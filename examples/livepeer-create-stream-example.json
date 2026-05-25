@@ -1,0 +1,52 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://livepeer.studio/api/stream",
+    "headers": {
+      "Authorization": "Bearer <LIVEPEER_API_KEY>",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "name": "demo-stream",
+      "record": true,
+      "profiles": [
+        {
+          "name": "720p",
+          "width": 1280,
+          "height": 720,
+          "bitrate": 3000000,
+          "fps": 30,
+          "encoder": "H.264"
+        },
+        {
+          "name": "480p",
+          "width": 854,
+          "height": 480,
+          "bitrate": 1500000,
+          "fps": 30,
+          "encoder": "H.264"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "5be8909d-9b86-4f43-9f24-7a4c2c1e2a14",
+      "name": "demo-stream",
+      "kind": "stream",
+      "userId": "user-abc",
+      "createdAt": 1716636000000,
+      "streamKey": "demo-streamKey-abc123",
+      "playbackId": "abc1234567890abc",
+      "playbackPolicy": { "type": "public" },
+      "record": true,
+      "profiles": [
+        { "name": "720p", "width": 1280, "height": 720, "bitrate": 3000000, "fps": 30, "encoder": "H.264" },
+        { "name": "480p", "width": 854, "height": 480, "bitrate": 1500000, "fps": 30, "encoder": "H.264" }
+      ],
+      "isActive": false,
+      "suspended": false
+    }
+  }
+}

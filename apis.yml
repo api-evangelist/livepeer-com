@@ -1,0 +1,344 @@
+aid: livepeer-com
+name: Livepeer
+description: >-
+  Livepeer is the open, permissionless protocol for video transcoding, streaming,
+  and AI video inference, coordinated on Ethereum mainnet and Arbitrum One via the
+  Livepeer Token (LPT). The company commercializes the network through Livepeer
+  Studio (a managed REST API for live streaming, VOD, multistream, recording,
+  rooms, access control, and AI generate) and the Livepeer AI Network, where any
+  GPU operator can serve text-to-image, image-to-video, live video-to-video, LLM,
+  audio-to-text, text-to-speech, upscale, and segmentation pipelines for fees
+  settled in ETH via probabilistic micropayments. The reference Go implementation
+  (go-livepeer), official SDKs in TypeScript, Python, and Go, the React UI Kit,
+  the AI worker, and the Gateway are all open source under the Livepeer GitHub
+  organization.
+type: Index
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+tags:
+  - Video
+  - Live Streaming
+  - Video On Demand
+  - AI Video
+  - Decentralized Compute
+  - GPU Network
+  - Ethereum
+  - Arbitrum
+  - Web3
+url: https://raw.githubusercontent.com/api-evangelist/livepeer-com/refs/heads/main/apis.yml
+created: '2026-05-25'
+modified: '2026-05-25'
+specificationVersion: '0.19'
+apis:
+  - aid: livepeer-com:studio
+    name: Livepeer Studio API
+    description: >-
+      Managed REST API for the Livepeer network. Create and run live streams via
+      RTMP/SRT/WHIP, ingest VOD assets, run transcode tasks, configure multistream
+      destinations, drive WebRTC rooms, manage signing keys for token-gated
+      playback, query usage and viewership metrics, and submit AI generate jobs
+      to the network — all behind a single Bearer-authenticated API on
+      https://livepeer.studio/api.
+    humanURL: https://livepeer.studio
+    baseURL: https://livepeer.studio/api
+    tags:
+      - Live Streaming
+      - Video On Demand
+      - Transcoding
+      - Multistream
+      - Recording
+      - Rooms
+      - Webhooks
+      - Access Control
+      - Playback
+      - Metrics
+      - AI Generate
+      - Assets
+      - Tasks
+    properties:
+      - url: https://docs.livepeer.org
+        type: Documentation
+      - url: https://docs.livepeer.org/api-reference
+        type: APIReference
+      - url: https://docs.livepeer.org/quickstart
+        type: GettingStarted
+      - url: https://docs.livepeer.org/developers/authentication
+        type: Authentication
+      - url: openapi/livepeer-studio-openapi.yml
+        type: OpenAPI
+      - url: rules/livepeer-studio-rules.yml
+        type: SpectralRuleset
+      - url: json-schema/livepeer-stream-schema.json
+        type: JSONSchema
+      - url: json-schema/livepeer-asset-schema.json
+        type: JSONSchema
+      - url: json-schema/livepeer-task-schema.json
+        type: JSONSchema
+      - url: json-schema/livepeer-webhook-schema.json
+        type: JSONSchema
+      - url: json-structure/livepeer-stream-structure.json
+        type: JSONStructure
+      - url: examples/livepeer-create-stream-example.json
+        type: Example
+      - url: examples/livepeer-create-webhook-example.json
+        type: Example
+      - type: NaftikoCapability
+        url: capabilities/livepeer-studio-stream.yaml
+      - type: NaftikoCapability
+        url: capabilities/livepeer-studio-multistream.yaml
+      - type: NaftikoCapability
+        url: capabilities/livepeer-studio-asset.yaml
+      - type: NaftikoCapability
+        url: capabilities/livepeer-studio-task.yaml
+      - type: NaftikoCapability
+        url: capabilities/livepeer-studio-webhook.yaml
+      - type: NaftikoCapability
+        url: capabilities/livepeer-studio-session.yaml
+      - type: NaftikoCapability
+        url: capabilities/livepeer-studio-room.yaml
+      - type: NaftikoCapability
+        url: capabilities/livepeer-studio-accesscontrol.yaml
+      - type: NaftikoCapability
+        url: capabilities/livepeer-studio-playback.yaml
+      - type: NaftikoCapability
+        url: capabilities/livepeer-studio-transcode.yaml
+      - type: NaftikoCapability
+        url: capabilities/livepeer-studio-metrics.yaml
+      - type: NaftikoCapability
+        url: capabilities/livepeer-studio-generate.yaml
+
+  - aid: livepeer-com:ai-network
+    name: Livepeer AI Network
+    description: >-
+      Open AI inference gateway exposing text-to-image, image-to-image,
+      image-to-video, live video-to-video, upscale, audio-to-text, text-to-speech,
+      LLM (OpenAI-compatible), image-to-text, and Segment Anything 2 pipelines
+      against a permissionless network of GPU Orchestrators. Two interchangeable
+      endpoints: the community gateway at https://dream-gateway.livepeer.cloud
+      and Livepeer Studio's managed gateway at https://livepeer.studio/api/beta/generate.
+      Fees settle in ETH on Arbitrum One via probabilistic micropayment tickets.
+    humanURL: https://docs.livepeer.org/ai
+    baseURL: https://dream-gateway.livepeer.cloud
+    tags:
+      - AI Inference
+      - Generative AI
+      - Text To Image
+      - Image To Image
+      - Image To Video
+      - Live Video To Video
+      - Upscale
+      - Audio To Text
+      - Text To Speech
+      - LLM
+      - Image To Text
+      - Segmentation
+      - GPU Network
+    properties:
+      - url: https://docs.livepeer.org/ai
+        type: Documentation
+      - url: https://docs.livepeer.org/ai/api-reference
+        type: APIReference
+      - url: openapi/livepeer-ai-worker-openapi.yml
+        type: OpenAPI
+      - url: openapi/livepeer-gateway-openapi.yml
+        type: OpenAPI
+      - url: rules/livepeer-ai-rules.yml
+        type: SpectralRuleset
+      - url: json-schema/livepeer-ai-text-to-image-schema.json
+        type: JSONSchema
+      - url: json-schema/livepeer-ai-image-to-video-schema.json
+        type: JSONSchema
+      - url: examples/livepeer-ai-text-to-image-example.json
+        type: Example
+      - url: examples/livepeer-image-to-video-example.json
+        type: Example
+      - type: NaftikoCapability
+        url: capabilities/livepeer-ai-generate.yaml
+      - type: NaftikoCapability
+        url: capabilities/livepeer-ai-system.yaml
+
+  - aid: livepeer-com:cli-http
+    name: Livepeer Node CLI HTTP API
+    description: >-
+      Local loopback HTTP API exposed by go-livepeer for Orchestrator and Gateway
+      operators. Endpoints cover node status, protocol parameters, registered
+      orchestrators, bond/unbond/rebond actions, orchestrator activation,
+      broadcaster configuration, max price for capability, reward calls, ETH/LPT
+      transfers, and message signing — used by the official Livepeer CLI and
+      dashboards.
+    humanURL: https://docs.livepeer.org/orchestrators
+    baseURL: http://127.0.0.1:7935
+    tags:
+      - Node Operations
+      - Orchestrator
+      - Gateway
+      - Staking
+      - Ethereum
+      - CLI
+    properties:
+      - url: https://docs.livepeer.org/orchestrators/guides/install-go-livepeer
+        type: Documentation
+      - url: https://docs.livepeer.org/references/livepeer-cli
+        type: APIReference
+      - url: openapi/livepeer-cli-http-openapi.yml
+        type: OpenAPI
+      - url: rules/livepeer-studio-rules.yml
+        type: SpectralRuleset
+      - type: NaftikoCapability
+        url: capabilities/livepeer-cli-status.yaml
+      - type: NaftikoCapability
+        url: capabilities/livepeer-cli-staking.yaml
+      - type: NaftikoCapability
+        url: capabilities/livepeer-cli-orchestrator.yaml
+      - type: NaftikoCapability
+        url: capabilities/livepeer-cli-gateway.yaml
+      - type: NaftikoCapability
+        url: capabilities/livepeer-cli-ethereum.yaml
+
+common:
+  - type: Website
+    url: https://livepeer.org
+  - type: StudioPortal
+    url: https://livepeer.studio
+  - type: Documentation
+    url: https://docs.livepeer.org
+  - type: APIReference
+    url: https://docs.livepeer.org/api-reference
+  - type: Pricing
+    url: https://livepeer.studio/pricing
+  - type: Blog
+    url: https://livepeer.org/blog
+  - type: ChangeLog
+    url: https://docs.livepeer.org/changelog
+  - type: Explorer
+    url: https://explorer.livepeer.org
+  - type: Forum
+    url: https://forum.livepeer.org
+  - type: Roadmap
+    url: https://roadmap.livepeer.org/roadmap
+  - type: StatusPage
+    url: https://status.livepeer.studio
+  - type: SignUp
+    url: https://livepeer.studio/register
+  - type: Login
+    url: https://livepeer.studio/login
+  - type: TermsOfService
+    url: https://www.livepeer.org/legal/terms-of-service
+  - type: PrivacyPolicy
+    url: https://www.livepeer.org/legal/privacy-policy
+  - type: GitHubOrganization
+    url: https://github.com/livepeer
+  - type: GitHubRepository
+    url: https://github.com/livepeer/go-livepeer
+  - type: GitHubRepository
+    url: https://github.com/livepeer/studio
+  - type: GitHubRepository
+    url: https://github.com/livepeer/docs
+  - type: SDKs
+    url: https://docs.livepeer.org/sdks
+  - type: TypeScriptSDK
+    url: https://github.com/livepeer/livepeer-js
+  - type: PythonSDK
+    url: https://github.com/livepeer/livepeer-python
+  - type: PythonSDK
+    url: https://github.com/livepeer/livepeer-ai-python
+  - type: PythonSDK
+    url: https://github.com/livepeer/livepeer-python-gateway
+  - type: GoSDK
+    url: https://github.com/livepeer/livepeer-go
+  - type: UIKit
+    url: https://github.com/livepeer/ui-kit
+    name: Livepeer React UI Kit
+  - type: ReferenceImplementation
+    url: https://github.com/livepeer/go-livepeer
+  - type: AIWorker
+    url: https://github.com/livepeer/ai-worker
+  - type: Plugin
+    url: https://github.com/livepeer/naap
+    name: NAAP — Livepeer AI Compute Network plugin platform
+  - type: SmartContracts
+    url: https://github.com/livepeer/protocol
+  - type: NetworkExplorer
+    url: https://explorer.livepeer.org
+  - type: TokenContractEthereum
+    url: https://etherscan.io/token/0x58b6a8a3302369daec383334672404ee733ab239
+  - type: TokenContractArbitrum
+    url: https://arbiscan.io/token/0x289ba1701c2f088cf0faf8b3705246331cb8a839
+  - type: Discord
+    url: https://discord.gg/livepeer
+  - type: Twitter
+    url: https://twitter.com/Livepeer
+  - type: YouTube
+    url: https://www.youtube.com/@LivepeerNetwork
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/livepeer
+  - type: LLMsTxt
+    url: https://docs.livepeer.org/llms.txt
+  - type: LLMsFullTxt
+    url: https://docs.livepeer.org/llms-full.txt
+  - type: SpectralRuleset
+    url: rules/livepeer-studio-rules.yml
+  - type: SpectralRuleset
+    url: rules/livepeer-ai-rules.yml
+  - type: Vocabulary
+    url: vocabulary/livepeer-com-vocabulary.yml
+  - type: JSON-LD
+    url: json-ld/livepeer-com-context.jsonld
+  - type: JSONStructure
+    url: json-structure/livepeer-platform-structure.json
+  - type: Plans
+    url: plans/livepeer-com-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/livepeer-com-rate-limits.yml
+  - type: FinOps
+    url: finops/livepeer-com-finops.yml
+  - type: Features
+    data:
+      - Decentralized GPU network for transcoding + AI inference
+      - LPT token live on Ethereum mainnet and Arbitrum One
+      - Probabilistic micropayment (PM) tickets for sub-cent settlement
+      - Livepeer Studio managed REST API with Bearer auth
+      - Live streaming via RTMP, SRT, and WHIP ingest
+      - Adaptive bitrate HLS + WebRTC playback
+      - Recording, clipping, and on-demand asset hosting
+      - Multistream simulcast to YouTube, Twitch, Facebook, etc.
+      - WebRTC rooms with optional RTMP egress
+      - Token-gated playback via signing keys, JWT, and webhook policies
+      - Webhooks for stream/asset/recording/task lifecycle
+      - AI pipelines (text-to-image, image-to-video, live video-to-video, LLM, etc.)
+      - Two AI gateways (community + Studio beta) interchangeable per request
+      - Official TypeScript, Python (Studio + AI + Gateway), and Go SDKs
+      - React UI Kit (Player, Broadcast) for client embedding
+      - go-livepeer reference node for operators
+      - NAAP plugin platform for the AI Compute Network
+      - Open governance via Livepeer Improvement Proposals (LIPs)
+    sources:
+      - https://livepeer.org
+      - https://docs.livepeer.org
+      - https://livepeer.studio/pricing
+    updated: '2026-05-25'
+  - type: UseCases
+    data:
+      - User-generated live streaming platforms (creator economy)
+      - On-demand video platforms with low transcoding cost
+      - Web3 / NFT video drops with on-chain provenance
+      - Multistream restreaming to incumbent social platforms
+      - Real-time video AI transformation (Daydream / live video-to-video)
+      - AI avatars and embodied agents (Embody)
+      - Open streaming infrastructure (Stream.place, Frameworks)
+      - Generative video for marketing, advertising, and entertainment
+      - Realtime sports / security / manufacturing video intelligence
+      - LLM inference on decentralized GPU capacity
+  - type: Integrations
+    data:
+      - YouTube, Twitch, Facebook Live (multistream targets)
+      - IPFS / Filecoin (asset storage)
+      - Ethereum Mainnet (LPT, governance)
+      - Arbitrum One (PM tickets, AI fee settlement)
+      - The Graph (subgraph for Livepeer protocol)
+      - OBS, Streamlabs, Larix, Restream (ingest tooling)
+      - OpenAI-compatible LLM clients (via /llm endpoint)
+      - Daydream, Embody, Frameworks, Stream.place, Storyboard (ecosystem apps)
+
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

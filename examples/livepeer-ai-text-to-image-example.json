@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://dream-gateway.livepeer.cloud/text-to-image",
+    "headers": {
+      "Authorization": "Bearer <LIVEPEER_API_KEY>",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "model_id": "SG161222/RealVisXL_V4.0_Lightning",
+      "prompt": "A cinematic shot of a fox crossing a moonlit forest path, depth of field, 35mm lens",
+      "negative_prompt": "blurry, low quality, distorted",
+      "width": 1024,
+      "height": 1024,
+      "num_inference_steps": 6,
+      "guidance_scale": 2.0,
+      "num_images_per_prompt": 1,
+      "safety_check": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "images": [
+        {
+          "url": "https://obj-store.livepeer.cloud/some-bucket/text-to-image/abc/image-0.png",
+          "seed": 1234567,
+          "nsfw": false
+        }
+      ]
+    }
+  }
+}

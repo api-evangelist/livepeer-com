@@ -1,0 +1,132 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: "Livepeer AI \u2014 Default"
+  description: "Livepeer AI \u2014 Default. 3 operations. Self-contained Naftiko capability for one AI business surface."
+  tags:
+  - Livepeer
+  - AI
+  - Default
+  created: '2026-05-25'
+  modified: '2026-05-25'
+binds:
+- namespace: env
+  keys:
+    LIVEPEER_API_KEY: LIVEPEER_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: livepeer-ai-default
+    baseUri: https://dream-gateway.livepeer.cloud
+    description: "Livepeer AI \u2014 Default business capability. Self-contained, no shared references."
+    resources:
+    - name: health
+      path: /health
+      operations:
+      - name: health
+        method: GET
+        description: Health
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: hardware-info
+      path: /hardware/info
+      operations:
+      - name: hardwareinfo
+        method: GET
+        description: Hardware Info
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: hardware-stats
+      path: /hardware/stats
+      operations:
+      - name: hardwarestats
+        method: GET
+        description: Hardware Stats
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.LIVEPEER_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: livepeer-ai-default-rest
+    port: 8090
+    description: "REST adapter for Livepeer AI \u2014 Default."
+    resources:
+    - path: /health
+      name: health
+      description: REST surface for health.
+      operations:
+      - method: GET
+        name: health
+        description: Health
+        call: livepeer-ai-default.health
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /hardware/info
+      name: hardware-info
+      description: REST surface for hardware-info.
+      operations:
+      - method: GET
+        name: hardwareinfo
+        description: Hardware Info
+        call: livepeer-ai-default.hardwareinfo
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /hardware/stats
+      name: hardware-stats
+      description: REST surface for hardware-stats.
+      operations:
+      - method: GET
+        name: hardwarestats
+        description: Hardware Stats
+        call: livepeer-ai-default.hardwarestats
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: livepeer-ai-default-mcp
+    port: 9100
+    transport: http
+    description: "MCP adapter for Livepeer AI \u2014 Default. One tool per consumed operation."
+    tools:
+    - name: health
+      description: Health
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: livepeer-ai-default.health
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: hardware-info
+      description: Hardware Info
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: livepeer-ai-default.hardwareinfo
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: hardware-stats
+      description: Hardware Stats
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: livepeer-ai-default.hardwarestats
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,103 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: "Livepeer CLI \u2014 Orchestrator"
+  description: "Livepeer CLI \u2014 Orchestrator. 2 operations. Self-contained Naftiko capability for one CLI business surface."
+  tags:
+  - Livepeer
+  - CLI
+  - Orchestrator
+  created: '2026-05-25'
+  modified: '2026-05-25'
+capability:
+  consumes:
+  - type: http
+    namespace: livepeer-cli-orchestrator
+    baseUri: http://localhost:5935
+    description: "Livepeer CLI \u2014 Orchestrator business capability. Self-contained, no shared references."
+    resources:
+    - name: activateOrchestrator
+      path: /activateOrchestrator
+      operations:
+      - name: activateorchestrator
+        method: POST
+        description: Activate orchestrator
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: reward
+      path: /reward
+      operations:
+      - name: claimreward
+        method: POST
+        description: Claim orchestrator rewards
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: livepeer-cli-orchestrator-rest
+    port: 8100
+    description: "REST adapter for Livepeer CLI \u2014 Orchestrator."
+    resources:
+    - path: /activateOrchestrator
+      name: activateOrchestrator
+      description: REST surface for activateOrchestrator.
+      operations:
+      - method: POST
+        name: activateorchestrator
+        description: Activate orchestrator
+        call: livepeer-cli-orchestrator.activateorchestrator
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /reward
+      name: reward
+      description: REST surface for reward.
+      operations:
+      - method: POST
+        name: claimreward
+        description: Claim orchestrator rewards
+        call: livepeer-cli-orchestrator.claimreward
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: livepeer-cli-orchestrator-mcp
+    port: 9110
+    transport: http
+    description: "MCP adapter for Livepeer CLI \u2014 Orchestrator. One tool per consumed operation."
+    tools:
+    - name: activate-orchestrator
+      description: Activate orchestrator
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-cli-orchestrator.activateorchestrator
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: claim-orchestrator-rewards
+      description: Claim orchestrator rewards
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-cli-orchestrator.claimreward
+      outputParameters:
+      - type: object
+        mapping: $.

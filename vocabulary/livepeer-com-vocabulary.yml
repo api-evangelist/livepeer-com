@@ -1,0 +1,270 @@
+name: Livepeer Vocabulary
+description: >-
+  Vocabulary and taxonomy for the Livepeer decentralized video platform. Covers
+  the protocol, AI compute network, Livepeer Studio API, and Livepeer Token (LPT)
+  governance concepts spanning Ethereum mainnet and Arbitrum One.
+version: "1.0.0"
+created: "2026-05-25"
+modified: "2026-05-25"
+
+categories:
+  - name: Protocol Concepts
+    description: Core building blocks of the Livepeer protocol.
+    terms:
+      - term: Livepeer Protocol
+        definition: >-
+          A permissionless, peer-to-peer protocol for video transcoding, streaming,
+          and AI video inference. Coordinates GPU-equipped Orchestrators and
+          Gateways via on-chain incentives.
+        related: [Orchestrator, Gateway, Broadcaster, LPT]
+
+      - term: Orchestrator
+        definition: >-
+          A network node that performs video transcoding or AI inference work
+          using its own (and delegated) staked LPT as bond. Earns fees in ETH/USDC
+          and rewards in LPT.
+        related: [Transcoder, AIWorker, Delegator, Stake]
+
+      - term: Transcoder
+        definition: >-
+          Historical / hardware-side role for converting source streams into
+          multiple bitrates. Today, transcoder responsibility is performed by
+          Orchestrators running go-livepeer with GPUs.
+        related: [Orchestrator, AdaptiveBitrate, Segment]
+
+      - term: AIWorker
+        definition: >-
+          A GPU node attached to an Orchestrator that runs AI inference pipelines
+          (text-to-image, image-to-video, live video-to-video, LLM, etc.).
+        related: [Orchestrator, AIPipeline, Gateway]
+
+      - term: Gateway
+        definition: >-
+          A node that submits jobs into the Livepeer network on behalf of
+          applications. Handles payment-channel ticket creation, orchestrator
+          selection, and stream-level QoS. Successor to the broadcaster role.
+        related: [Broadcaster, Orchestrator, PaymentTicket]
+
+      - term: Broadcaster
+        definition: >-
+          Legacy term for the network participant publishing video to the network.
+          Now generalized as a Gateway.
+        related: [Gateway, Orchestrator, Job]
+
+      - term: Delegator
+        definition: >-
+          An LPT holder who stakes (bonds) tokens to an Orchestrator to share in
+          fee and reward emissions while securing the protocol's incentives.
+        related: [Stake, Bond, Unbond, Round]
+
+      - term: Treasury
+        definition: >-
+          On-chain governance pool funded by a percentage of protocol inflation,
+          spent via LIPs (Livepeer Improvement Proposals) and Delegated Voting.
+        related: [LIP, Governance, LPT]
+
+  - name: Tokens & Economics
+    description: LPT token, payments, rounds, and incentive economics.
+    terms:
+      - term: LPT
+        definition: >-
+          Livepeer Token. ERC-20 utility/work token used to coordinate work,
+          stake into Orchestrators, vote in governance, and earn inflationary
+          rewards. Live on Ethereum mainnet and Arbitrum One.
+        related: [Stake, Reward, Delegator, Treasury]
+
+      - term: Ticket
+        definition: >-
+          Probabilistic micropayment voucher (PM ticket) issued by a Gateway to
+          pay an Orchestrator for transcoding or AI work. Winning tickets are
+          redeemed on-chain.
+        related: [Gateway, Orchestrator, ProbabilisticMicropayments]
+
+      - term: Round
+        definition: >-
+          A discrete time epoch (~22.4 hours) in the protocol used for stake
+          accounting, fee distribution, and reward issuance.
+        related: [Reward, Inflation, RoundsManager]
+
+      - term: Bond
+        definition: >-
+          The action of staking LPT to an Orchestrator. Bonded stake contributes
+          to that Orchestrator's earning power and is at risk of slashing.
+        related: [Stake, Delegator, Unbond, Rebond]
+
+      - term: Unbond
+        definition: >-
+          The action of withdrawing staked LPT from an Orchestrator. Subject to
+          an unbonding period before the LPT becomes transferable.
+        related: [Bond, Withdraw, Delegator]
+
+  - name: Studio Video Surface
+    description: Livepeer Studio managed-API resources for video & streaming.
+    terms:
+      - term: Stream
+        definition: >-
+          A live stream resource in Livepeer Studio. Identified by a stream key,
+          ingestible via RTMP/SRT/WHIP, and delivered as adaptive bitrate HLS or
+          WebRTC playback.
+        related: [Session, Multistream, PlaybackId]
+
+      - term: Session
+        definition: >-
+          A single ingest occurrence of a Stream, with its own ID, recording,
+          metrics, and clips. One Stream can have many Sessions.
+        related: [Stream, Recording, Clip]
+
+      - term: Asset
+        definition: >-
+          A piece of on-demand (VOD) video stored in Livepeer Studio. Uploaded
+          via direct upload URL or import-from-URL; transcoded and made
+          playable.
+        related: [Stream, Task, Playback]
+
+      - term: Task
+        definition: >-
+          A background processing job (import, transcode, export, clip) executed
+          by Studio. Tasks expose status, progress, and outputs.
+        related: [Asset, Transcode, Stream]
+
+      - term: Multistream
+        definition: >-
+          The Studio feature for re-broadcasting a live stream to one or more
+          third-party RTMP destinations (YouTube, Twitch, Facebook, etc.).
+        related: [Stream, RTMP, Target]
+
+      - term: Room
+        definition: >-
+          A real-time, multi-participant audio/video room (WebRTC) with optional
+          RTMP egress. Foundation for video-chat and watch-party experiences.
+        related: [RoomUser, Egress, WebRTC]
+
+      - term: SigningKey
+        definition: >-
+          An access-control key used for token-gated, JWT-signed playback URLs.
+        related: [Playback, AccessControl, JWT]
+
+      - term: Playback
+        definition: >-
+          Delivery of HLS, MP4, or WebRTC media to viewers. A Playback ID is the
+          stable identifier shared with players.
+        related: [Stream, Asset, PlaybackId]
+
+  - name: AI Pipelines
+    description: Inference workloads exposed by the Livepeer AI network.
+    terms:
+      - term: AI Pipeline
+        definition: >-
+          A named inference workflow (e.g., text-to-image) exposed by the AI
+          Gateway as a single POST endpoint with a fixed Params schema.
+        related: [TextToImage, ImageToVideo, LiveVideoToVideo, AIWorker]
+
+      - term: Text-to-Image
+        definition: >-
+          AI pipeline that generates one or more images from a text prompt.
+        related: [Diffusion, AIPipeline]
+
+      - term: Image-to-Image
+        definition: >-
+          AI pipeline that transforms an input image guided by a text prompt
+          (style transfer, restyle, etc.).
+        related: [TextToImage, AIPipeline]
+
+      - term: Image-to-Video
+        definition: >-
+          AI pipeline that animates an input image into a short video clip.
+        related: [AIPipeline, VideoGeneration]
+
+      - term: Live Video-to-Video
+        definition: >-
+          AI pipeline that transforms a live video stream in real time using a
+          text prompt or model.
+        related: [Daydream, AIPipeline, RealTime]
+
+      - term: Upscale
+        definition: >-
+          AI pipeline that increases the resolution of an image.
+        related: [SuperResolution, AIPipeline]
+
+      - term: Audio-to-Text
+        definition: >-
+          AI pipeline that transcribes audio into text (Whisper-class).
+        related: [Transcription, AIPipeline]
+
+      - term: Text-to-Speech
+        definition: >-
+          AI pipeline that synthesizes spoken audio from text.
+        related: [TTS, AIPipeline]
+
+      - term: LLM
+        definition: >-
+          AI pipeline exposing an OpenAI-compatible chat completion surface on
+          the Livepeer GPU network.
+        related: [ChatCompletion, AIPipeline]
+
+      - term: Segment Anything 2
+        definition: >-
+          AI pipeline that performs Meta's SAM2 segmentation on an image.
+        related: [Segmentation, AIPipeline]
+
+      - term: Image-to-Text
+        definition: >-
+          AI pipeline that captions or describes the contents of an image.
+        related: [Caption, AIPipeline]
+
+  - name: Webhooks & Events
+    description: Event-driven integrations.
+    terms:
+      - term: Webhook
+        definition: >-
+          A Studio-managed HTTPS endpoint invoked when stream/asset/task events
+          occur (stream.started, recording.ready, asset.ready, task.failed, etc.).
+        related: [Event, Subscription]
+
+      - term: Webhook Log
+        definition: >-
+          A record of an individual webhook delivery attempt, including status,
+          payload, and retry metadata.
+        related: [Webhook, Retry]
+
+  - name: Tooling & SDKs
+    description: Developer tooling on top of the protocol/APIs.
+    terms:
+      - term: go-livepeer
+        definition: Reference Go implementation of the Livepeer node.
+        related: [Orchestrator, Gateway]
+
+      - term: Cog
+        definition: External (Replicate) tool; not Livepeer; included only to avoid confusion.
+        related: []
+
+      - term: Livepeer JS SDK
+        definition: Official TypeScript SDK for Livepeer Studio.
+        related: [Studio, REST]
+
+      - term: Livepeer Python SDK
+        definition: Official Python SDK for Livepeer Studio and the Livepeer AI network.
+        related: [Studio, AI]
+
+      - term: Livepeer Go SDK
+        definition: Official Go SDK for Livepeer Studio.
+        related: [Studio]
+
+      - term: UI Kit
+        definition: React components (Player, Broadcast) for Livepeer Studio integration.
+        related: [Studio, React]
+
+  - name: Governance
+    description: On-chain governance constructs.
+    terms:
+      - term: LIP
+        definition: Livepeer Improvement Proposal — formal proposal mechanism.
+        related: [Governance, Treasury]
+
+      - term: BondingManager
+        definition: Contract managing Orchestrator activation, bond, unbond, rebond.
+        related: [Orchestrator, Delegator]
+
+      - term: TicketBroker
+        definition: Contract that handles Probabilistic Micropayment ticket redemption.
+        related: [Ticket, Gateway, Orchestrator]

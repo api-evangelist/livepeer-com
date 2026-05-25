@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-structure.org/draft/2025-09/schema",
+  "name": "LivepeerPlatform",
+  "version": "1.0.0",
+  "description": "Operational structure summarising the Livepeer platform surface: Studio video resources, AI Network pipelines, CLI HTTP, and protocol-level governance.",
+  "structures": {
+    "Provider": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "const": "Livepeer" },
+        "products": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["Livepeer Studio", "Livepeer AI Network", "Livepeer Protocol", "Livepeer CLI"]
+        },
+        "tokens": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["LPT"]
+        },
+        "chains": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["Ethereum Mainnet", "Arbitrum One"]
+        }
+      }
+    },
+    "StudioSurface": {
+      "type": "object",
+      "properties": {
+        "baseUri": { "type": "string", "default": "https://livepeer.studio/api" },
+        "auth": { "type": "string", "const": "Bearer (API key)" },
+        "resourceFamilies": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["Stream", "Multistream", "Asset", "Task", "Webhook", "Session", "Room", "AccessControl", "Playback", "Transcode", "Metrics", "Generate"]
+        }
+      }
+    },
+    "AISurface": {
+      "type": "object",
+      "properties": {
+        "gateways": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["https://dream-gateway.livepeer.cloud", "https://livepeer.studio/api/beta/generate"]
+        },
+        "pipelines": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [
+            "text-to-image",
+            "image-to-image",
+            "image-to-video",
+            "live-video-to-video",
+            "upscale",
+            "audio-to-text",
+            "text-to-speech",
+            "image-to-text",
+            "segment-anything-2",
+            "llm"
+          ]
+        },
+        "infraEndpoints": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["/health", "/hardware/info", "/hardware/stats"]
+        }
+      }
+    },
+    "ProtocolSurface": {
+      "type": "object",
+      "properties": {
+        "roles": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["Orchestrator", "Gateway", "Delegator", "AIWorker"]
+        },
+        "cliPaths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["/status", "/protocolParameters", "/bond", "/unbond", "/rebond", "/activateOrchestrator", "/reward", "/transferTokens", "/signMessage", "/setBroadcastConfig", "/setMaxPriceForCapability", "/registeredOrchestrators"]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,456 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: "Livepeer AI \u2014 Generate"
+  description: "Livepeer AI \u2014 Generate. 10 operations. Self-contained Naftiko capability for one AI business surface."
+  tags:
+  - Livepeer
+  - AI
+  - Generate
+  created: '2026-05-25'
+  modified: '2026-05-25'
+binds:
+- namespace: env
+  keys:
+    LIVEPEER_API_KEY: LIVEPEER_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: livepeer-ai-generate
+    baseUri: https://dream-gateway.livepeer.cloud
+    description: "Livepeer AI \u2014 Generate business capability. Self-contained, no shared references."
+    resources:
+    - name: text-to-image
+      path: /text-to-image
+      operations:
+      - name: gentexttoimage
+        method: POST
+        description: Text To Image
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: image-to-image
+      path: /image-to-image
+      operations:
+      - name: genimagetoimage
+        method: POST
+        description: Image To Image
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: image-to-video
+      path: /image-to-video
+      operations:
+      - name: genimagetovideo
+        method: POST
+        description: Image To Video
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: upscale
+      path: /upscale
+      operations:
+      - name: genupscale
+        method: POST
+        description: Upscale
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: audio-to-text
+      path: /audio-to-text
+      operations:
+      - name: genaudiototext
+        method: POST
+        description: Audio To Text
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: segment-anything-2
+      path: /segment-anything-2
+      operations:
+      - name: gensegmentanything2
+        method: POST
+        description: Segment Anything 2
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: llm
+      path: /llm
+      operations:
+      - name: genllm
+        method: POST
+        description: LLM
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: image-to-text
+      path: /image-to-text
+      operations:
+      - name: genimagetotext
+        method: POST
+        description: Image To Text
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: live-video-to-video
+      path: /live-video-to-video
+      operations:
+      - name: genlivevideotovideo
+        method: POST
+        description: Live Video To Video
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: text-to-speech
+      path: /text-to-speech
+      operations:
+      - name: gentexttospeech
+        method: POST
+        description: Text To Speech
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.LIVEPEER_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: livepeer-ai-generate-rest
+    port: 8090
+    description: "REST adapter for Livepeer AI \u2014 Generate."
+    resources:
+    - path: /text-to-image
+      name: text-to-image
+      description: REST surface for text-to-image.
+      operations:
+      - method: POST
+        name: gentexttoimage
+        description: Text To Image
+        call: livepeer-ai-generate.gentexttoimage
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /image-to-image
+      name: image-to-image
+      description: REST surface for image-to-image.
+      operations:
+      - method: POST
+        name: genimagetoimage
+        description: Image To Image
+        call: livepeer-ai-generate.genimagetoimage
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /image-to-video
+      name: image-to-video
+      description: REST surface for image-to-video.
+      operations:
+      - method: POST
+        name: genimagetovideo
+        description: Image To Video
+        call: livepeer-ai-generate.genimagetovideo
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /upscale
+      name: upscale
+      description: REST surface for upscale.
+      operations:
+      - method: POST
+        name: genupscale
+        description: Upscale
+        call: livepeer-ai-generate.genupscale
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /audio-to-text
+      name: audio-to-text
+      description: REST surface for audio-to-text.
+      operations:
+      - method: POST
+        name: genaudiototext
+        description: Audio To Text
+        call: livepeer-ai-generate.genaudiototext
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /segment-anything-2
+      name: segment-anything-2
+      description: REST surface for segment-anything-2.
+      operations:
+      - method: POST
+        name: gensegmentanything2
+        description: Segment Anything 2
+        call: livepeer-ai-generate.gensegmentanything2
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /llm
+      name: llm
+      description: REST surface for llm.
+      operations:
+      - method: POST
+        name: genllm
+        description: LLM
+        call: livepeer-ai-generate.genllm
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /image-to-text
+      name: image-to-text
+      description: REST surface for image-to-text.
+      operations:
+      - method: POST
+        name: genimagetotext
+        description: Image To Text
+        call: livepeer-ai-generate.genimagetotext
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /live-video-to-video
+      name: live-video-to-video
+      description: REST surface for live-video-to-video.
+      operations:
+      - method: POST
+        name: genlivevideotovideo
+        description: Live Video To Video
+        call: livepeer-ai-generate.genlivevideotovideo
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /text-to-speech
+      name: text-to-speech
+      description: REST surface for text-to-speech.
+      operations:
+      - method: POST
+        name: gentexttospeech
+        description: Text To Speech
+        call: livepeer-ai-generate.gentexttospeech
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: livepeer-ai-generate-mcp
+    port: 9100
+    transport: http
+    description: "MCP adapter for Livepeer AI \u2014 Generate. One tool per consumed operation."
+    tools:
+    - name: text-to-image
+      description: Text To Image
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-ai-generate.gentexttoimage
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: image-to-image
+      description: Image To Image
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-ai-generate.genimagetoimage
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: image-to-video
+      description: Image To Video
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-ai-generate.genimagetovideo
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: upscale
+      description: Upscale
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-ai-generate.genupscale
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: audio-to-text
+      description: Audio To Text
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-ai-generate.genaudiototext
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: segment-anything-2
+      description: Segment Anything 2
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-ai-generate.gensegmentanything2
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: llm
+      description: LLM
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-ai-generate.genllm
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: image-to-text
+      description: Image To Text
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-ai-generate.genimagetotext
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: live-video-to-video
+      description: Live Video To Video
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-ai-generate.genlivevideotovideo
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: text-to-speech
+      description: Text To Speech
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-ai-generate.gentexttospeech
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

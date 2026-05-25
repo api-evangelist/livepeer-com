@@ -1,0 +1,97 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Livepeer
+providerId: livepeer-com
+created: '2026-05-25'
+modified: '2026-05-25'
+reconciled: true
+tags:
+  - FinOps
+  - FOCUS
+  - Video Streaming
+  - AI Inference
+description: >-
+  FOCUS-aligned FinOps mapping for Livepeer Studio (fiat-billed managed video
+  + AI inference) and the open Livepeer AI Network (settled on Arbitrum in ETH
+  via probabilistic micropayments).
+sources:
+  - https://livepeer.studio/pricing
+  - https://docs.livepeer.org
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Livepeer Inc.
+serviceCategory: Media & Streaming, AI Inference
+billingModel:
+  pricingCategory: Per-Minute Usage + Per-Pixel/Token Inference
+  billingFrequency: Monthly
+  billingCurrency: USD
+focusColumns:
+  ServiceName: Livepeer Studio
+  ServiceCategory: Streaming Media
+  SubAccountName: Project
+  ProviderName: Livepeer
+  PublisherName: Livepeer Inc.
+  BillingCurrency: USD
+  PricingUnit: minutes
+  ConsumedUnit: minutes
+meters:
+  - name: transcoding_minutes
+    unit: minute
+    aggregation: sum
+    dimensions: [profile_count, resolution, region]
+  - name: storage_minutes
+    unit: minute
+    aggregation: sum
+    dimensions: [project]
+  - name: delivery_minutes
+    unit: minute
+    aggregation: sum
+    dimensions: [region, edge]
+  - name: concurrent_viewers
+    unit: viewer
+    aggregation: max
+    dimensions: [stream_id, project]
+  - name: ai_pipeline_units
+    unit: pipeline_call
+    aggregation: sum
+    dimensions: [pipeline, model_id, orchestrator]
+    notes: Per-pixel for image/video; per-token for LLM; per-second for live video-to-video.
+  - name: lpt_emissions
+    unit: LPT
+    aggregation: sum
+    dimensions: [orchestrator, delegator, round]
+    notes: On-chain only; tracked separately from fiat billing.
+principles:
+  - name: Visibility
+    description: Pull usage metrics monthly via /data/usage/query and Studio billing exports.
+  - name: Allocation
+    description: Tag streams/assets with projectId; correlate to internal cost centers via SubAccountName.
+  - name: Optimization
+    description: >-
+      Choose lighter profiles, lower fps, or reduce delivery regions for cost
+      reduction; use community AI gateway during prototyping, then migrate to
+      Studio beta for SLA.
+  - name: Forecasting
+    description: Track minute consumption against Growth $100 minimum + viewer projections.
+  - name: Governance
+    description: Lock down API keys per project; rotate webhook shared secrets.
+exports:
+  - name: Studio Usage Query
+    type: api
+    url: https://livepeer.studio/api/data/usage/query
+    notes: Returns minutes-of-transcoding/delivery/storage windowed by from/to.
+  - name: Studio Billing Dashboard
+    type: portal
+    url: https://livepeer.studio/dashboard/billing
+    notes: Human-readable invoice + tier consumption.
+unmappedSurfaces:
+  - name: Probabilistic Micropayment Tickets (Arbitrum)
+    rationale: >-
+      Open-protocol AI/transcode jobs settle in ETH on Arbitrum One. Cost is
+      tracked via Gateway wallet outflows + on-chain TicketBroker events
+      rather than FOCUS billing rows.

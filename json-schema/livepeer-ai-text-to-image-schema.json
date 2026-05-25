@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api-evangelist.github.io/livepeer-com/json-schema/livepeer-ai-text-to-image-schema.json",
+  "title": "Livepeer AI — Text-to-Image",
+  "description": "Request payload for the Livepeer AI Network text-to-image pipeline.",
+  "type": "object",
+  "required": ["prompt"],
+  "properties": {
+    "model_id": {
+      "type": "string",
+      "description": "Hugging Face model id served by the network (e.g. SG161222/RealVisXL_V4.0_Lightning)."
+    },
+    "prompt": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Text prompt describing the desired image."
+    },
+    "negative_prompt": { "type": "string" },
+    "loras": { "type": "string", "description": "Stringified JSON LoRA configuration." },
+    "width": { "type": "integer", "default": 1024, "minimum": 128, "maximum": 2048 },
+    "height": { "type": "integer", "default": 1024, "minimum": 128, "maximum": 2048 },
+    "guidance_scale": { "type": "number", "default": 7.5 },
+    "safety_check": { "type": "boolean", "default": true },
+    "seed": { "type": "integer" },
+    "num_inference_steps": { "type": "integer", "default": 50 },
+    "num_images_per_prompt": { "type": "integer", "default": 1, "minimum": 1, "maximum": 4 }
+  }
+}

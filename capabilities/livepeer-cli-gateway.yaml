@@ -1,0 +1,113 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: "Livepeer CLI \u2014 Gateway"
+  description: "Livepeer CLI \u2014 Gateway. 2 operations. Self-contained Naftiko capability for one CLI business surface."
+  tags:
+  - Livepeer
+  - CLI
+  - Gateway
+  created: '2026-05-25'
+  modified: '2026-05-25'
+capability:
+  consumes:
+  - type: http
+    namespace: livepeer-cli-gateway
+    baseUri: http://localhost:5935
+    description: "Livepeer CLI \u2014 Gateway business capability. Self-contained, no shared references."
+    resources:
+    - name: setBroadcastConfig
+      path: /setBroadcastConfig
+      operations:
+      - name: setbroadcastconfig
+        method: POST
+        description: Set broadcast configuration
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: setMaxPriceForCapability
+      path: /setMaxPriceForCapability
+      operations:
+      - name: setmaxpriceforcapability
+        method: POST
+        description: Set max price per AI capability
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+  exposes:
+  - type: rest
+    namespace: livepeer-cli-gateway-rest
+    port: 8100
+    description: "REST adapter for Livepeer CLI \u2014 Gateway."
+    resources:
+    - path: /setBroadcastConfig
+      name: setBroadcastConfig
+      description: REST surface for setBroadcastConfig.
+      operations:
+      - method: POST
+        name: setbroadcastconfig
+        description: Set broadcast configuration
+        call: livepeer-cli-gateway.setbroadcastconfig
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /setMaxPriceForCapability
+      name: setMaxPriceForCapability
+      description: REST surface for setMaxPriceForCapability.
+      operations:
+      - method: POST
+        name: setmaxpriceforcapability
+        description: Set max price per AI capability
+        call: livepeer-cli-gateway.setmaxpriceforcapability
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: livepeer-cli-gateway-mcp
+    port: 9110
+    transport: http
+    description: "MCP adapter for Livepeer CLI \u2014 Gateway. One tool per consumed operation."
+    tools:
+    - name: set-broadcast-configuration
+      description: Set broadcast configuration
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-cli-gateway.setbroadcastconfig
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: set-max-price-per-ai-capability
+      description: Set max price per AI capability
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-cli-gateway.setmaxpriceforcapability
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

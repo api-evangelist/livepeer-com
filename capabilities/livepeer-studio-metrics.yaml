@@ -1,0 +1,421 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: "Livepeer Studio \u2014 Metrics"
+  description: "Livepeer Studio \u2014 Metrics. 5 operations. Self-contained Naftiko capability for one Studio business surface."
+  tags:
+  - Livepeer
+  - Studio
+  - Metrics
+  created: '2026-05-25'
+  modified: '2026-05-25'
+binds:
+- namespace: env
+  keys:
+    LIVEPEER_API_KEY: LIVEPEER_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: livepeer-studio-metrics
+    baseUri: https://livepeer.studio/api
+    description: "Livepeer Studio \u2014 Metrics business capability. Self-contained, no shared references."
+    resources:
+    - name: data-views-now
+      path: /data/views/now
+      operations:
+      - name: getrealtimeviewershipnow
+        method: GET
+        description: Query realtime viewership
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: playbackId
+          in: query
+          type: string
+          description: 'The playback ID to filter the query results. This can be a canonical
+
+            playback ID from Livepeer assets or streams, or dStorage identifiers
+
+            for assets
+
+            '
+          required: false
+        - name: creatorId
+          in: query
+          type: string
+          description: The creator ID to filter the query results
+          required: false
+        - name: breakdownBy[]
+          in: query
+          type: array
+          description: 'The list of fields to break down the query results. Specify this
+
+            query-string multiple times to break down by multiple fields.
+
+            '
+          required: false
+    - name: data-views-query
+      path: /data/views/query
+      operations:
+      - name: getviewershipmetrics
+        method: GET
+        description: Query viewership metrics
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: playbackId
+          in: query
+          type: string
+          description: 'The playback ID to filter the query results. This can be a canonical
+
+            playback ID from Livepeer assets or streams, or dStorage identifiers
+
+            for assets
+
+            '
+          required: false
+        - name: from
+          in: query
+          type: string
+          description: Start timestamp for the query range (inclusive)
+          required: false
+        - name: to
+          in: query
+          type: string
+          description: End timestamp for the query range (exclusive)
+          required: false
+        - name: timeStep
+          in: query
+          type: string
+          description: The time step to aggregate viewership metrics by
+          required: false
+        - name: assetId
+          in: query
+          type: string
+          description: The asset ID to filter metrics for
+          required: false
+        - name: streamId
+          in: query
+          type: string
+          description: The stream ID to filter metrics for
+          required: false
+        - name: creatorId
+          in: query
+          type: string
+          description: The creator ID to filter the query results
+          required: false
+        - name: breakdownBy[]
+          in: query
+          type: array
+          description: 'The list of fields to break down the query results. Specify this
+
+            query-string multiple times to break down by multiple fields.
+
+            '
+          required: false
+    - name: data-views-query-creator
+      path: /data/views/query/creator
+      operations:
+      - name: getcreatorviewershipmetrics
+        method: GET
+        description: Query creator viewership metrics
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: from
+          in: query
+          type: string
+          description: Start timestamp for the query range (inclusive)
+          required: false
+        - name: to
+          in: query
+          type: string
+          description: End timestamp for the query range (exclusive)
+          required: false
+        - name: timeStep
+          in: query
+          type: string
+          description: The time step to aggregate viewership metrics by
+          required: false
+        - name: assetId
+          in: query
+          type: string
+          description: The asset ID to filter metrics for
+          required: false
+        - name: streamId
+          in: query
+          type: string
+          description: The stream ID to filter metrics for
+          required: false
+        - name: creatorId
+          in: query
+          type: string
+          description: The creator ID to filter the query results
+          required: false
+        - name: breakdownBy[]
+          in: query
+          type: array
+          description: 'The list of fields to break down the query results. Specify this
+
+            query-string multiple times to break down by multiple fields.
+
+            '
+          required: false
+    - name: data-views-query-total-playbackId
+      path: /data/views/query/total/{playbackId}
+      operations:
+      - name: getpublicviewershipmetrics
+        method: GET
+        description: Query public total views metrics
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: playbackId
+          in: path
+          type: string
+          description: 'The playback ID to filter the query results. This can be a canonical
+
+            playback ID from Livepeer assets or streams, or dStorage identifiers
+
+            for assets
+
+            '
+          required: true
+    - name: data-usage-query
+      path: /data/usage/query
+      operations:
+      - name: getusagemetrics
+        method: GET
+        description: Query usage metrics
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: from
+          in: query
+          type: integer
+          description: 'Start millis timestamp for the query range (inclusive)
+
+            '
+          required: false
+        - name: to
+          in: query
+          type: integer
+          description: 'End millis timestamp for the query range (exclusive)
+
+            '
+          required: false
+        - name: timeStep
+          in: query
+          type: string
+          description: 'The time step to aggregate viewership metrics by
+
+            '
+          required: false
+        - name: creatorId
+          in: query
+          type: string
+          description: 'The creator ID to filter the query results
+
+            '
+          required: false
+        - name: breakdownBy[]
+          in: query
+          type: array
+          description: 'The list of fields to break down the query results. Currently the
+
+            only supported breakdown is by `creatorId`.
+
+            '
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.LIVEPEER_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: livepeer-studio-metrics-rest
+    port: 8080
+    description: "REST adapter for Livepeer Studio \u2014 Metrics."
+    resources:
+    - path: /data/views/now
+      name: data-views-now
+      description: REST surface for data-views-now.
+      operations:
+      - method: GET
+        name: getrealtimeviewershipnow
+        description: Query realtime viewership
+        call: livepeer-studio-metrics.getrealtimeviewershipnow
+        with:
+          playbackId: rest.playbackId
+          creatorId: rest.creatorId
+          breakdownBy[]: rest.breakdownBy[]
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /data/views/query
+      name: data-views-query
+      description: REST surface for data-views-query.
+      operations:
+      - method: GET
+        name: getviewershipmetrics
+        description: Query viewership metrics
+        call: livepeer-studio-metrics.getviewershipmetrics
+        with:
+          playbackId: rest.playbackId
+          from: rest.from
+          to: rest.to
+          timeStep: rest.timeStep
+          assetId: rest.assetId
+          streamId: rest.streamId
+          creatorId: rest.creatorId
+          breakdownBy[]: rest.breakdownBy[]
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /data/views/query/creator
+      name: data-views-query-creator
+      description: REST surface for data-views-query-creator.
+      operations:
+      - method: GET
+        name: getcreatorviewershipmetrics
+        description: Query creator viewership metrics
+        call: livepeer-studio-metrics.getcreatorviewershipmetrics
+        with:
+          from: rest.from
+          to: rest.to
+          timeStep: rest.timeStep
+          assetId: rest.assetId
+          streamId: rest.streamId
+          creatorId: rest.creatorId
+          breakdownBy[]: rest.breakdownBy[]
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /data/views/query/total/{playback-id}
+      name: data-views-query-total-playbackId
+      description: REST surface for data-views-query-total-playbackId.
+      operations:
+      - method: GET
+        name: getpublicviewershipmetrics
+        description: Query public total views metrics
+        call: livepeer-studio-metrics.getpublicviewershipmetrics
+        with:
+          playbackId: rest.playbackId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /data/usage/query
+      name: data-usage-query
+      description: REST surface for data-usage-query.
+      operations:
+      - method: GET
+        name: getusagemetrics
+        description: Query usage metrics
+        call: livepeer-studio-metrics.getusagemetrics
+        with:
+          from: rest.from
+          to: rest.to
+          timeStep: rest.timeStep
+          creatorId: rest.creatorId
+          breakdownBy[]: rest.breakdownBy[]
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: livepeer-studio-metrics-mcp
+    port: 9090
+    transport: http
+    description: "MCP adapter for Livepeer Studio \u2014 Metrics. One tool per consumed operation."
+    tools:
+    - name: query-realtime-viewership
+      description: Query realtime viewership
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: livepeer-studio-metrics.getrealtimeviewershipnow
+      with:
+        playbackId: tools.playbackId
+        creatorId: tools.creatorId
+        breakdownBy[]: tools.breakdownBy[]
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: query-viewership-metrics
+      description: Query viewership metrics
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: livepeer-studio-metrics.getviewershipmetrics
+      with:
+        playbackId: tools.playbackId
+        from: tools.from
+        to: tools.to
+        timeStep: tools.timeStep
+        assetId: tools.assetId
+        streamId: tools.streamId
+        creatorId: tools.creatorId
+        breakdownBy[]: tools.breakdownBy[]
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: query-creator-viewership-metrics
+      description: Query creator viewership metrics
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: livepeer-studio-metrics.getcreatorviewershipmetrics
+      with:
+        from: tools.from
+        to: tools.to
+        timeStep: tools.timeStep
+        assetId: tools.assetId
+        streamId: tools.streamId
+        creatorId: tools.creatorId
+        breakdownBy[]: tools.breakdownBy[]
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: query-public-total-views-metrics
+      description: Query public total views metrics
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: livepeer-studio-metrics.getpublicviewershipmetrics
+      with:
+        playbackId: tools.playbackId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: query-usage-metrics
+      description: Query usage metrics
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: livepeer-studio-metrics.getusagemetrics
+      with:
+        from: tools.from
+        to: tools.to
+        timeStep: tools.timeStep
+        creatorId: tools.creatorId
+        breakdownBy[]: tools.breakdownBy[]
+      outputParameters:
+      - type: object
+        mapping: $.

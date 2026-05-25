@@ -1,0 +1,91 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "livepeer": "https://livepeer.org/ns#",
+    "schema": "https://schema.org/",
+
+    "Stream": "livepeer:Stream",
+    "Session": "livepeer:Session",
+    "Asset": "livepeer:Asset",
+    "Task": "livepeer:Task",
+    "Webhook": "livepeer:Webhook",
+    "MultistreamTarget": "livepeer:MultistreamTarget",
+    "Room": "livepeer:Room",
+    "RoomUser": "livepeer:RoomUser",
+    "SigningKey": "livepeer:SigningKey",
+    "Playback": "livepeer:Playback",
+
+    "Orchestrator": "livepeer:Orchestrator",
+    "Gateway": "livepeer:Gateway",
+    "Delegator": "livepeer:Delegator",
+    "Round": "livepeer:Round",
+    "Bond": "livepeer:Bond",
+    "Ticket": "livepeer:Ticket",
+    "Treasury": "livepeer:Treasury",
+
+    "AIPipeline": "livepeer:AIPipeline",
+    "TextToImage": "livepeer:TextToImage",
+    "ImageToImage": "livepeer:ImageToImage",
+    "ImageToVideo": "livepeer:ImageToVideo",
+    "Upscale": "livepeer:Upscale",
+    "AudioToText": "livepeer:AudioToText",
+    "TextToSpeech": "livepeer:TextToSpeech",
+    "ImageToText": "livepeer:ImageToText",
+    "LiveVideoToVideo": "livepeer:LiveVideoToVideo",
+    "LLM": "livepeer:LLM",
+    "SegmentAnything2": "livepeer:SegmentAnything2",
+
+    "id": "@id",
+    "type": "@type",
+
+    "name": "schema:name",
+    "description": "schema:description",
+    "createdAt": "schema:dateCreated",
+    "updatedAt": "schema:dateModified",
+
+    "playbackId": "livepeer:playbackId",
+    "streamKey": "livepeer:streamKey",
+    "isActive": "livepeer:isActive",
+    "record": "livepeer:record",
+    "profiles": "livepeer:profiles",
+    "ingestRate": "livepeer:ingestRate",
+    "outputRate": "livepeer:outputRate",
+
+    "assetId": "livepeer:assetId",
+    "size": "schema:contentSize",
+    "duration": "schema:duration",
+    "videoSpec": "livepeer:videoSpec",
+
+    "status": "livepeer:status",
+    "progress": "livepeer:progress",
+    "errorMessage": "schema:error",
+
+    "events": "livepeer:events",
+    "url": "schema:url",
+    "sharedSecret": "livepeer:sharedSecret",
+
+    "prompt": "livepeer:prompt",
+    "negativePrompt": "livepeer:negativePrompt",
+    "modelId": "livepeer:modelId",
+    "seed": "livepeer:seed",
+    "guidanceScale": "livepeer:guidanceScale",
+    "numInferenceSteps": "livepeer:numInferenceSteps",
+    "width": "schema:width",
+    "height": "schema:height",
+    "images": "livepeer:images",
+    "frames": "livepeer:frames",
+    "fps": "livepeer:fps",
+    "text": "schema:text",
+
+    "orchestratorAddress": "livepeer:orchestratorAddress",
+    "delegatorAddress": "livepeer:delegatorAddress",
+    "stake": "livepeer:stake",
+    "feeShare": "livepeer:feeShare",
+    "rewardCut": "livepeer:rewardCut",
+    "pricePerPixel": "livepeer:pricePerPixel",
+
+    "chain": "livepeer:chain",
+    "contractAddress": "livepeer:contractAddress",
+    "transactionHash": "livepeer:transactionHash"
+  }
+}

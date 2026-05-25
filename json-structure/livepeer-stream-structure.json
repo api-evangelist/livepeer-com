@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-structure.org/draft/2025-09/schema",
+  "name": "LivepeerStream",
+  "version": "1.0.0",
+  "description": "Operational structure of a Livepeer Studio stream object: identity, ingest, transcode, playback, recording, and multistream.",
+  "structures": {
+    "Identity": {
+      "type": "object",
+      "required": ["id", "name"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "playbackId": { "type": "string" },
+        "createdAt": { "type": "integer" }
+      }
+    },
+    "Ingest": {
+      "type": "object",
+      "properties": {
+        "streamKey": { "type": "string" },
+        "pull": {
+          "type": "object",
+          "properties": {
+            "source": { "type": "string" },
+            "headers": { "type": "object" }
+          }
+        }
+      }
+    },
+    "Transcode": {
+      "type": "object",
+      "properties": {
+        "profiles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "width": { "type": "integer" },
+              "height": { "type": "integer" },
+              "bitrate": { "type": "integer" },
+              "fps": { "type": "integer" }
+            }
+          }
+        }
+      }
+    },
+    "Recording": {
+      "type": "object",
+      "properties": {
+        "record": { "type": "boolean" },
+        "recordingSpec": { "type": "object" }
+      }
+    },
+    "Multistream": {
+      "type": "object",
+      "properties": {
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "profile": { "type": "string" },
+              "videoOnly": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+    "AccessControl": {
+      "type": "object",
+      "properties": {
+        "playbackPolicy": {
+          "type": "object",
+          "properties": {
+            "type": { "type": "string" },
+            "webhookId": { "type": "string" },
+            "allowedOrigins": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+    "Telemetry": {
+      "type": "object",
+      "properties": {
+        "isActive": { "type": "boolean" },
+        "isHealthy": { "type": "boolean" },
+        "ingestRate": { "type": "number" },
+        "outputRate": { "type": "number" },
+        "issues": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  }
+}

@@ -1,0 +1,129 @@
+extends:
+  - spectral:oas
+
+rules:
+  # Livepeer Studio API conventions:
+  # - All paths use kebab-case singular resources (/stream, /asset, /webhook, /room, /multistream/target)
+  # - Bearer token auth via Authorization header (apiKey scheme)
+  # - operationIds use camelCase (e.g. createStream, getMultistreamTargets, addMultistreamTarget)
+  # - Path parameters use camelCase: {id}, {assetId}, {taskId}, {playbackId}, {targetId}, {userId}, {keyId}, {logId}, {parentId}
+  # - AI generate endpoints live under /api/generate/* (text-to-image, image-to-video, etc.)
+  # - Tags are lowercase singular (stream, asset, webhook, room, multistream, session, transcode, accessControl, playback, generate, metrics, task)
+  # - All operations have operationId + summary + description
+  # - 4xx/5xx errors return error-information schema
+
+  livepeer-operation-id-required:
+    description: Every Livepeer Studio operation must declare an operationId
+    message: "Operation must declare an operationId"
+    severity: error
+    given: "$.paths.*[get,post,put,patch,delete]"
+    then:
+      field: operationId
+      function: truthy
+
+  livepeer-operation-id-camel-case:
+    description: Livepeer operationIds must use camelCase (createStream, getMultistreamTargets)
+    message: "OperationId '{{value}}' must use camelCase"
+    severity: warn
+    given: "$.paths.*[get,post,put,patch,delete]"
+    then:
+      field: operationId
+      function: pattern
+      functionOptions:
+        match: "^[a-z][a-zA-Z0-9]+$"
+
+  livepeer-summary-required:
+    description: Every operation must have a summary
+    message: "Operation must declare a summary"
+    severity: warn
+    given: "$.paths.*[get,post,put,patch,delete]"
+    then:
+      field: summary
+      function: truthy
+
+  livepeer-summary-title-case:
+    description: Summaries should use sentence/title casing with capitalized first word
+    message: "Summary '{{value}}' must start with a capital letter"
+    severity: info
+    given: "$.paths.*[get,post,put,patch,delete]"
+    then:
+      field: summary
+      function: pattern
+      functionOptions:
+        match: "^[A-Z]"
+
+  livepeer-tags-required:
+    description: Every operation must declare at least one tag
+    message: "Operation must declare tags"
+    severity: warn
+    given: "$.paths.*[get,post,put,patch,delete]"
+    then:
+      field: tags
+      function: truthy
+
+  livepeer-tag-lowercase:
+    description: Livepeer tags are lowercase (stream, asset, webhook, room, accessControl, generate)
+    message: "Tag '{{value}}' must start with a lowercase letter"
+    severity: warn
+    given: "$.paths.*[get,post,put,patch,delete].tags.*"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[a-z]"
+
+  livepeer-bearer-auth:
+    description: Livepeer Studio requires bearer token (apiKey) security
+    message: "Studio operations should require apiKey bearer auth"
+    severity: info
+    given: "$.components.securitySchemes.apiKey"
+    then:
+      field: scheme
+      function: pattern
+      functionOptions:
+        match: "^bearer$"
+
+  livepeer-path-kebab-case:
+    description: Paths must use kebab-case (e.g. /access-control/signing-key, /multistream/target, /start-pull)
+    message: "Path '{{property}}' should use kebab-case for static segments"
+    severity: info
+    given: "$.paths"
+    then:
+      field: "@key"
+      function: pattern
+      functionOptions:
+        match: "^(/[a-z0-9-]+|/\\{[a-zA-Z0-9]+\\})+/?$"
+
+  livepeer-no-trailing-slash:
+    description: Paths should not have trailing slashes
+    message: "Path '{{property}}' must not end with a trailing slash"
+    severity: warn
+    given: "$.paths"
+    then:
+      field: "@key"
+      function: pattern
+      functionOptions:
+        notMatch: "/$"
+
+  livepeer-2xx-response-defined:
+    description: Every operation must define at least one 2xx response
+    message: "Operation must define a 2xx response"
+    severity: warn
+    given: "$.paths.*[get,post,put,patch,delete].responses"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          patternProperties:
+            "^2[0-9][0-9]$": {}
+          minProperties: 1
+
+  livepeer-server-https:
+    description: Server URLs must use HTTPS
+    message: "Server URL '{{value}}' must use HTTPS"
+    severity: error
+    given: "$.servers[*].url"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^https://"

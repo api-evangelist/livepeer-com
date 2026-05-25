@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api-evangelist.github.io/livepeer-com/json-schema/livepeer-task-schema.json",
+  "title": "Livepeer Task",
+  "description": "A Livepeer Studio background processing task: import, transcode, upload, export-to-IPFS, or clip.",
+  "type": "object",
+  "required": ["id", "type", "status"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": {
+      "type": "string",
+      "enum": ["upload", "import", "export", "exportData", "transcode-file", "clip"]
+    },
+    "createdAt": { "type": "number" },
+    "userId": { "type": "string" },
+    "outputAssetId": { "type": "string" },
+    "inputAssetId": { "type": "string" },
+    "projectId": { "type": "string" },
+    "requesterId": { "type": "string" },
+    "scheduledAt": { "type": "number" },
+    "params": {
+      "type": "object",
+      "description": "Type-discriminated parameters for the task."
+    },
+    "status": {
+      "type": "object",
+      "required": ["phase"],
+      "properties": {
+        "phase": {
+          "type": "string",
+          "enum": ["pending", "waiting", "running", "failed", "completed", "cancelled"]
+        },
+        "updatedAt": { "type": "number" },
+        "progress": { "type": "number" },
+        "errorMessage": { "type": "string" },
+        "retries": { "type": "integer" },
+        "step": { "type": "string" }
+      }
+    },
+    "output": {
+      "type": "object",
+      "description": "Type-specific result of the task."
+    }
+  }
+}

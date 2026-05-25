@@ -1,0 +1,153 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Livepeer
+providerId: livepeer-com
+created: '2026-05-25'
+modified: '2026-05-25'
+reconciled: true
+tags:
+  - Video
+  - Streaming
+  - AI Inference
+  - Web3
+description: >-
+  Livepeer Studio commercial pricing surface (Sandbox, Growth / Pay-as-you-go,
+  and Enterprise tiers). The Livepeer Protocol itself is permissionless and
+  pays Orchestrators in ETH/USDC + LPT, not exposed as a fiat plan.
+sources:
+  - https://livepeer.studio/pricing
+  - https://docs.livepeer.org
+plans:
+  - id: livepeer-sandbox
+    name: Sandbox (Free)
+    type: free
+    description: >-
+      Free tier for prototyping on Livepeer Studio. No minimum spend. Generous
+      allowances to test live, on-demand, and AI capabilities in workflow.
+    entries:
+      - label: Transcoding minutes per month (included)
+        name: transcoding-included-minutes
+        type: included
+        metric: minutes
+        limit: 1000
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0'
+        userMultiplied: false
+      - label: Storage minutes per month (included)
+        name: storage-included-minutes
+        type: included
+        metric: minutes
+        limit: 60
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0'
+        userMultiplied: false
+      - label: Delivery minutes per month (included)
+        name: delivery-included-minutes
+        type: included
+        metric: minutes
+        limit: 5000
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0'
+        userMultiplied: false
+    elements:
+      - name: Up to 30 concurrent viewers
+      - name: No credit card required
+      - name: Access to AI generate beta endpoints
+
+  - id: livepeer-growth
+    name: Growth — Pay As You Go
+    type: usage-based
+    description: >-
+      Pay-as-you-go pricing for live streaming, VOD and recording, with a $100
+      monthly minimum spend. Same per-minute rates apply across transcoding,
+      storage, and delivery.
+    entries:
+      - label: Transcoding per 60 minutes
+        name: transcoding-per-60-min
+        type: metered
+        metric: minutes
+        limit: -1
+        timeFrame: usage
+        geo: global
+        unit: 60
+        price: '0.33'
+        userMultiplied: false
+      - label: Storage per 60 minutes
+        name: storage-per-60-min
+        type: metered
+        metric: minutes
+        limit: -1
+        timeFrame: usage
+        geo: global
+        unit: 60
+        price: '0.09'
+        userMultiplied: false
+      - label: Delivery per 60 minutes
+        name: delivery-per-60-min
+        type: metered
+        metric: minutes
+        limit: -1
+        timeFrame: usage
+        geo: global
+        unit: 60
+        price: '0.03'
+        userMultiplied: false
+      - label: Minimum monthly spend
+        name: minimum-monthly-spend
+        type: minimum
+        metric: USD
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '100'
+        userMultiplied: false
+    elements:
+      - name: Up to 50,000 concurrent viewers
+      - name: Pay only for what you use beyond minimum
+      - name: Webhooks, multistream, recording included
+
+  - id: livepeer-enterprise
+    name: Enterprise (Volume)
+    type: contract
+    description: >-
+      Custom enterprise contracts with volume discounts starting at 15% off
+      Growth rates. $2,500 monthly minimum and annual commitment.
+    entries:
+      - label: Minimum monthly spend
+        name: enterprise-minimum-monthly
+        type: minimum
+        metric: USD
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '2500'
+        userMultiplied: false
+    elements:
+      - name: Volume discounts (starting at 15%)
+        details: Discount scales with committed spend
+      - name: Unlimited concurrent viewers
+      - name: Annual commitment required
+      - name: Dedicated support and SLAs
+      - name: Custom AI capacity reservations
+
+  - id: livepeer-ai-network
+    name: Livepeer AI Network (Open Gateway)
+    type: protocol
+    description: >-
+      The decentralized AI inference market settles in ETH on Arbitrum via
+      probabilistic micropayment tickets to Orchestrators. There is no Livepeer
+      Studio plan for direct gateway usage; pricing per pipeline is set by the
+      market of Orchestrators (per-pixel / per-token / per-second).
+    elements:
+      - name: Settled on Arbitrum One in ETH
+      - name: Per-Orchestrator pricing posted on-chain
+      - name: Treasury rebates available for ecosystem builders

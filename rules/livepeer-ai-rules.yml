@@ -1,0 +1,89 @@
+extends:
+  - spectral:oas
+
+rules:
+  # Livepeer AI Gateway / AI Runner conventions:
+  # - All paths use kebab-case (/text-to-image, /image-to-video, /segment-anything-2, /live-video-to-video, /hardware/info)
+  # - Single POST per pipeline endpoint (no GET/DELETE)
+  # - Bearer + HTTPBearer security schemes
+  # - operationIds use genXxx pattern (genTextToImage, genImageToImage)
+  # - Request schemas suffix with Params (TextToImageParams, ImageToVideoParams)
+  # - Response schemas suffix with Response (ImageResponse, AudioResponse, TextResponse)
+  # - HTTPError schema for 4xx/5xx errors
+
+  livepeer-ai-operation-id-gen-prefix:
+    description: AI pipeline operationIds must start with 'gen' (e.g. genTextToImage)
+    message: "AI operationId '{{value}}' must start with 'gen'"
+    severity: warn
+    given: "$.paths.*.post"
+    then:
+      field: operationId
+      function: pattern
+      functionOptions:
+        match: "^gen[A-Z][a-zA-Z0-9]+$"
+
+  livepeer-ai-path-kebab-case:
+    description: AI pipeline paths must use kebab-case
+    message: "Path '{{property}}' must use kebab-case"
+    severity: warn
+    given: "$.paths"
+    then:
+      field: "@key"
+      function: pattern
+      functionOptions:
+        match: "^(/[a-z0-9-]+)+/?$"
+
+  livepeer-ai-tags-required:
+    description: AI pipeline operations should be tagged 'generate'
+    message: "AI operation must declare tags"
+    severity: warn
+    given: "$.paths.*.post"
+    then:
+      field: tags
+      function: truthy
+
+  livepeer-ai-pipeline-is-post:
+    description: AI pipeline operations are POST (text-to-image, image-to-video, etc.)
+    message: "AI pipeline path '{{property}}' should expose POST"
+    severity: info
+    given: "$.paths[?(@property.match(/^\\/(text-to-image|image-to-image|image-to-video|upscale|audio-to-text|segment-anything-2|llm|image-to-text|live-video-to-video|text-to-speech)$/))]"
+    then:
+      field: post
+      function: truthy
+
+  livepeer-ai-http-error-schema:
+    description: AI Runner errors should reference HTTPError schema
+    message: "Component schema HTTPError must exist for AI errors"
+    severity: info
+    given: "$.components.schemas"
+    then:
+      field: HTTPError
+      function: truthy
+
+  livepeer-ai-server-required:
+    description: AI specs must declare a server (dream-gateway.livepeer.cloud or livepeer.studio)
+    message: "AI spec must declare at least one server"
+    severity: error
+    given: "$"
+    then:
+      field: servers
+      function: truthy
+
+  livepeer-ai-server-https:
+    description: Servers must use HTTPS
+    message: "Server URL '{{value}}' must use HTTPS"
+    severity: error
+    given: "$.servers[*].url"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^https://"
+
+  livepeer-ai-operation-summary:
+    description: Every AI pipeline operation needs a summary
+    message: "AI operation must declare summary"
+    severity: warn
+    given: "$.paths.*[get,post]"
+    then:
+      field: summary
+      function: truthy

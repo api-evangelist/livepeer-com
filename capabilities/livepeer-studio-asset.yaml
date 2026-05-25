@@ -1,0 +1,271 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: "Livepeer Studio \u2014 Asset"
+  description: "Livepeer Studio \u2014 Asset. 6 operations. Self-contained Naftiko capability for one Studio business surface."
+  tags:
+  - Livepeer
+  - Studio
+  - Asset
+  created: '2026-05-25'
+  modified: '2026-05-25'
+binds:
+- namespace: env
+  keys:
+    LIVEPEER_API_KEY: LIVEPEER_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: livepeer-studio-asset
+    baseUri: https://livepeer.studio/api
+    description: "Livepeer Studio \u2014 Asset business capability. Self-contained, no shared references."
+    resources:
+    - name: asset
+      path: /asset
+      operations:
+      - name: getassets
+        method: GET
+        description: Retrieve assets
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: asset-request-upload
+      path: /asset/request-upload
+      operations:
+      - name: requestupload
+        method: POST
+        description: Upload an asset
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: asset-upload-url
+      path: /asset/upload/url
+      operations:
+      - name: uploadasset
+        method: POST
+        description: Upload asset via URL
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: asset-assetId
+      path: /asset/{assetId}
+      operations:
+      - name: getasset
+        method: GET
+        description: Retrieves an asset
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: assetId
+          in: path
+          type: string
+          description: ID of the asset
+          required: true
+      - name: updateasset
+        method: PATCH
+        description: Patch an asset
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: assetId
+          in: path
+          type: string
+          description: ID of the asset
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: deleteasset
+        method: DELETE
+        description: Delete an asset
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: assetId
+          in: path
+          type: string
+          description: ID of the asset
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.LIVEPEER_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: livepeer-studio-asset-rest
+    port: 8080
+    description: "REST adapter for Livepeer Studio \u2014 Asset."
+    resources:
+    - path: /asset
+      name: asset
+      description: REST surface for asset.
+      operations:
+      - method: GET
+        name: getassets
+        description: Retrieve assets
+        call: livepeer-studio-asset.getassets
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /asset/request-upload
+      name: asset-request-upload
+      description: REST surface for asset-request-upload.
+      operations:
+      - method: POST
+        name: requestupload
+        description: Upload an asset
+        call: livepeer-studio-asset.requestupload
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /asset/upload/url
+      name: asset-upload-url
+      description: REST surface for asset-upload-url.
+      operations:
+      - method: POST
+        name: uploadasset
+        description: Upload asset via URL
+        call: livepeer-studio-asset.uploadasset
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /asset/{asset-id}
+      name: asset-assetId
+      description: REST surface for asset-assetId.
+      operations:
+      - method: GET
+        name: getasset
+        description: Retrieves an asset
+        call: livepeer-studio-asset.getasset
+        with:
+          assetId: rest.assetId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updateasset
+        description: Patch an asset
+        call: livepeer-studio-asset.updateasset
+        with:
+          assetId: rest.assetId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteasset
+        description: Delete an asset
+        call: livepeer-studio-asset.deleteasset
+        with:
+          assetId: rest.assetId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: livepeer-studio-asset-mcp
+    port: 9090
+    transport: http
+    description: "MCP adapter for Livepeer Studio \u2014 Asset. One tool per consumed operation."
+    tools:
+    - name: retrieve-assets
+      description: Retrieve assets
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: livepeer-studio-asset.getassets
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: upload-an-asset
+      description: Upload an asset
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-studio-asset.requestupload
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: upload-asset-via-url
+      description: Upload asset via URL
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-studio-asset.uploadasset
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieves-an-asset
+      description: Retrieves an asset
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: livepeer-studio-asset.getasset
+      with:
+        assetId: tools.assetId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: patch-an-asset
+      description: Patch an asset
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-studio-asset.updateasset
+      with:
+        assetId: tools.assetId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-an-asset
+      description: Delete an asset
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: livepeer-studio-asset.deleteasset
+      with:
+        assetId: tools.assetId
+      outputParameters:
+      - type: object
+        mapping: $.

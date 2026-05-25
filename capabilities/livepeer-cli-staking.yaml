@@ -1,0 +1,155 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: "Livepeer CLI \u2014 Staking"
+  description: "Livepeer CLI \u2014 Staking. 3 operations. Self-contained Naftiko capability for one CLI business surface."
+  tags:
+  - Livepeer
+  - CLI
+  - Staking
+  created: '2026-05-25'
+  modified: '2026-05-25'
+capability:
+  consumes:
+  - type: http
+    namespace: livepeer-cli-staking
+    baseUri: http://localhost:5935
+    description: "Livepeer CLI \u2014 Staking business capability. Self-contained, no shared references."
+    resources:
+    - name: bond
+      path: /bond
+      operations:
+      - name: bondtokens
+        method: POST
+        description: Bond tokens to an orchestrator
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: unbond
+      path: /unbond
+      operations:
+      - name: unbondtokens
+        method: POST
+        description: Unbond tokens
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: rebond
+      path: /rebond
+      operations:
+      - name: rebondtokens
+        method: POST
+        description: Rebond tokens
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+  exposes:
+  - type: rest
+    namespace: livepeer-cli-staking-rest
+    port: 8100
+    description: "REST adapter for Livepeer CLI \u2014 Staking."
+    resources:
+    - path: /bond
+      name: bond
+      description: REST surface for bond.
+      operations:
+      - method: POST
+        name: bondtokens
+        description: Bond tokens to an orchestrator
+        call: livepeer-cli-staking.bondtokens
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /unbond
+      name: unbond
+      description: REST surface for unbond.
+      operations:
+      - method: POST
+        name: unbondtokens
+        description: Unbond tokens
+        call: livepeer-cli-staking.unbondtokens
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /rebond
+      name: rebond
+      description: REST surface for rebond.
+      operations:
+      - method: POST
+        name: rebondtokens
+        description: Rebond tokens
+        call: livepeer-cli-staking.rebondtokens
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: livepeer-cli-staking-mcp
+    port: 9110
+    transport: http
+    description: "MCP adapter for Livepeer CLI \u2014 Staking. One tool per consumed operation."
+    tools:
+    - name: bond-tokens-to-an-orchestrator
+      description: Bond tokens to an orchestrator
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-cli-staking.bondtokens
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: unbond-tokens
+      description: Unbond tokens
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-cli-staking.unbondtokens
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: rebond-tokens
+      description: Rebond tokens
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-cli-staking.rebondtokens
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

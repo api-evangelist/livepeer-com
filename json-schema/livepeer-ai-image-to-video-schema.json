@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api-evangelist.github.io/livepeer-com/json-schema/livepeer-ai-image-to-video-schema.json",
+  "title": "Livepeer AI — Image-to-Video",
+  "description": "Request payload (multipart/form-data) for the Livepeer AI Network image-to-video pipeline.",
+  "type": "object",
+  "required": ["image"],
+  "properties": {
+    "model_id": { "type": "string" },
+    "image": {
+      "type": "string",
+      "format": "binary",
+      "description": "Reference image to animate."
+    },
+    "height": { "type": "integer", "default": 576 },
+    "width": { "type": "integer", "default": 1024 },
+    "fps": { "type": "integer", "default": 6 },
+    "motion_bucket_id": { "type": "integer", "default": 127 },
+    "noise_aug_strength": { "type": "number", "default": 0.02 },
+    "safety_check": { "type": "boolean", "default": true },
+    "seed": { "type": "integer" },
+    "num_inference_steps": { "type": "integer", "default": 25 }
+  }
+}

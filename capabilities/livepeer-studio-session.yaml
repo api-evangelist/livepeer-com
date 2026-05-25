@@ -1,0 +1,205 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: "Livepeer Studio \u2014 Session"
+  description: "Livepeer Studio \u2014 Session. 4 operations. Self-contained Naftiko capability for one Studio business surface."
+  tags:
+  - Livepeer
+  - Studio
+  - Session
+  created: '2026-05-25'
+  modified: '2026-05-25'
+binds:
+- namespace: env
+  keys:
+    LIVEPEER_API_KEY: LIVEPEER_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: livepeer-studio-session
+    baseUri: https://livepeer.studio/api
+    description: "Livepeer Studio \u2014 Session business capability. Self-contained, no shared references."
+    resources:
+    - name: session-id-clips
+      path: /session/{id}/clips
+      operations:
+      - name: getsessionclips
+        method: GET
+        description: Retrieve clips of a session
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: ID of the parent session
+          required: true
+    - name: session
+      path: /session
+      operations:
+      - name: getsessions
+        method: GET
+        description: Retrieve sessions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: session-id
+      path: /session/{id}
+      operations:
+      - name: getsession
+        method: GET
+        description: Retrieve a session
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: ID of the session
+          required: true
+    - name: stream-parentId-sessions
+      path: /stream/{parentId}/sessions
+      operations:
+      - name: getrecordedsessions
+        method: GET
+        description: Retrieve Recorded Sessions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: parentId
+          in: path
+          type: string
+          description: ID of the parent stream
+          required: true
+        - name: record
+          in: query
+          type: string
+          description: 'Flag indicating if the response should only include recorded
+
+            sessions
+
+            '
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.LIVEPEER_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: livepeer-studio-session-rest
+    port: 8080
+    description: "REST adapter for Livepeer Studio \u2014 Session."
+    resources:
+    - path: /session/{id}/clips
+      name: session-id-clips
+      description: REST surface for session-id-clips.
+      operations:
+      - method: GET
+        name: getsessionclips
+        description: Retrieve clips of a session
+        call: livepeer-studio-session.getsessionclips
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /session
+      name: session
+      description: REST surface for session.
+      operations:
+      - method: GET
+        name: getsessions
+        description: Retrieve sessions
+        call: livepeer-studio-session.getsessions
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /session/{id}
+      name: session-id
+      description: REST surface for session-id.
+      operations:
+      - method: GET
+        name: getsession
+        description: Retrieve a session
+        call: livepeer-studio-session.getsession
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /stream/{parent-id}/sessions
+      name: stream-parentId-sessions
+      description: REST surface for stream-parentId-sessions.
+      operations:
+      - method: GET
+        name: getrecordedsessions
+        description: Retrieve Recorded Sessions
+        call: livepeer-studio-session.getrecordedsessions
+        with:
+          parentId: rest.parentId
+          record: rest.record
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: livepeer-studio-session-mcp
+    port: 9090
+    transport: http
+    description: "MCP adapter for Livepeer Studio \u2014 Session. One tool per consumed operation."
+    tools:
+    - name: retrieve-clips-of-a-session
+      description: Retrieve clips of a session
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: livepeer-studio-session.getsessionclips
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-sessions
+      description: Retrieve sessions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: livepeer-studio-session.getsessions
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-a-session
+      description: Retrieve a session
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: livepeer-studio-session.getsession
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-recorded-sessions
+      description: Retrieve Recorded Sessions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: livepeer-studio-session.getrecordedsessions
+      with:
+        parentId: tools.parentId
+        record: tools.record
+      outputParameters:
+      - type: object
+        mapping: $.

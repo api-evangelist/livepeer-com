@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api-evangelist.github.io/livepeer-com/json-schema/livepeer-webhook-schema.json",
+  "title": "Livepeer Webhook",
+  "description": "Webhook subscription that posts events from Livepeer Studio (stream/asset/task lifecycle) to a customer URL.",
+  "type": "object",
+  "required": ["name", "url", "events"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string", "minLength": 1 },
+    "kind": { "type": "string", "enum": ["webhook"] },
+    "createdAt": { "type": "number" },
+    "userId": { "type": "string" },
+    "projectId": { "type": "string" },
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": [
+          "stream.started",
+          "stream.detection",
+          "stream.idle",
+          "recording.ready",
+          "recording.started",
+          "recording.waiting",
+          "multistream.connected",
+          "multistream.error",
+          "multistream.disconnected",
+          "playback.user.new",
+          "playback.accessControl",
+          "asset.created",
+          "asset.updated",
+          "asset.ready",
+          "asset.failed",
+          "asset.deleted",
+          "task.spawned",
+          "task.updated",
+          "task.completed",
+          "task.failed"
+        ]
+      }
+    },
+    "url": { "type": "string", "format": "uri" },
+    "sharedSecret": {
+      "type": "string",
+      "description": "Used for HMAC-signing the delivered payload."
+    },
+    "streamId": { "type": "string" }
+  }
+}

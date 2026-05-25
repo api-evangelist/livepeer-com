@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api-evangelist.github.io/livepeer-com/json-schema/livepeer-asset-schema.json",
+  "title": "Livepeer Asset",
+  "description": "An on-demand video asset stored in Livepeer Studio. Captures source upload, transcoded video specifications, playback identity, and IPFS storage state.",
+  "type": "object",
+  "required": ["id", "name"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": {
+      "type": "string",
+      "enum": ["video", "audio"],
+      "description": "Asset content type."
+    },
+    "playbackId": { "type": "string" },
+    "userId": { "type": "string" },
+    "playbackUrl": { "type": "string", "format": "uri" },
+    "downloadUrl": { "type": "string", "format": "uri" },
+    "playbackPolicy": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["public", "jwt", "webhook", "lit_signing_condition"]
+        },
+        "webhookId": { "type": "string" },
+        "webhookContext": { "type": "object" },
+        "refreshInterval": { "type": "number" },
+        "allowedOrigins": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["type"]
+    },
+    "source": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["type"],
+          "properties": {
+            "type": { "const": "url" },
+            "url": { "type": "string", "format": "uri" },
+            "encryption": {
+              "type": "object",
+              "properties": {
+                "encryptedKey": { "type": "string" }
+              }
+            },
+            "gatewayUrl": { "type": "string", "format": "uri" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type"],
+          "properties": {
+            "type": { "const": "recording" },
+            "sessionId": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type"],
+          "properties": {
+            "type": { "const": "directUpload" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "sourceId"],
+          "properties": {
+            "type": { "const": "clip" },
+            "sessionId": { "type": "string" },
+            "playbackId": { "type": "string" },
+            "sourceId": { "type": "string" }
+          }
+        }
+      ]
+    },
+    "creatorId": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["unverified", "verified"] },
+        "value": { "type": "string" }
+      }
+    },
+    "storage": {
+      "type": "object",
+      "properties": {
+        "ipfs": {
+          "type": "object",
+          "properties": {
+            "spec": {
+              "type": "object",
+              "properties": {
+                "nftMetadataTemplate": {
+                  "type": "string",
+                  "enum": ["file", "player"]
+                },
+                "nftMetadata": { "type": "object" }
+              }
+            },
+            "nftMetadata": {
+              "type": "object",
+              "properties": {
+                "cid": { "type": "string" },
+                "url": { "type": "string", "format": "uri" },
+                "gatewayUrl": { "type": "string", "format": "uri" }
+              }
+            },
+            "cid": { "type": "string" },
+            "url": { "type": "string", "format": "uri" },
+            "gatewayUrl": { "type": "string", "format": "uri" },
+            "updatedAt": { "type": "number" }
+          }
+        },
+        "status": {
+          "type": "object",
+          "properties": {
+            "phase": {
+              "type": "string",
+              "enum": ["waiting", "processing", "ready", "failed", "reverted"]
+            },
+            "progress": { "type": "number" },
+            "errorMessage": { "type": "string" },
+            "tasks": {
+              "type": "object",
+              "properties": {
+                "pending": { "type": "string" },
+                "last": { "type": "string" },
+                "failed": { "type": "string" }
+              }
+            }
+          },
+          "required": ["phase"]
+        }
+      }
+    },
+    "status": {
+      "type": "object",
+      "properties": {
+        "phase": {
+          "type": "string",
+          "enum": ["waiting", "processing", "ready", "failed", "deleting", "deleted"]
+        },
+        "updatedAt": { "type": "number" },
+        "progress": { "type": "number" },
+        "errorMessage": { "type": "string" }
+      },
+      "required": ["phase", "updatedAt"]
+    },
+    "name": { "type": "string" },
+    "projectId": { "type": "string" },
+    "createdAt": { "type": "number" },
+    "createdByTokenName": { "type": "string" },
+    "size": { "type": "number" },
+    "hash": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "hash": { "type": "string" },
+          "algorithm": { "type": "string" }
+        }
+      }
+    },
+    "videoSpec": {
+      "type": "object",
+      "properties": {
+        "format": { "type": "string" },
+        "duration": { "type": "number" },
+        "bitrate": { "type": "number" },
+        "tracks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string", "enum": ["video", "audio"] },
+              "codec": { "type": "string" },
+              "startTime": { "type": "number" },
+              "duration": { "type": "number" },
+              "bitrate": { "type": "number" },
+              "width": { "type": "integer" },
+              "height": { "type": "integer" },
+              "pixelFormat": { "type": "string" },
+              "fps": { "type": "number" },
+              "channels": { "type": "integer" },
+              "sampleRate": { "type": "integer" },
+              "bitDepth": { "type": "integer" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

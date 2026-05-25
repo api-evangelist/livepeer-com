@@ -1,0 +1,41 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://livepeer.studio/api/webhook",
+    "headers": {
+      "Authorization": "Bearer <LIVEPEER_API_KEY>",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "name": "stream-lifecycle",
+      "url": "https://example.com/webhooks/livepeer",
+      "events": [
+        "stream.started",
+        "stream.idle",
+        "recording.ready",
+        "asset.ready",
+        "task.failed"
+      ],
+      "sharedSecret": "rotate-me-every-90-days"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "wh_01HXX0EXAMPLE",
+      "kind": "webhook",
+      "name": "stream-lifecycle",
+      "url": "https://example.com/webhooks/livepeer",
+      "events": [
+        "stream.started",
+        "stream.idle",
+        "recording.ready",
+        "asset.ready",
+        "task.failed"
+      ],
+      "sharedSecret": "rotate-me-every-90-days",
+      "createdAt": 1716636000000,
+      "userId": "user-abc"
+    }
+  }
+}

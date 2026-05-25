@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api-evangelist.github.io/livepeer-com/json-schema/livepeer-stream-schema.json",
+  "title": "Livepeer Stream",
+  "description": "A live stream resource managed by Livepeer Studio. Combines ingest configuration, transcode profiles, recording settings, multistream targets, and playback identity into one resource.",
+  "type": "object",
+  "required": ["name"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Stable identifier of the stream."
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable stream name."
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["stream"],
+      "description": "Resource kind discriminator."
+    },
+    "creatorId": {
+      "type": "string",
+      "description": "Optional creator identifier."
+    },
+    "lastSeen": {
+      "type": "integer",
+      "description": "Unix milliseconds of the last segment seen."
+    },
+    "sourceSegments": { "type": "integer" },
+    "transcodedSegments": { "type": "integer" },
+    "sourceSegmentsDuration": { "type": "number" },
+    "transcodedSegmentsDuration": { "type": "number" },
+    "sourceBytes": { "type": "integer" },
+    "transcodedBytes": { "type": "integer" },
+    "ingestRate": {
+      "type": "number",
+      "description": "Source bitrate in bits per second."
+    },
+    "outputRate": {
+      "type": "number",
+      "description": "Total output bitrate across renditions in bps."
+    },
+    "deleted": { "type": "boolean" },
+    "isActive": {
+      "type": "boolean",
+      "description": "True while the stream is ingesting."
+    },
+    "isHealthy": { "type": "boolean" },
+    "issues": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "createdByTokenName": { "type": "string" },
+    "createdAt": {
+      "type": "integer",
+      "description": "Unix milliseconds when the stream was created."
+    },
+    "parentId": {
+      "type": "string",
+      "description": "ID of the parent stream for session/child resources."
+    },
+    "streamKey": {
+      "type": "string",
+      "description": "Secret key used for RTMP/SRT ingest."
+    },
+    "pull": {
+      "type": "object",
+      "description": "Pull-ingest source configuration.",
+      "properties": {
+        "source": { "type": "string", "format": "uri" },
+        "headers": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+            "lat": { "type": "number" },
+            "lon": { "type": "number" }
+          }
+        }
+      },
+      "required": ["source"]
+    },
+    "playbackId": {
+      "type": "string",
+      "description": "Public identifier used by players to retrieve manifests."
+    },
+    "profiles": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ffmpegProfile" }
+    },
+    "projectId": { "type": "string" },
+    "record": {
+      "type": "boolean",
+      "description": "Whether sessions should be recorded for VOD."
+    },
+    "recordingSpec": {
+      "type": "object",
+      "properties": {
+        "profiles": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ffmpegProfile" }
+        }
+      }
+    },
+    "multistream": {
+      "type": "object",
+      "properties": {
+        "targets": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/multistreamTargetRef" }
+        }
+      }
+    },
+    "playbackPolicy": { "$ref": "#/$defs/playbackPolicy" },
+    "userTags": {
+      "type": "object",
+      "description": "Free-form user metadata.",
+      "additionalProperties": { "type": "string" }
+    },
+    "suspended": { "type": "boolean" },
+    "userId": { "type": "string" }
+  },
+  "$defs": {
+    "ffmpegProfile": {
+      "type": "object",
+      "required": ["name", "width", "height", "bitrate", "fps"],
+      "properties": {
+        "name": { "type": "string" },
+        "width": { "type": "integer", "minimum": 128 },
+        "height": { "type": "integer", "minimum": 128 },
+        "bitrate": { "type": "integer", "minimum": 100 },
+        "fps": { "type": "integer", "minimum": 0 },
+        "fpsDen": { "type": "integer" },
+        "gop": { "type": "string" },
+        "profile": {
+          "type": "string",
+          "enum": ["H264Baseline", "H264Main", "H264High", "H264ConstrainedHigh"]
+        },
+        "encoder": {
+          "type": "string",
+          "enum": ["H.264", "HEVC", "VP8", "VP9"]
+        },
+        "quality": { "type": "integer" }
+      }
+    },
+    "multistreamTargetRef": {
+      "type": "object",
+      "required": ["profile"],
+      "properties": {
+        "profile": {
+          "type": "string",
+          "description": "Profile name to push to the multistream destination."
+        },
+        "videoOnly": { "type": "boolean" },
+        "id": {
+          "type": "string",
+          "description": "Existing multistream target ID."
+        },
+        "spec": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "url": { "type": "string", "format": "uri" }
+          },
+          "required": ["url"]
+        }
+      }
+    },
+    "playbackPolicy": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["public", "jwt", "webhook", "lit_signing_condition"]
+        },
+        "webhookId": { "type": "string" },
+        "webhookContext": { "type": "object" },
+        "refreshInterval": { "type": "number" },
+        "allowedOrigins": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["type"]
+    }
+  }
+}

@@ -1,0 +1,362 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: "Livepeer Studio \u2014 Webhook"
+  description: "Livepeer Studio \u2014 Webhook. 8 operations. Self-contained Naftiko capability for one Studio business surface."
+  tags:
+  - Livepeer
+  - Studio
+  - Webhook
+  created: '2026-05-25'
+  modified: '2026-05-25'
+binds:
+- namespace: env
+  keys:
+    LIVEPEER_API_KEY: LIVEPEER_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: livepeer-studio-webhook
+    baseUri: https://livepeer.studio/api
+    description: "Livepeer Studio \u2014 Webhook business capability. Self-contained, no shared references."
+    resources:
+    - name: webhook
+      path: /webhook
+      operations:
+      - name: getwebhooks
+        method: GET
+        description: Retrieve a Webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createwebhook
+        method: POST
+        description: Create a webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: webhook-id
+      path: /webhook/{id}
+      operations:
+      - name: getwebhook
+        method: GET
+        description: Retrieve a webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: path parameter 'id'
+          required: true
+      - name: updatewebhook
+        method: PUT
+        description: Update a webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: path parameter 'id'
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: deletewebhook
+        method: DELETE
+        description: Delete a webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: path parameter 'id'
+          required: true
+    - name: webhook-id-log
+      path: /webhook/{id}/log
+      operations:
+      - name: getwebhooklogs
+        method: GET
+        description: Retrieve webhook logs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: path parameter 'id'
+          required: true
+    - name: webhook-id-log-logId
+      path: /webhook/{id}/log/{logId}
+      operations:
+      - name: getwebhooklog
+        method: GET
+        description: Retrieve a webhook log
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: path parameter 'id'
+          required: true
+        - name: logId
+          in: path
+          type: string
+          description: path parameter 'logId'
+          required: true
+    - name: webhook-id-log-logId-resend
+      path: /webhook/{id}/log/{logId}/resend
+      operations:
+      - name: resendwebhook
+        method: POST
+        description: Resend a webhook
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id
+          in: path
+          type: string
+          description: path parameter 'id'
+          required: true
+        - name: logId
+          in: path
+          type: string
+          description: path parameter 'logId'
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.LIVEPEER_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: livepeer-studio-webhook-rest
+    port: 8080
+    description: "REST adapter for Livepeer Studio \u2014 Webhook."
+    resources:
+    - path: /webhook
+      name: webhook
+      description: REST surface for webhook.
+      operations:
+      - method: GET
+        name: getwebhooks
+        description: Retrieve a Webhook
+        call: livepeer-studio-webhook.getwebhooks
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createwebhook
+        description: Create a webhook
+        call: livepeer-studio-webhook.createwebhook
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /webhook/{id}
+      name: webhook-id
+      description: REST surface for webhook-id.
+      operations:
+      - method: GET
+        name: getwebhook
+        description: Retrieve a webhook
+        call: livepeer-studio-webhook.getwebhook
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updatewebhook
+        description: Update a webhook
+        call: livepeer-studio-webhook.updatewebhook
+        with:
+          id: rest.id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletewebhook
+        description: Delete a webhook
+        call: livepeer-studio-webhook.deletewebhook
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /webhook/{id}/log
+      name: webhook-id-log
+      description: REST surface for webhook-id-log.
+      operations:
+      - method: GET
+        name: getwebhooklogs
+        description: Retrieve webhook logs
+        call: livepeer-studio-webhook.getwebhooklogs
+        with:
+          id: rest.id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /webhook/{id}/log/{log-id}
+      name: webhook-id-log-logId
+      description: REST surface for webhook-id-log-logId.
+      operations:
+      - method: GET
+        name: getwebhooklog
+        description: Retrieve a webhook log
+        call: livepeer-studio-webhook.getwebhooklog
+        with:
+          id: rest.id
+          logId: rest.logId
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /webhook/{id}/log/{log-id}/resend
+      name: webhook-id-log-logId-resend
+      description: REST surface for webhook-id-log-logId-resend.
+      operations:
+      - method: POST
+        name: resendwebhook
+        description: Resend a webhook
+        call: livepeer-studio-webhook.resendwebhook
+        with:
+          id: rest.id
+          logId: rest.logId
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: livepeer-studio-webhook-mcp
+    port: 9090
+    transport: http
+    description: "MCP adapter for Livepeer Studio \u2014 Webhook. One tool per consumed operation."
+    tools:
+    - name: retrieve-a-webhook
+      description: Retrieve a Webhook
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: livepeer-studio-webhook.getwebhooks
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-a-webhook
+      description: Create a webhook
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-studio-webhook.createwebhook
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-a-webhook
+      description: Retrieve a webhook
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: livepeer-studio-webhook.getwebhook
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-a-webhook
+      description: Update a webhook
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: livepeer-studio-webhook.updatewebhook
+      with:
+        id: tools.id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-a-webhook
+      description: Delete a webhook
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: livepeer-studio-webhook.deletewebhook
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-webhook-logs
+      description: Retrieve webhook logs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: livepeer-studio-webhook.getwebhooklogs
+      with:
+        id: tools.id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-a-webhook-log
+      description: Retrieve a webhook log
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: livepeer-studio-webhook.getwebhooklog
+      with:
+        id: tools.id
+        logId: tools.logId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: resend-a-webhook
+      description: Resend a webhook
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: livepeer-studio-webhook.resendwebhook
+      with:
+        id: tools.id
+        logId: tools.logId
+      outputParameters:
+      - type: object
+        mapping: $.

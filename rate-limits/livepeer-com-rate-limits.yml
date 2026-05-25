@@ -1,0 +1,71 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Livepeer
+providerId: livepeer-com
+created: '2026-05-25'
+modified: '2026-05-25'
+reconciled: true
+tags:
+  - Rate Limiting
+  - Video Streaming
+  - AI Inference
+description: >-
+  Documented and observed rate-limit surface for Livepeer Studio's REST API
+  and Livepeer AI Network gateways. Studio does not publish a fixed per-key
+  RPS in its API reference; tier-based limits apply on top of plan minimums.
+sources:
+  - https://docs.livepeer.org
+  - https://livepeer.studio/pricing
+headers:
+  retryAfter: Retry-After
+responseCodes:
+  throttled: 429
+  unauthorized: 401
+limits:
+  - name: Studio concurrent viewers (Sandbox)
+    scope: account
+    metric: concurrent_viewers
+    limit: 30
+    timeFrame: instant
+  - name: Studio concurrent viewers (Growth)
+    scope: account
+    metric: concurrent_viewers
+    limit: 50000
+    timeFrame: instant
+  - name: Studio concurrent viewers (Enterprise)
+    scope: account
+    metric: concurrent_viewers
+    limit: -1
+    timeFrame: instant
+    notes: Unlimited subject to capacity planning.
+  - name: Studio API requests per key (default)
+    scope: api-key
+    metric: requests_per_second
+    limit: 100
+    timeFrame: second
+    notes: Soft default; tier and use case may raise/lower this on request.
+  - name: Asset direct upload size
+    scope: request
+    metric: bytes
+    limit: 10737418240
+    timeFrame: request
+    notes: 10 GB hard cap per direct upload; use multipart for larger.
+  - name: AI Gateway predictions (community gateway)
+    scope: ip
+    metric: requests_per_minute
+    limit: 60
+    timeFrame: minute
+    notes: dream-gateway.livepeer.cloud applies fair-use throttling per source IP.
+  - name: AI Gateway predictions (Studio beta)
+    scope: api-key
+    metric: concurrent_predictions
+    limit: 4
+    timeFrame: instant
+    notes: Per-key concurrent AI prediction soft cap on Studio /api/beta/generate.
+  - name: Webhook delivery retry budget
+    scope: webhook
+    metric: retries
+    limit: 5
+    timeFrame: hour
+    notes: Failed deliveries retried with exponential backoff up to 5 attempts.
