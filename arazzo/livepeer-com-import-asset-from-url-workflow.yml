@@ -1,0 +1,119 @@
+arazzo: 1.0.1
+info:
+  title: Livepeer Import an Asset from a URL
+  summary: Upload an asset from an external URL, then poll the processing task.
+  description: >-
+    Imports a video into Livepeer directly from a public URL (HTTP, IPFS, or
+    Arweave) without handling the file bytes yourself. It starts the upload from
+    the source URL, captures the asset and processing task, then polls the task
+    until its phase reports "completed", branching to a failure end when the task
+    fails. On completion it reads the finished asset to surface the playback ID.
+    Every step spells out its request inline so the flow can be read and executed
+    without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: livepeerStudio
+  url: ../openapi/livepeer-studio-openapi.yml
+  type: openapi
+workflows:
+- workflowId: import-asset-from-url
+  summary: Upload an asset from a URL, then poll the task until completion.
+  description: >-
+    Starts an upload of an asset from an external URL, then polls the processing
+    task, branching on the task phase, and finally reads the completed asset.
+  inputs:
+    type: object
+    required:
+    - authToken
+    - name
+    - url
+    properties:
+      authToken:
+        type: string
+        description: Livepeer API key used as a Bearer token.
+      name:
+        type: string
+        description: Name of the asset to create.
+      url:
+        type: string
+        description: Public source URL (https, ipfs, or ar) to import the video from.
+  steps:
+  - stepId: uploadAsset
+    description: >-
+      Start the upload of an asset from the provided source URL. The response
+      includes the placeholder asset and the processing task.
+    operationId: uploadAsset
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.name
+        url: $inputs.url
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      assetId: $response.body#/asset/id
+      taskId: $response.body#/task/id
+  - stepId: pollTask
+    description: >-
+      Poll the processing task by ID. Branch to reading the asset when the task
+      is completed and end on failure; otherwise keep polling.
+    operationId: getTask
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    - name: taskId
+      in: path
+      value: $steps.uploadAsset.outputs.taskId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      phase: $response.body#/status/phase
+      outputAssetId: $response.body#/outputAssetId
+    onSuccess:
+    - name: taskCompleted
+      type: goto
+      stepId: getAsset
+      criteria:
+      - context: $response.body
+        condition: $.status.phase == "completed"
+        type: jsonpath
+    - name: taskFailed
+      type: end
+      criteria:
+      - context: $response.body
+        condition: $.status.phase == "failed"
+        type: jsonpath
+    - name: keepPolling
+      type: goto
+      stepId: pollTask
+      criteria:
+      - context: $response.body
+        condition: $.status.phase != "completed" && $.status.phase != "failed"
+        type: jsonpath
+  - stepId: getAsset
+    description: >-
+      Read the finished asset to surface its playback ID and playback URL.
+    operationId: getAsset
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    - name: assetId
+      in: path
+      value: $steps.uploadAsset.outputs.assetId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      phase: $response.body#/status/phase
+      playbackId: $response.body#/playbackId
+      playbackUrl: $response.body#/playbackUrl
+  outputs:
+    assetId: $steps.uploadAsset.outputs.assetId
+    taskId: $steps.uploadAsset.outputs.taskId
+    playbackId: $steps.getAsset.outputs.playbackId
+    playbackUrl: $steps.getAsset.outputs.playbackUrl

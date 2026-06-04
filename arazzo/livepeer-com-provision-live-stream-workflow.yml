@@ -1,0 +1,99 @@
+arazzo: 1.0.1
+info:
+  title: Livepeer Provision a Live Stream
+  summary: Create a live stream, confirm it exists, and resolve its playback info.
+  description: >-
+    The foundational Livepeer Studio livestreaming flow. It creates a new stream
+    with a name and optional transcoding profiles, reads the stream back to
+    confirm its ingest stream key and playback ID were assigned, and then
+    resolves the playback info so the caller has everything needed to ingest
+    (RTMP) and play back (HLS/WebRTC) the live stream. Every step spells out its
+    request inline so the flow can be read and executed without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: livepeerStudio
+  url: ../openapi/livepeer-studio-openapi.yml
+  type: openapi
+workflows:
+- workflowId: provision-live-stream
+  summary: Create a stream then resolve its playback info.
+  description: >-
+    Creates a new live stream, retrieves the created stream to confirm the
+    assigned stream key and playback ID, and finally fetches the playback info
+    for that playback ID.
+  inputs:
+    type: object
+    required:
+    - authToken
+    - name
+    properties:
+      authToken:
+        type: string
+        description: Livepeer API key used as a Bearer token.
+      name:
+        type: string
+        description: Name of the stream to create.
+      record:
+        type: boolean
+        description: Whether sessions of this stream should be recorded.
+  steps:
+  - stepId: createStream
+    description: >-
+      Create a new live stream. Livepeer assigns a stream key for ingest and a
+      playback ID for playback.
+    operationId: createStream
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.name
+        record: $inputs.record
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      streamId: $response.body#/id
+      streamKey: $response.body#/streamKey
+      playbackId: $response.body#/playbackId
+  - stepId: getStream
+    description: >-
+      Read the stream back by ID to confirm it was created and to capture its
+      current active state.
+    operationId: getStream
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    - name: id
+      in: path
+      value: $steps.createStream.outputs.streamId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      isActive: $response.body#/isActive
+      confirmedPlaybackId: $response.body#/playbackId
+  - stepId: getPlaybackInfo
+    description: >-
+      Resolve playback info for the stream's playback ID, returning the live
+      playback sources (HLS, WebRTC).
+    operationId: getPlaybackInfo
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    - name: id
+      in: path
+      value: $steps.getStream.outputs.confirmedPlaybackId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      playbackType: $response.body#/type
+      sources: $response.body#/meta/source
+  outputs:
+    streamId: $steps.createStream.outputs.streamId
+    streamKey: $steps.createStream.outputs.streamKey
+    playbackId: $steps.createStream.outputs.playbackId
+    sources: $steps.getPlaybackInfo.outputs.sources

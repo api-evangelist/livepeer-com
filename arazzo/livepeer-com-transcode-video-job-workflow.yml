@@ -1,0 +1,131 @@
+arazzo: 1.0.1
+info:
+  title: Livepeer Run a Transcode Job
+  summary: Submit a transcode job to S3/web3.storage and poll the task until done.
+  description: >-
+    Transcodes a source video into HLS, MP4, and/or fMP4 renditions and writes
+    the results to a caller-supplied storage service. Transcoding is
+    asynchronous, so the workflow submits the job, captures the returned task,
+    and polls the task status until its phase reports "completed", branching to a
+    failure end when it fails. Every step spells out its request inline so the
+    flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: livepeerStudio
+  url: ../openapi/livepeer-studio-openapi.yml
+  type: openapi
+workflows:
+- workflowId: transcode-video-job
+  summary: Submit a transcode job and poll its task until complete or failed.
+  description: >-
+    Submits a transcode job that reads a source URL and writes HLS and MP4
+    outputs to an S3-compatible bucket, then polls the resulting task,
+    branching on the task phase.
+  inputs:
+    type: object
+    required:
+    - authToken
+    - inputUrl
+    - storageEndpoint
+    - storageBucket
+    - accessKeyId
+    - secretAccessKey
+    properties:
+      authToken:
+        type: string
+        description: Livepeer API key used as a Bearer token.
+      inputUrl:
+        type: string
+        description: Public URL of the source video to transcode.
+      storageEndpoint:
+        type: string
+        description: S3-compatible endpoint URL for the output storage.
+      storageBucket:
+        type: string
+        description: Bucket to write the transcoded outputs into.
+      accessKeyId:
+        type: string
+        description: Access key ID for the output storage.
+      secretAccessKey:
+        type: string
+        description: Secret access key for the output storage.
+      hlsPath:
+        type: string
+        description: Path within the bucket for the HLS output.
+        default: /output/hls
+      mp4Path:
+        type: string
+        description: Path within the bucket for the MP4 output.
+        default: /output/mp4
+  steps:
+  - stepId: transcodeVideo
+    description: >-
+      Submit the transcode job reading from the input URL and writing HLS and
+      MP4 outputs to the S3-compatible storage. Returns the processing task.
+    operationId: transcodeVideo
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    requestBody:
+      contentType: application/json
+      payload:
+        input:
+          url: $inputs.inputUrl
+        storage:
+          type: s3
+          endpoint: $inputs.storageEndpoint
+          bucket: $inputs.storageBucket
+          credentials:
+            accessKeyId: $inputs.accessKeyId
+            secretAccessKey: $inputs.secretAccessKey
+        outputs:
+          hls:
+            path: $inputs.hlsPath
+          mp4:
+            path: $inputs.mp4Path
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      taskId: $response.body#/id
+  - stepId: pollTask
+    description: >-
+      Poll the transcode task by ID. End successfully when the task is
+      completed and end on failure; otherwise keep polling.
+    operationId: getTask
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    - name: taskId
+      in: path
+      value: $steps.transcodeVideo.outputs.taskId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      phase: $response.body#/status/phase
+      progress: $response.body#/status/progress
+    onSuccess:
+    - name: taskCompleted
+      type: end
+      criteria:
+      - context: $response.body
+        condition: $.status.phase == "completed"
+        type: jsonpath
+    - name: taskFailed
+      type: end
+      criteria:
+      - context: $response.body
+        condition: $.status.phase == "failed"
+        type: jsonpath
+    - name: keepPolling
+      type: goto
+      stepId: pollTask
+      criteria:
+      - context: $response.body
+        condition: $.status.phase != "completed" && $.status.phase != "failed"
+        type: jsonpath
+  outputs:
+    taskId: $steps.transcodeVideo.outputs.taskId
+    finalPhase: $steps.pollTask.outputs.phase

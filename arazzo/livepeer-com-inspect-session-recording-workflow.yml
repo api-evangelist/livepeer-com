@@ -1,0 +1,74 @@
+arazzo: 1.0.1
+info:
+  title: Livepeer Inspect a Session Recording
+  summary: Read a stream session and resolve its recording playback info.
+  description: >-
+    Inspects a past livestream session and resolves the playback info for its
+    recording. It reads the session by ID to capture the recording status and
+    the playback ID, then resolves the playback info for that playback ID so the
+    caller has the recording (VOD) playback sources. Every step spells out its
+    request inline so the flow can be read and executed without opening the
+    underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: livepeerStudio
+  url: ../openapi/livepeer-studio-openapi.yml
+  type: openapi
+workflows:
+- workflowId: inspect-session-recording
+  summary: Read a session then resolve its recording playback info.
+  description: >-
+    Reads a stream session by ID to capture its recording status and playback
+    ID, then resolves the playback info for that playback ID.
+  inputs:
+    type: object
+    required:
+    - authToken
+    - sessionId
+    properties:
+      authToken:
+        type: string
+        description: Livepeer API key used as a Bearer token.
+      sessionId:
+        type: string
+        description: ID of the stream session to inspect.
+  steps:
+  - stepId: getSession
+    description: >-
+      Read the session by ID to capture its recording status and the playback
+      ID used to access the recording.
+    operationId: getSession
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    - name: id
+      in: path
+      value: $inputs.sessionId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      recordingStatus: $response.body#/recordingStatus
+      playbackId: $response.body#/playbackId
+      recordingUrl: $response.body#/recordingUrl
+  - stepId: getPlaybackInfo
+    description: >-
+      Resolve playback info for the session's playback ID, returning the
+      recording (VOD) playback sources.
+    operationId: getPlaybackInfo
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    - name: id
+      in: path
+      value: $steps.getSession.outputs.playbackId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      playbackType: $response.body#/type
+      sources: $response.body#/meta/source
+  outputs:
+    recordingStatus: $steps.getSession.outputs.recordingStatus
+    playbackId: $steps.getSession.outputs.playbackId
+    sources: $steps.getPlaybackInfo.outputs.sources

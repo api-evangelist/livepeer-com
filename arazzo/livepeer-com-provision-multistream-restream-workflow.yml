@@ -1,0 +1,107 @@
+arazzo: 1.0.1
+info:
+  title: Livepeer Provision Multistream Restreaming
+  summary: Create a stream and attach an inline multistream target to restream it.
+  description: >-
+    Restreaming (multistream) pushes a Livepeer livestream out to one or more
+    third-party RTMP/SRT destinations such as Twitch or YouTube. This workflow
+    creates a new stream, attaches a multistream target to that stream using an
+    inline target spec so the target resource is created automatically, and then
+    reads the stream back to confirm the multistream target is registered. Every
+    step spells out its request inline so the flow can be read and executed
+    without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: livepeerStudio
+  url: ../openapi/livepeer-studio-openapi.yml
+  type: openapi
+workflows:
+- workflowId: provision-multistream-restream
+  summary: Create a stream and add a multistream restream target to it.
+  description: >-
+    Creates a new live stream, adds an inline multistream target that pushes a
+    named rendition profile to an external RTMP/SRT URL, then reads the stream
+    back to confirm the multistream configuration.
+  inputs:
+    type: object
+    required:
+    - authToken
+    - name
+    - targetName
+    - targetUrl
+    properties:
+      authToken:
+        type: string
+        description: Livepeer API key used as a Bearer token.
+      name:
+        type: string
+        description: Name of the stream to create.
+      targetName:
+        type: string
+        description: Friendly name for the multistream target.
+      targetUrl:
+        type: string
+        description: RTMP(S) or SRT URL of the external restream destination.
+      profile:
+        type: string
+        description: Rendition profile to push (e.g. "source" or "720p0").
+        default: source
+  steps:
+  - stepId: createStream
+    description: Create the parent live stream that will be restreamed.
+    operationId: createStream
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.name
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      streamId: $response.body#/id
+      playbackId: $response.body#/playbackId
+  - stepId: addMultistreamTarget
+    description: >-
+      Attach a multistream target to the stream using an inline spec so the
+      target resource is created automatically and bound to the stream.
+    operationId: addMultistreamTarget
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    - name: id
+      in: path
+      value: $steps.createStream.outputs.streamId
+    requestBody:
+      contentType: application/json
+      payload:
+        profile: $inputs.profile
+        videoOnly: false
+        spec:
+          name: $inputs.targetName
+          url: $inputs.targetUrl
+    successCriteria:
+    - condition: $statusCode == 204
+  - stepId: getStream
+    description: >-
+      Read the stream back to confirm the multistream target list now contains
+      the newly added target.
+    operationId: getStream
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    - name: id
+      in: path
+      value: $steps.createStream.outputs.streamId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      multistreamTargets: $response.body#/multistream/targets
+  outputs:
+    streamId: $steps.createStream.outputs.streamId
+    playbackId: $steps.createStream.outputs.playbackId
+    multistreamTargets: $steps.getStream.outputs.multistreamTargets

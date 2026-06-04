@@ -1,0 +1,106 @@
+arazzo: 1.0.1
+info:
+  title: Livepeer Register a Stream Webhook
+  summary: Create a stream then register a webhook scoped to its lifecycle events.
+  description: >-
+    Wires up event-driven notifications for a livestream. It creates a new
+    stream, registers a webhook bound to that stream that fires on the requested
+    lifecycle events (for example stream.started and stream.idle), and reads the
+    webhook back to confirm it was stored. Every step spells out its request
+    inline so the flow can be read and executed without opening the underlying
+    OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: livepeerStudio
+  url: ../openapi/livepeer-studio-openapi.yml
+  type: openapi
+workflows:
+- workflowId: register-stream-webhook
+  summary: Create a stream and register a webhook for its events.
+  description: >-
+    Creates a new live stream, registers a webhook scoped to that stream for the
+    requested events, and reads the webhook back to confirm registration.
+  inputs:
+    type: object
+    required:
+    - authToken
+    - streamName
+    - webhookName
+    - webhookUrl
+    - events
+    properties:
+      authToken:
+        type: string
+        description: Livepeer API key used as a Bearer token.
+      streamName:
+        type: string
+        description: Name of the stream to create.
+      webhookName:
+        type: string
+        description: Name of the webhook to create.
+      webhookUrl:
+        type: string
+        description: HTTPS URL that Livepeer will call when events fire.
+      events:
+        type: array
+        description: List of event names to subscribe to (e.g. stream.started).
+        items:
+          type: string
+      sharedSecret:
+        type: string
+        description: Shared secret used to sign the webhook payload.
+  steps:
+  - stepId: createStream
+    description: Create the live stream the webhook will be scoped to.
+    operationId: createStream
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.streamName
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      streamId: $response.body#/id
+  - stepId: createWebhook
+    description: >-
+      Register a webhook bound to the created stream for the requested events.
+    operationId: createWebhook
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.webhookName
+        url: $inputs.webhookUrl
+        events: $inputs.events
+        sharedSecret: $inputs.sharedSecret
+        streamId: $steps.createStream.outputs.streamId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      webhookId: $response.body#/id
+  - stepId: getWebhook
+    description: Read the webhook back by ID to confirm it was stored.
+    operationId: getWebhook
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    - name: id
+      in: path
+      value: $steps.createWebhook.outputs.webhookId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      confirmedEvents: $response.body#/events
+      confirmedUrl: $response.body#/url
+  outputs:
+    streamId: $steps.createStream.outputs.streamId
+    webhookId: $steps.createWebhook.outputs.webhookId
+    confirmedEvents: $steps.getWebhook.outputs.confirmedEvents

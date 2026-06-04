@@ -195,6 +195,42 @@ apis:
         url: capabilities/livepeer-cli-ethereum.yaml
 
 common:
+  - type: ArazzoWorkflows
+    url: arazzo/
+    workflows:
+    - url: arazzo/livepeer-com-clip-livestream-workflow.yml
+      name: Livepeer Clip a Livestream
+      summary: Create a clip from a live playback ID, poll the clip task, fetch the asset.
+    - url: arazzo/livepeer-com-enable-stream-recording-workflow.yml
+      name: Livepeer Enable Recording on a Stream
+      summary: Create a stream, enable recording via update, and confirm the change.
+    - url: arazzo/livepeer-com-import-asset-from-url-workflow.yml
+      name: Livepeer Import an Asset from a URL
+      summary: Upload an asset from an external URL, then poll the processing task.
+    - url: arazzo/livepeer-com-inspect-session-recording-workflow.yml
+      name: Livepeer Inspect a Session Recording
+      summary: Read a stream session and resolve its recording playback info.
+    - url: arazzo/livepeer-com-provision-live-stream-workflow.yml
+      name: Livepeer Provision a Live Stream
+      summary: Create a live stream, confirm it exists, and resolve its playback info.
+    - url: arazzo/livepeer-com-provision-multistream-restream-workflow.yml
+      name: Livepeer Provision Multistream Restreaming
+      summary: Create a stream and attach an inline multistream target to restream it.
+    - url: arazzo/livepeer-com-register-stream-webhook-workflow.yml
+      name: Livepeer Register a Stream Webhook
+      summary: Create a stream then register a webhook scoped to its lifecycle events.
+    - url: arazzo/livepeer-com-secure-stream-signing-key-workflow.yml
+      name: Livepeer Secure a Stream with a Signing Key
+      summary: Create a signing key, create a JWT-gated stream, and resolve playback.
+    - url: arazzo/livepeer-com-standalone-multistream-target-workflow.yml
+      name: Livepeer Reuse a Standalone Multistream Target
+      summary: Create a reusable multistream target, then bind it to a new stream by ID.
+    - url: arazzo/livepeer-com-transcode-video-job-workflow.yml
+      name: Livepeer Run a Transcode Job
+      summary: Submit a transcode job to S3/web3.storage and poll the task until done.
+    - url: arazzo/livepeer-com-upload-and-process-asset-workflow.yml
+      name: Livepeer Upload and Process an Asset
+      summary: Request a direct upload URL, then poll the asset and task until ready.
   - type: Website
     url: https://livepeer.org
   - type: StudioPortal

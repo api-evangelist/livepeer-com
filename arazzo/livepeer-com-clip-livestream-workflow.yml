@@ -1,0 +1,125 @@
+arazzo: 1.0.1
+info:
+  title: Livepeer Clip a Livestream
+  summary: Create a clip from a live playback ID, poll the clip task, fetch the asset.
+  description: >-
+    Creates a highlight clip from an ongoing livestream (or a recorded session)
+    by specifying the playback ID and a start/end timestamp window. Clipping is
+    asynchronous, so the workflow captures the clip asset and task, polls the
+    task until its phase reports "completed", branching to a failure end on
+    failure, and then reads the finished clip asset to surface its playback ID.
+    Every step spells out its request inline so the flow can be read and executed
+    without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: livepeerStudio
+  url: ../openapi/livepeer-studio-openapi.yml
+  type: openapi
+workflows:
+- workflowId: clip-livestream
+  summary: Create a clip, poll its task, then read the resulting clip asset.
+  description: >-
+    Creates a clip from a livestream playback ID over a timestamp window, polls
+    the clip processing task, branching on the task phase, and reads the
+    resulting clip asset.
+  inputs:
+    type: object
+    required:
+    - authToken
+    - playbackId
+    - startTime
+    properties:
+      authToken:
+        type: string
+        description: Livepeer API key used as a Bearer token.
+      playbackId:
+        type: string
+        description: Playback ID of the live stream or recording to clip.
+      startTime:
+        type: number
+        description: Clip start timestamp in Unix milliseconds.
+      endTime:
+        type: number
+        description: Clip end timestamp in Unix milliseconds.
+      name:
+        type: string
+        description: Friendly name for the clip.
+  steps:
+  - stepId: createClip
+    description: >-
+      Create a clip over the supplied playback ID and timestamp window. Returns
+      the clip asset and its processing task.
+    operationId: createClip
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    requestBody:
+      contentType: application/json
+      payload:
+        playbackId: $inputs.playbackId
+        startTime: $inputs.startTime
+        endTime: $inputs.endTime
+        name: $inputs.name
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      assetId: $response.body#/asset/id
+      taskId: $response.body#/task/id
+  - stepId: pollTask
+    description: >-
+      Poll the clip task by ID. Branch to reading the asset when the task is
+      completed and end on failure; otherwise keep polling.
+    operationId: getTask
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    - name: taskId
+      in: path
+      value: $steps.createClip.outputs.taskId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      phase: $response.body#/status/phase
+    onSuccess:
+    - name: clipReady
+      type: goto
+      stepId: getClipAsset
+      criteria:
+      - context: $response.body
+        condition: $.status.phase == "completed"
+        type: jsonpath
+    - name: clipFailed
+      type: end
+      criteria:
+      - context: $response.body
+        condition: $.status.phase == "failed"
+        type: jsonpath
+    - name: keepPolling
+      type: goto
+      stepId: pollTask
+      criteria:
+      - context: $response.body
+        condition: $.status.phase != "completed" && $.status.phase != "failed"
+        type: jsonpath
+  - stepId: getClipAsset
+    description: Read the finished clip asset to surface its playback ID and URL.
+    operationId: getAsset
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    - name: assetId
+      in: path
+      value: $steps.createClip.outputs.assetId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      phase: $response.body#/status/phase
+      playbackId: $response.body#/playbackId
+      playbackUrl: $response.body#/playbackUrl
+  outputs:
+    clipAssetId: $steps.createClip.outputs.assetId
+    clipPlaybackId: $steps.getClipAsset.outputs.playbackId
+    clipPlaybackUrl: $steps.getClipAsset.outputs.playbackUrl

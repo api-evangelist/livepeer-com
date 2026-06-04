@@ -1,0 +1,126 @@
+arazzo: 1.0.1
+info:
+  title: Livepeer Upload and Process an Asset
+  summary: Request a direct upload URL, then poll the asset and task until ready.
+  description: >-
+    The standard Livepeer on-demand (VOD) ingestion flow. It requests a direct
+    upload URL for a named asset, which also returns the placeholder asset and
+    the processing task. The caller uploads the file out of band to the returned
+    URL or Tus endpoint, then this workflow polls the asset's processing status,
+    branching to completion when the asset phase reports "ready" and to a failure
+    branch when it reports "failed". Every step spells out its request inline so
+    the flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: livepeerStudio
+  url: ../openapi/livepeer-studio-openapi.yml
+  type: openapi
+workflows:
+- workflowId: upload-and-process-asset
+  summary: Request an upload URL, then poll the asset until it is ready or failed.
+  description: >-
+    Requests a direct upload URL for a new asset, captures the upload endpoints
+    and the asset and task IDs, then polls the asset status, branching on the
+    asset processing phase.
+  inputs:
+    type: object
+    required:
+    - authToken
+    - name
+    properties:
+      authToken:
+        type: string
+        description: Livepeer API key used as a Bearer token.
+      name:
+        type: string
+        description: Name of the asset to create (e.g. "filename.mp4").
+      staticMp4:
+        type: boolean
+        description: Whether to generate static MP4 renditions for the asset.
+        default: false
+  steps:
+  - stepId: requestUpload
+    description: >-
+      Request a direct upload URL for the asset. The response includes the
+      direct PUT URL, the Tus resumable endpoint, the placeholder asset, and the
+      processing task.
+    operationId: requestUpload
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.name
+        staticMp4: $inputs.staticMp4
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      uploadUrl: $response.body#/url
+      tusEndpoint: $response.body#/tusEndpoint
+      assetId: $response.body#/asset/id
+      taskId: $response.body#/task/id
+  - stepId: pollAsset
+    description: >-
+      Poll the asset by ID and inspect its processing phase. Branch to
+      completion when the asset is ready and to the failure branch when it has
+      failed; otherwise keep polling.
+    operationId: getAsset
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    - name: assetId
+      in: path
+      value: $steps.requestUpload.outputs.assetId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      phase: $response.body#/status/phase
+      playbackId: $response.body#/playbackId
+      playbackUrl: $response.body#/playbackUrl
+    onSuccess:
+    - name: assetReady
+      type: goto
+      stepId: getPlaybackInfo
+      criteria:
+      - context: $response.body
+        condition: $.status.phase == "ready"
+        type: jsonpath
+    - name: assetFailed
+      type: end
+      criteria:
+      - context: $response.body
+        condition: $.status.phase == "failed"
+        type: jsonpath
+    - name: keepPolling
+      type: goto
+      stepId: pollAsset
+      criteria:
+      - context: $response.body
+        condition: $.status.phase != "ready" && $.status.phase != "failed"
+        type: jsonpath
+  - stepId: getPlaybackInfo
+    description: >-
+      Once the asset is ready, resolve its playback info so the caller has the
+      VOD playback sources.
+    operationId: getPlaybackInfo
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    - name: id
+      in: path
+      value: $steps.pollAsset.outputs.playbackId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      sources: $response.body#/meta/source
+  outputs:
+    assetId: $steps.requestUpload.outputs.assetId
+    uploadUrl: $steps.requestUpload.outputs.uploadUrl
+    tusEndpoint: $steps.requestUpload.outputs.tusEndpoint
+    playbackId: $steps.pollAsset.outputs.playbackId
+    sources: $steps.getPlaybackInfo.outputs.sources

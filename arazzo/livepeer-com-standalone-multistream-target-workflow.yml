@@ -1,0 +1,103 @@
+arazzo: 1.0.1
+info:
+  title: Livepeer Reuse a Standalone Multistream Target
+  summary: Create a reusable multistream target, then bind it to a new stream by ID.
+  description: >-
+    Creates a multistream target as a standalone, reusable resource first, then
+    creates a stream and attaches the existing target to that stream by ID
+    (rather than inlining a new target spec). This pattern is useful when the
+    same restream destination is shared across many streams. Every step spells
+    out its request inline so the flow can be read and executed without opening
+    the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: livepeerStudio
+  url: ../openapi/livepeer-studio-openapi.yml
+  type: openapi
+workflows:
+- workflowId: standalone-multistream-target
+  summary: Create a standalone multistream target then bind it to a new stream.
+  description: >-
+    Creates a reusable multistream target resource, creates a new stream, and
+    attaches the existing target to the stream by its target ID.
+  inputs:
+    type: object
+    required:
+    - authToken
+    - targetName
+    - targetUrl
+    - streamName
+    properties:
+      authToken:
+        type: string
+        description: Livepeer API key used as a Bearer token.
+      targetName:
+        type: string
+        description: Friendly name for the reusable multistream target.
+      targetUrl:
+        type: string
+        description: RTMP(S) or SRT URL of the external restream destination.
+      streamName:
+        type: string
+        description: Name of the stream to create and bind the target to.
+      profile:
+        type: string
+        description: Rendition profile to push to the target.
+        default: source
+  steps:
+  - stepId: createMultistreamTarget
+    description: >-
+      Create a standalone, reusable multistream target resource pointing at the
+      external destination URL.
+    operationId: createMultistreamTarget
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.targetName
+        url: $inputs.targetUrl
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      targetId: $response.body#/id
+  - stepId: createStream
+    description: Create the stream that will push to the reusable target.
+    operationId: createStream
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.streamName
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      streamId: $response.body#/id
+  - stepId: bindTarget
+    description: >-
+      Attach the existing multistream target to the stream by referencing the
+      target ID instead of inlining a new spec.
+    operationId: addMultistreamTarget
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    - name: id
+      in: path
+      value: $steps.createStream.outputs.streamId
+    requestBody:
+      contentType: application/json
+      payload:
+        profile: $inputs.profile
+        videoOnly: false
+        id: $steps.createMultistreamTarget.outputs.targetId
+    successCriteria:
+    - condition: $statusCode == 204
+  outputs:
+    targetId: $steps.createMultistreamTarget.outputs.targetId
+    streamId: $steps.createStream.outputs.streamId

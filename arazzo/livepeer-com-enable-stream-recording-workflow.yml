@@ -1,0 +1,85 @@
+arazzo: 1.0.1
+info:
+  title: Livepeer Enable Recording on a Stream
+  summary: Create a stream, enable recording via update, and confirm the change.
+  description: >-
+    Turns on session recording for a livestream after it has been created. It
+    creates a new stream with recording off, patches the stream to enable the
+    record flag, and reads the stream back to confirm the recording setting is
+    now active. Every step spells out its request inline so the flow can be read
+    and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: livepeerStudio
+  url: ../openapi/livepeer-studio-openapi.yml
+  type: openapi
+workflows:
+- workflowId: enable-stream-recording
+  summary: Create a stream, patch it to enable recording, then confirm.
+  description: >-
+    Creates a new live stream with recording disabled, patches the stream to
+    enable recording, and reads the stream back to confirm the record flag.
+  inputs:
+    type: object
+    required:
+    - authToken
+    - name
+    properties:
+      authToken:
+        type: string
+        description: Livepeer API key used as a Bearer token.
+      name:
+        type: string
+        description: Name of the stream to create.
+  steps:
+  - stepId: createStream
+    description: Create a new live stream with recording initially disabled.
+    operationId: createStream
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.name
+        record: false
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      streamId: $response.body#/id
+      playbackId: $response.body#/playbackId
+  - stepId: enableRecording
+    description: Patch the stream to enable session recording.
+    operationId: updateStream
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    - name: id
+      in: path
+      value: $steps.createStream.outputs.streamId
+    requestBody:
+      contentType: application/json
+      payload:
+        record: true
+    successCriteria:
+    - condition: $statusCode == 204
+  - stepId: confirmRecording
+    description: Read the stream back to confirm the record flag is now enabled.
+    operationId: getStream
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    - name: id
+      in: path
+      value: $steps.createStream.outputs.streamId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      record: $response.body#/record
+  outputs:
+    streamId: $steps.createStream.outputs.streamId
+    playbackId: $steps.createStream.outputs.playbackId
+    record: $steps.confirmRecording.outputs.record

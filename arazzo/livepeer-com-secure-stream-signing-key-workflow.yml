@@ -1,0 +1,89 @@
+arazzo: 1.0.1
+info:
+  title: Livepeer Secure a Stream with a Signing Key
+  summary: Create a signing key, create a JWT-gated stream, and resolve playback.
+  description: >-
+    Sets up access-controlled playback for a livestream. It creates an access
+    control signing key (the private key is only returned on creation, so it is
+    captured here), creates a stream whose playback policy requires JWT
+    authorization, and resolves the stream's playback info so the caller can
+    confirm the gated playback sources. Every step spells out its request inline
+    so the flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: livepeerStudio
+  url: ../openapi/livepeer-studio-openapi.yml
+  type: openapi
+workflows:
+- workflowId: secure-stream-signing-key
+  summary: Create a signing key then a JWT-gated stream and resolve its playback.
+  description: >-
+    Creates an access control signing key, creates a stream with a JWT playback
+    policy, and resolves the stream's playback info.
+  inputs:
+    type: object
+    required:
+    - authToken
+    - streamName
+    properties:
+      authToken:
+        type: string
+        description: Livepeer API key used as a Bearer token.
+      streamName:
+        type: string
+        description: Name of the gated stream to create.
+  steps:
+  - stepId: createSigningKey
+    description: >-
+      Create an access control signing key. The private key is only returned on
+      creation, so it is captured here for later JWT signing.
+    operationId: createSigningKey
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      signingKeyId: $response.body#/id
+      publicKey: $response.body#/publicKey
+  - stepId: createGatedStream
+    description: >-
+      Create a stream whose playback policy requires JWT authorization, gating
+      playback behind tokens signed with the signing key.
+    operationId: createStream
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.streamName
+        playbackPolicy:
+          type: jwt
+    successCriteria:
+    - condition: $statusCode == 201
+    outputs:
+      streamId: $response.body#/id
+      playbackId: $response.body#/playbackId
+  - stepId: getPlaybackInfo
+    description: Resolve playback info for the gated stream's playback ID.
+    operationId: getPlaybackInfo
+    parameters:
+    - name: Authorization
+      in: header
+      value: Bearer $inputs.authToken
+    - name: id
+      in: path
+      value: $steps.createGatedStream.outputs.playbackId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      playbackPolicy: $response.body#/meta/playbackPolicy
+  outputs:
+    signingKeyId: $steps.createSigningKey.outputs.signingKeyId
+    publicKey: $steps.createSigningKey.outputs.publicKey
+    streamId: $steps.createGatedStream.outputs.streamId
+    playbackId: $steps.createGatedStream.outputs.playbackId
