@@ -1,0 +1,214 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Livepeer CLI Local HTTP API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Status",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get node status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:5935/status"
+          },
+          "docs": "Display node information, balances, and configuration"
+        },
+        {
+          "info": {
+            "name": "View protocol parameters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:5935/protocolParameters"
+          },
+          "docs": "Show protocol state and parameters"
+        },
+        {
+          "info": {
+            "name": "List registered orchestrators",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:5935/registeredOrchestrators"
+          },
+          "docs": "Display available orchestrators on the network"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Staking",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Bond tokens to an orchestrator",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:5935/bond",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Delegate LPT tokens to an orchestrator"
+        },
+        {
+          "info": {
+            "name": "Unbond tokens",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:5935/unbond",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Remove delegated tokens (starts unbonding period)"
+        },
+        {
+          "info": {
+            "name": "Rebond tokens",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:5935/rebond",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Rebond tokens in unbonding state"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Orchestrator",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Activate orchestrator",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:5935/activateOrchestrator",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Multi-step process to become an orchestrator"
+        },
+        {
+          "info": {
+            "name": "Claim orchestrator rewards",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:5935/reward"
+          },
+          "docs": "Claim orchestrator rewards for current round"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Gateway",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Set broadcast configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:5935/setBroadcastConfig",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Configure transcoding options and max price"
+        },
+        {
+          "info": {
+            "name": "Set max price per AI capability",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:5935/setMaxPriceForCapability",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set pricing for specific AI pipelines and models"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Ethereum",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Transfer LPT tokens",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:5935/transferTokens",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Transfer LPT to another address"
+        },
+        {
+          "info": {
+            "name": "Sign message",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:5935/signMessage",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Sign message with node's private key"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

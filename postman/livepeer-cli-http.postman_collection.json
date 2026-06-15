@@ -1,0 +1,1142 @@
+{
+  "info": {
+    "_postman_id": "27da138a-6a32-43c9-9745-64728e2731b9",
+    "name": "Livepeer CLI Local HTTP API",
+    "description": "Local control-plane HTTP endpoints exposed by the Livepeer node.\n\nThe CLI HTTP API provides programmatic access to node management functions\nincluding status monitoring, staking operations, orchestrator configuration,\nand broadcast settings.\n\n**Default Ports:**\n- Gateway: http://localhost:5935\n- Orchestrator: http://localhost:7935\n\n\nContact Support:\n Name: Livepeer Documentation",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-06-05T15:10:47.000Z",
+    "updatedAt": "2026-06-05T15:10:47.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-27da138a-6a32-43c9-9745-64728e2731b9"
+  },
+  "item": [
+    {
+      "name": "status",
+      "item": [
+        {
+          "name": "Get node status",
+          "id": "848615e9-68e8-4b64-a781-63a3bdbc8691",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "status"
+              ]
+            },
+            "description": "Display node information, balances, and configuration"
+          },
+          "response": [
+            {
+              "id": "7572f2a7-d5bd-4aa5-b689-d71653285560",
+              "name": "Node status retrieved successfully",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "status"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"node\": {\n    \"version\": \"<string>\",\n    \"chainId\": \"<integer>\"\n  },\n  \"account\": {\n    \"address\": \"<string>\",\n    \"ethBalance\": \"<string>\",\n    \"lptBalance\": \"<string>\"\n  }\n}",
+              "createdAt": "2026-06-05T15:10:47.000Z",
+              "updatedAt": "2026-06-05T15:10:47.000Z",
+              "uid": "35240-7572f2a7-d5bd-4aa5-b689-d71653285560"
+            }
+          ],
+          "createdAt": "2026-06-05T15:10:47.000Z",
+          "updatedAt": "2026-06-05T15:10:47.000Z",
+          "uid": "35240-848615e9-68e8-4b64-a781-63a3bdbc8691"
+        }
+      ],
+      "id": "d9d22e36-db7a-4b96-b131-5f31c0ea2551",
+      "createdAt": "2026-06-05T15:10:47.000Z",
+      "updatedAt": "2026-06-05T15:10:47.000Z",
+      "uid": "35240-d9d22e36-db7a-4b96-b131-5f31c0ea2551"
+    },
+    {
+      "name": "protocolParameters",
+      "item": [
+        {
+          "name": "View protocol parameters",
+          "id": "779c0f45-30e6-42a6-a13d-887f6413334a",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/protocolParameters",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "protocolParameters"
+              ]
+            },
+            "description": "Show protocol state and parameters"
+          },
+          "response": [
+            {
+              "id": "454d873c-c2ec-4eb5-a367-815b51b2ce15",
+              "name": "Protocol parameters retrieved successfully",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/protocolParameters",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "protocolParameters"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"totalBondedToken\": \"<string>\",\n  \"totalSupply\": \"<string>\",\n  \"paused\": \"<boolean>\",\n  \"currentRound\": \"<string>\"\n}",
+              "createdAt": "2026-06-05T15:10:47.000Z",
+              "updatedAt": "2026-06-05T15:10:47.000Z",
+              "uid": "35240-454d873c-c2ec-4eb5-a367-815b51b2ce15"
+            }
+          ],
+          "createdAt": "2026-06-05T15:10:47.000Z",
+          "updatedAt": "2026-06-05T15:10:47.000Z",
+          "uid": "35240-779c0f45-30e6-42a6-a13d-887f6413334a"
+        }
+      ],
+      "id": "5b1a2145-db77-4b26-8c75-faff13267f70",
+      "createdAt": "2026-06-05T15:10:47.000Z",
+      "updatedAt": "2026-06-05T15:10:47.000Z",
+      "uid": "35240-5b1a2145-db77-4b26-8c75-faff13267f70"
+    },
+    {
+      "name": "registeredOrchestrators",
+      "item": [
+        {
+          "name": "List registered orchestrators",
+          "id": "7559e6b0-d7ce-45ec-b233-aa3e9a66634d",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/registeredOrchestrators",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "registeredOrchestrators"
+              ]
+            },
+            "description": "Display available orchestrators on the network"
+          },
+          "response": [
+            {
+              "id": "2120c921-48fe-42d3-a358-10edeeb36260",
+              "name": "Orchestrator list retrieved successfully",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/registeredOrchestrators",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "registeredOrchestrators"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "[\n  {\n    \"address\": \"<string>\",\n    \"serviceURI\": \"<string>\",\n    \"pricePerPixel\": \"<string>\",\n    \"activationRound\": \"<string>\"\n  },\n  {\n    \"address\": \"<string>\",\n    \"serviceURI\": \"<string>\",\n    \"pricePerPixel\": \"<string>\",\n    \"activationRound\": \"<string>\"\n  }\n]",
+              "createdAt": "2026-06-05T15:10:47.000Z",
+              "updatedAt": "2026-06-05T15:10:47.000Z",
+              "uid": "35240-2120c921-48fe-42d3-a358-10edeeb36260"
+            }
+          ],
+          "createdAt": "2026-06-05T15:10:47.000Z",
+          "updatedAt": "2026-06-05T15:10:47.000Z",
+          "uid": "35240-7559e6b0-d7ce-45ec-b233-aa3e9a66634d"
+        }
+      ],
+      "id": "093b50ca-ef0e-4305-ae53-6b9e9c6c858c",
+      "createdAt": "2026-06-05T15:10:47.000Z",
+      "updatedAt": "2026-06-05T15:10:47.000Z",
+      "uid": "35240-093b50ca-ef0e-4305-ae53-6b9e9c6c858c"
+    },
+    {
+      "name": "bond",
+      "item": [
+        {
+          "name": "Bond tokens to an orchestrator",
+          "id": "ccb34249-da8f-485d-9e38-0745887bdca3",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<string>\",\n  \"to\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/bond",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "bond"
+              ]
+            },
+            "description": "Delegate LPT tokens to an orchestrator"
+          },
+          "response": [
+            {
+              "id": "565bc1eb-3b45-4680-abe3-5660ea526a3d",
+              "name": "Bond successful",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<string>\",\n  \"to\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/bond",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "bond"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"txHash\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+              "createdAt": "2026-06-05T15:10:47.000Z",
+              "updatedAt": "2026-06-05T15:10:47.000Z",
+              "uid": "35240-565bc1eb-3b45-4680-abe3-5660ea526a3d"
+            }
+          ],
+          "createdAt": "2026-06-05T15:10:47.000Z",
+          "updatedAt": "2026-06-05T15:10:47.000Z",
+          "uid": "35240-ccb34249-da8f-485d-9e38-0745887bdca3"
+        }
+      ],
+      "id": "75f6118c-eaf8-4a1c-9136-89cae0fb4b9a",
+      "createdAt": "2026-06-05T15:10:47.000Z",
+      "updatedAt": "2026-06-05T15:10:47.000Z",
+      "uid": "35240-75f6118c-eaf8-4a1c-9136-89cae0fb4b9a"
+    },
+    {
+      "name": "unbond",
+      "item": [
+        {
+          "name": "Unbond tokens",
+          "id": "07b347f4-2d84-43ac-a392-278150e8ce88",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/unbond",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "unbond"
+              ]
+            },
+            "description": "Remove delegated tokens (starts unbonding period)"
+          },
+          "response": [
+            {
+              "id": "c110a4bd-3b82-468c-9530-1767f1de3608",
+              "name": "Unbond initiated successfully",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/unbond",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "unbond"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"txHash\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+              "createdAt": "2026-06-05T15:10:47.000Z",
+              "updatedAt": "2026-06-05T15:10:47.000Z",
+              "uid": "35240-c110a4bd-3b82-468c-9530-1767f1de3608"
+            }
+          ],
+          "createdAt": "2026-06-05T15:10:47.000Z",
+          "updatedAt": "2026-06-05T15:10:47.000Z",
+          "uid": "35240-07b347f4-2d84-43ac-a392-278150e8ce88"
+        }
+      ],
+      "id": "b61fb1bc-cdf4-448a-bf4a-57527a0bd956",
+      "createdAt": "2026-06-05T15:10:47.000Z",
+      "updatedAt": "2026-06-05T15:10:47.000Z",
+      "uid": "35240-b61fb1bc-cdf4-448a-bf4a-57527a0bd956"
+    },
+    {
+      "name": "rebond",
+      "item": [
+        {
+          "name": "Rebond tokens",
+          "id": "1e8dc853-91d0-4a1c-9638-85eab3e2d965",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"unbondingLockId\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/rebond",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "rebond"
+              ]
+            },
+            "description": "Rebond tokens in unbonding state"
+          },
+          "response": [
+            {
+              "id": "74c28a8a-b62f-4cf8-b315-1da3b776ee48",
+              "name": "Rebond successful",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"unbondingLockId\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/rebond",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "rebond"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"txHash\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+              "createdAt": "2026-06-05T15:10:47.000Z",
+              "updatedAt": "2026-06-05T15:10:47.000Z",
+              "uid": "35240-74c28a8a-b62f-4cf8-b315-1da3b776ee48"
+            }
+          ],
+          "createdAt": "2026-06-05T15:10:47.000Z",
+          "updatedAt": "2026-06-05T15:10:47.000Z",
+          "uid": "35240-1e8dc853-91d0-4a1c-9638-85eab3e2d965"
+        }
+      ],
+      "id": "0b95072f-afaf-4713-adf0-f70d0840fa40",
+      "createdAt": "2026-06-05T15:10:47.000Z",
+      "updatedAt": "2026-06-05T15:10:47.000Z",
+      "uid": "35240-0b95072f-afaf-4713-adf0-f70d0840fa40"
+    },
+    {
+      "name": "activateOrchestrator",
+      "item": [
+        {
+          "name": "Activate orchestrator",
+          "id": "649d2c88-0a25-45a0-aad3-19290627fc11",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"blockRewardCut\": \"<string>\",\n  \"feeShare\": \"<string>\",\n  \"pricePerUnit\": \"<string>\",\n  \"serviceURI\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/activateOrchestrator",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "activateOrchestrator"
+              ]
+            },
+            "description": "Multi-step process to become an orchestrator"
+          },
+          "response": [
+            {
+              "id": "bd1b0c04-7e35-41d5-9b91-c745abc9ccf8",
+              "name": "Orchestrator activated successfully",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"blockRewardCut\": \"<string>\",\n  \"feeShare\": \"<string>\",\n  \"pricePerUnit\": \"<string>\",\n  \"serviceURI\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/activateOrchestrator",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "activateOrchestrator"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"txHash\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+              "createdAt": "2026-06-05T15:10:47.000Z",
+              "updatedAt": "2026-06-05T15:10:47.000Z",
+              "uid": "35240-bd1b0c04-7e35-41d5-9b91-c745abc9ccf8"
+            }
+          ],
+          "createdAt": "2026-06-05T15:10:47.000Z",
+          "updatedAt": "2026-06-05T15:10:47.000Z",
+          "uid": "35240-649d2c88-0a25-45a0-aad3-19290627fc11"
+        }
+      ],
+      "id": "6b9391de-9ba2-47dc-99f4-80de4c68855b",
+      "createdAt": "2026-06-05T15:10:47.000Z",
+      "updatedAt": "2026-06-05T15:10:47.000Z",
+      "uid": "35240-6b9391de-9ba2-47dc-99f4-80de4c68855b"
+    },
+    {
+      "name": "setBroadcastConfig",
+      "item": [
+        {
+          "name": "Set broadcast configuration",
+          "id": "9ae19072-e73b-4881-aa8a-368960419610",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"maxPricePerUnit\": \"<string>\",\n  \"pixelsPerUnit\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/setBroadcastConfig",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "setBroadcastConfig"
+              ]
+            },
+            "description": "Configure transcoding options and max price"
+          },
+          "response": [
+            {
+              "id": "1c428239-9f67-4306-ac90-4ad963f069a1",
+              "name": "Broadcast config updated successfully",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"maxPricePerUnit\": \"<string>\",\n  \"pixelsPerUnit\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/setBroadcastConfig",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "setBroadcastConfig"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-06-05T15:10:47.000Z",
+              "updatedAt": "2026-06-05T15:10:47.000Z",
+              "uid": "35240-1c428239-9f67-4306-ac90-4ad963f069a1"
+            }
+          ],
+          "createdAt": "2026-06-05T15:10:47.000Z",
+          "updatedAt": "2026-06-05T15:10:47.000Z",
+          "uid": "35240-9ae19072-e73b-4881-aa8a-368960419610"
+        }
+      ],
+      "id": "a9009635-c2a1-4628-8dd0-feabd57a50bb",
+      "createdAt": "2026-06-05T15:10:47.000Z",
+      "updatedAt": "2026-06-05T15:10:47.000Z",
+      "uid": "35240-a9009635-c2a1-4628-8dd0-feabd57a50bb"
+    },
+    {
+      "name": "setMaxPriceForCapability",
+      "item": [
+        {
+          "name": "Set max price per AI capability",
+          "id": "10b275f8-dfc0-4e98-88a3-028485a02d5b",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"capabilities_prices\": [\n    {\n      \"pipeline\": \"<string>\",\n      \"price_per_unit\": \"<integer>\",\n      \"model_id\": \"<string>\",\n      \"pixels_per_unit\": \"<integer>\"\n    },\n    {\n      \"pipeline\": \"<string>\",\n      \"price_per_unit\": \"<integer>\",\n      \"model_id\": \"<string>\",\n      \"pixels_per_unit\": \"<integer>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/setMaxPriceForCapability",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "setMaxPriceForCapability"
+              ]
+            },
+            "description": "Set pricing for specific AI pipelines and models"
+          },
+          "response": [
+            {
+              "id": "933efed7-ebb6-4641-b918-d9ef3cb89b53",
+              "name": "AI pricing updated successfully",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"capabilities_prices\": [\n    {\n      \"pipeline\": \"<string>\",\n      \"price_per_unit\": \"<integer>\",\n      \"model_id\": \"<string>\",\n      \"pixels_per_unit\": \"<integer>\"\n    },\n    {\n      \"pipeline\": \"<string>\",\n      \"price_per_unit\": \"<integer>\",\n      \"model_id\": \"<string>\",\n      \"pixels_per_unit\": \"<integer>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/setMaxPriceForCapability",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "setMaxPriceForCapability"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "text",
+              "header": [],
+              "cookie": [],
+              "responseTime": null,
+              "body": null,
+              "createdAt": "2026-06-05T15:10:47.000Z",
+              "updatedAt": "2026-06-05T15:10:47.000Z",
+              "uid": "35240-933efed7-ebb6-4641-b918-d9ef3cb89b53"
+            }
+          ],
+          "createdAt": "2026-06-05T15:10:47.000Z",
+          "updatedAt": "2026-06-05T15:10:47.000Z",
+          "uid": "35240-10b275f8-dfc0-4e98-88a3-028485a02d5b"
+        }
+      ],
+      "id": "5bf74269-7569-41f6-9801-cab40fe49fc1",
+      "createdAt": "2026-06-05T15:10:47.000Z",
+      "updatedAt": "2026-06-05T15:10:47.000Z",
+      "uid": "35240-5bf74269-7569-41f6-9801-cab40fe49fc1"
+    },
+    {
+      "name": "reward",
+      "item": [
+        {
+          "name": "Claim orchestrator rewards",
+          "id": "a75dbbe5-0193-4c74-b629-ecd214bb8806",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/reward",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "reward"
+              ]
+            },
+            "description": "Claim orchestrator rewards for current round"
+          },
+          "response": [
+            {
+              "id": "7e01a230-973c-46f4-b324-9db17913d804",
+              "name": "Reward claimed successfully",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/reward",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "reward"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"txHash\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+              "createdAt": "2026-06-05T15:10:47.000Z",
+              "updatedAt": "2026-06-05T15:10:47.000Z",
+              "uid": "35240-7e01a230-973c-46f4-b324-9db17913d804"
+            }
+          ],
+          "createdAt": "2026-06-05T15:10:47.000Z",
+          "updatedAt": "2026-06-05T15:10:47.000Z",
+          "uid": "35240-a75dbbe5-0193-4c74-b629-ecd214bb8806"
+        }
+      ],
+      "id": "f1d5a1cd-6bd9-4dbb-b1e4-b6bb5ed9df26",
+      "createdAt": "2026-06-05T15:10:47.000Z",
+      "updatedAt": "2026-06-05T15:10:47.000Z",
+      "uid": "35240-f1d5a1cd-6bd9-4dbb-b1e4-b6bb5ed9df26"
+    },
+    {
+      "name": "transferTokens",
+      "item": [
+        {
+          "name": "Transfer LPT tokens",
+          "id": "5ff0e794-8184-43fe-b8e9-9805ce66f5c4",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"to\": \"<string>\",\n  \"amount\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/transferTokens",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "transferTokens"
+              ]
+            },
+            "description": "Transfer LPT to another address"
+          },
+          "response": [
+            {
+              "id": "93855ffc-c2c1-4ecf-b9a1-26625bfde770",
+              "name": "Transfer successful",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"to\": \"<string>\",\n  \"amount\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/transferTokens",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "transferTokens"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"txHash\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+              "createdAt": "2026-06-05T15:10:47.000Z",
+              "updatedAt": "2026-06-05T15:10:47.000Z",
+              "uid": "35240-93855ffc-c2c1-4ecf-b9a1-26625bfde770"
+            }
+          ],
+          "createdAt": "2026-06-05T15:10:47.000Z",
+          "updatedAt": "2026-06-05T15:10:47.000Z",
+          "uid": "35240-5ff0e794-8184-43fe-b8e9-9805ce66f5c4"
+        }
+      ],
+      "id": "37d523c9-0681-424e-b389-56401d44ca40",
+      "createdAt": "2026-06-05T15:10:47.000Z",
+      "updatedAt": "2026-06-05T15:10:47.000Z",
+      "uid": "35240-37d523c9-0681-424e-b389-56401d44ca40"
+    },
+    {
+      "name": "signMessage",
+      "item": [
+        {
+          "name": "Sign message",
+          "id": "c1405e99-bb69-4c97-9d1f-30e1dddd7ec8",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "headerFamily": "json",
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/signMessage",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "signMessage"
+              ]
+            },
+            "description": "Sign message with node's private key"
+          },
+          "response": [
+            {
+              "id": "efed444c-81f3-4a9c-b905-8afb1c1a6ac5",
+              "name": "Message signed successfully",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "headerFamily": "json",
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/signMessage",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "signMessage"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "responseTime": null,
+              "body": "{\n  \"signature\": \"<string>\"\n}",
+              "createdAt": "2026-06-05T15:10:47.000Z",
+              "updatedAt": "2026-06-05T15:10:47.000Z",
+              "uid": "35240-efed444c-81f3-4a9c-b905-8afb1c1a6ac5"
+            }
+          ],
+          "createdAt": "2026-06-05T15:10:47.000Z",
+          "updatedAt": "2026-06-05T15:10:47.000Z",
+          "uid": "35240-c1405e99-bb69-4c97-9d1f-30e1dddd7ec8"
+        }
+      ],
+      "id": "cbb3196d-5452-41c2-ab3a-da6dd2007162",
+      "createdAt": "2026-06-05T15:10:47.000Z",
+      "updatedAt": "2026-06-05T15:10:47.000Z",
+      "uid": "35240-cbb3196d-5452-41c2-ab3a-da6dd2007162"
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5935"
+    }
+  ]
+}

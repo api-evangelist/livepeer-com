@@ -1,97 +1,192 @@
-# Livepeer
+# Livepeer (livepeer-com)
 
-> Decentralized video infrastructure and AI video on Ethereum + Arbitrum.
+Livepeer is the open, permissionless protocol for video transcoding, streaming, and AI video inference, coordinated on Ethereum mainnet and Arbitrum One via the Livepeer Token (LPT). The company commercializes the network through Livepeer Studio (a managed REST API for live streaming, VOD, multistream, recording, rooms, access control, and AI generate) and the Livepeer AI Network, where any GPU operator can serve text-to-image, image-to-video, live video-to-video, LLM, audio-to-text, text-to-speech, upscale, and segmentation pipelines for fees settled in ETH via probabilistic micropayments. The reference Go implementation (go-livepeer), official SDKs in TypeScript, Python, and Go, the React UI Kit, the AI worker, and the Gateway are all open source under the Livepeer GitHub organization.
 
-[Livepeer](https://livepeer.org) is the open, permissionless protocol for video transcoding, streaming, and AI video inference, coordinated on Ethereum mainnet and Arbitrum One via the **Livepeer Token (LPT)**. The company commercializes the network through **Livepeer Studio** — a managed REST API for live streaming, on-demand video, multistream, rooms, access control, recording, metrics, and AI generate — and the open **Livepeer AI Network**, where any GPU operator can serve text-to-image, image-to-video, live video-to-video, LLM, audio-to-text, text-to-speech, upscale, and segmentation pipelines for fees settled in ETH via probabilistic micropayments.
+**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/livepeer-com/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/livepeer-com/refs/heads/main/apis.yml)
 
-This repository is the API Evangelist catalog entry for Livepeer.
+## Scope
+
+- **Type:** Index
+
+## Tags
+
+- Video
+- Live Streaming
+- Video On Demand
+- AI Video
+- Decentralized Compute
+- GPU Network
+- Ethereum
+- Arbitrum
+- Web3
+
+## Timestamps
+
+- **Created:** 2026-05-25
+- **Modified:** 2026-05-25
 
 ## APIs
 
-This catalog covers three distinct API surfaces:
+### Livepeer Studio API
 
-| API | Base URL | Auth | Operations |
-|-----|----------|------|-----------:|
-| **Livepeer Studio** | `https://livepeer.studio/api` | Bearer (API key) | 64 |
-| **Livepeer AI Network** (community + Studio gateway) | `https://dream-gateway.livepeer.cloud` / `https://livepeer.studio/api/beta/generate` | Bearer (API key) | 13 |
-| **Livepeer Node CLI HTTP** (go-livepeer local API) | `http://127.0.0.1:7935` | Loopback | 12 |
+Managed REST API for the Livepeer network. Create and run live streams via RTMP/SRT/WHIP, ingest VOD assets, run transcode tasks, configure multistream destinations, drive WebRTC rooms, manage signing keys for token-gated playback, query usage and viewership metrics, and submit AI generate jobs to the network — all behind a single Bearer-authenticated API on https://livepeer.studio/api.
 
-Total: **89 operations** across 4 OpenAPI specifications.
+- **Human URL:** [https://livepeer.studio](https://livepeer.studio)
+- **Base URL:** `https://livepeer.studio/api`
 
-### Livepeer Studio surface (by tag)
+#### Tags
 
-- **stream** — 11 ops (create, retrieve, update, delete, terminate, start-pull, multistream targets, clip)
-- **asset** — 6 ops (list, request-upload, upload-by-URL, retrieve, patch, delete)
-- **webhook** — 8 ops (CRUD + logs + resend)
-- **multistream** — 5 ops (target CRUD)
-- **session** — 4 ops (list, retrieve, recorded sessions, clips)
-- **room** — 9 ops (WebRTC rooms + users + egress)
-- **transcode** — 1 op (file transcode)
-- **playback** — 1 op (retrieve playback info)
-- **accessControl** — 5 ops (signing key CRUD)
-- **task** — 2 ops (list, retrieve)
-- **metrics** — 5 ops (realtime + historical viewership, usage)
-- **generate** — 7 ops (text-to-image, image-to-image, image-to-video, upscale, audio-to-text, segment-anything-2, llm)
+- Live Streaming
+- Video On Demand
+- Transcoding
+- Multistream
+- Recording
+- Rooms
+- Webhooks
+- Access Control
+- Playback
+- Metrics
+- AI Generate
+- Assets
+- Tasks
 
-### Livepeer AI Network surface
+#### Properties
 
-10 generation pipelines:
+- [Documentation](https://docs.livepeer.org)
+- [API Reference](https://docs.livepeer.org/api-reference)
+- [Getting Started](https://docs.livepeer.org/quickstart)
+- [Authentication](https://docs.livepeer.org/developers/authentication)
+- [OpenAPI](openapi/livepeer-studio-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
+- [Postman Collection](collections/livepeer-studio.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Open Collection](collections/livepeer-studio.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Spectral Ruleset](rules/livepeer-studio-rules.yml)
+- [JSON Schema](json-schema/livepeer-stream-schema.json) — [JSON Schema](https://json-schema.org/specification)
+- [JSON Schema](json-schema/livepeer-asset-schema.json) — [JSON Schema](https://json-schema.org/specification)
+- [JSON Schema](json-schema/livepeer-task-schema.json) — [JSON Schema](https://json-schema.org/specification)
+- [JSON Schema](json-schema/livepeer-webhook-schema.json) — [JSON Schema](https://json-schema.org/specification)
+- [JSON Structure](json-structure/livepeer-stream-structure.json)
+- [Example](examples/livepeer-create-stream-example.json)
+- [Example](examples/livepeer-create-webhook-example.json)
 
-- `POST /text-to-image`
-- `POST /image-to-image`
-- `POST /image-to-video`
-- `POST /upscale`
-- `POST /audio-to-text`
-- `POST /segment-anything-2`
-- `POST /llm` (OpenAI chat-completion compatible)
-- `POST /image-to-text`
-- `POST /live-video-to-video`
-- `POST /text-to-speech`
+### Livepeer AI Network
 
-Plus runner introspection: `/health`, `/hardware/info`, `/hardware/stats`.
+Open AI inference gateway exposing text-to-image, image-to-image, image-to-video, live video-to-video, upscale, audio-to-text, text-to-speech, LLM (OpenAI-compatible), image-to-text, and Segment Anything 2 pipelines against a permissionless network of GPU Orchestrators. Two interchangeable endpoints: the community gateway at https://dream-gateway.livepeer.cloud and Livepeer Studio's managed gateway at https://livepeer.studio/api/beta/generate. Fees settle in ETH on Arbitrum One via probabilistic micropayment tickets.
 
-### Livepeer Node CLI HTTP
+- **Human URL:** [https://docs.livepeer.org/ai](https://docs.livepeer.org/ai)
+- **Base URL:** `https://dream-gateway.livepeer.cloud`
 
-12 endpoints exposed by `go-livepeer` for operators: status, protocol parameters, registered orchestrators, bond / unbond / rebond, orchestrator activation, broadcaster config, max price per capability, reward, ETH/LPT transfers, message signing.
+#### Tags
 
-## Repository contents
+- AI Inference
+- Generative AI
+- Text To Image
+- Image To Image
+- Image To Video
+- Live Video To Video
+- Upscale
+- Audio To Text
+- Text To Speech
+- LLM
+- Image To Text
+- Segmentation
+- GPU Network
 
-| Folder | What lives there |
-|---|---|
-| [`apis.yml`](./apis.yml) | APIs.json 0.19 entry indexing every API and artifact |
-| [`openapi/`](./openapi/) | OpenAPI 3.1 specs for Studio, AI Worker, AI Gateway, CLI |
-| [`rules/`](./rules/) | Spectral rulesets enforcing Studio + AI conventions |
-| [`capabilities/`](./capabilities/) | Naftiko capability YAMLs (one per business surface) |
-| [`vocabulary/`](./vocabulary/) | Domain vocabulary covering protocol, Studio, AI, tokens |
-| [`json-ld/`](./json-ld/) | JSON-LD context for Livepeer resources |
-| [`json-schema/`](./json-schema/) | Stream, Asset, Task, Webhook, AI pipeline schemas |
-| [`json-structure/`](./json-structure/) | Operational structures (platform, stream) |
-| [`examples/`](./examples/) | Example request/response payloads |
-| [`plans/`](./plans/) | API Commons 0.1 Plans (Sandbox / Growth / Enterprise) |
-| [`rate-limits/`](./rate-limits/) | API Commons 0.1 Rate Limits |
-| [`finops/`](./finops/) | FOCUS-aligned FinOps mapping |
-| [`review.yml`](./review.yml) | API Evangelist apis.yml lint review |
+#### Properties
 
-## Why Livepeer matters
+- [Documentation](https://docs.livepeer.org/ai)
+- [API Reference](https://docs.livepeer.org/ai/api-reference)
+- [OpenAPI](openapi/livepeer-ai-worker-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
+- [Postman Collection](collections/livepeer-ai-worker.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Open Collection](collections/livepeer-ai-worker.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [OpenAPI](openapi/livepeer-gateway-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
+- [Postman Collection](collections/livepeer-gateway.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Open Collection](collections/livepeer-gateway.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Spectral Ruleset](rules/livepeer-ai-rules.yml)
+- [JSON Schema](json-schema/livepeer-ai-text-to-image-schema.json) — [JSON Schema](https://json-schema.org/specification)
+- [JSON Schema](json-schema/livepeer-ai-image-to-video-schema.json) — [JSON Schema](https://json-schema.org/specification)
+- [Example](examples/livepeer-ai-text-to-image-example.json)
+- [Example](examples/livepeer-image-to-video-example.json)
 
-- **Tier-1 decentralized infrastructure provider**: The largest non-financial public good built on Ethereum that delivers measurable user-facing utility (video).
-- **First production AI compute market**: Livepeer's AI Subnet is one of the only crypto networks where AI inference workloads, not speculation, drive on-chain fee revenue (~60–72% of fees per recent quarterly metrics).
-- **Two posture options for the same workload**: Builders can start with the managed Studio API (familiar SaaS, fiat billing) and graduate to the open Gateway when they want to choose Orchestrators, pay in ETH, and operate trust-minimized.
-- **Open governance**: LPT holders steer treasury spend, protocol parameters, and upgrades via LIPs.
+### Livepeer Node CLI HTTP API
 
-## Naftiko capability surface
+Local loopback HTTP API exposed by go-livepeer for Orchestrator and Gateway operators. Endpoints cover node status, protocol parameters, registered orchestrators, bond/unbond/rebond actions, orchestrator activation, broadcaster configuration, max price for capability, reward calls, ETH/LPT transfers, and message signing — used by the official Livepeer CLI and dashboards.
 
-Every API surface is decomposed into shared per-domain Naftiko capabilities, each exposing:
+- **Human URL:** [https://docs.livepeer.org/orchestrators](https://docs.livepeer.org/orchestrators)
+- **Base URL:** `http://127.0.0.1:7935`
 
-- A **REST adapter** (one resource per consumed OpenAPI path)
-- An **MCP adapter** (one tool per consumed operation)
+#### Tags
 
-These capabilities are designed to be composed into governed AI workflows (e.g., "ingest creator livestream → record session → transcode VOD → generate text-to-image thumbnail → push to multistream"). Authentication is bound to `LIVEPEER_API_KEY` via environment.
+- Node Operations
+- Orchestrator
+- Gateway
+- Staking
+- Ethereum
+- CLI
 
-## Maintainer
+#### Properties
 
-[Kin Lane](https://apievangelist.com) — `kin@apievangelist.com`
+- [Documentation](https://docs.livepeer.org/orchestrators/guides/install-go-livepeer)
+- [API Reference](https://docs.livepeer.org/references/livepeer-cli)
+- [OpenAPI](openapi/livepeer-cli-http-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
+- [Postman Collection](collections/livepeer-cli-http.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
+- [Open Collection](collections/livepeer-cli-http.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Spectral Ruleset](rules/livepeer-studio-rules.yml)
 
----
+## Common Properties
 
-_Generated and curated by API Evangelist. Last refreshed 2026-05-25._
+- [Arazzo Workflows](arazzo/) — [Arazzo Specification](https://spec.openapis.org/arazzo/latest.html)
+- [Website](https://livepeer.org)
+- [Studio Portal](https://livepeer.studio)
+- [Documentation](https://docs.livepeer.org)
+- [API Reference](https://docs.livepeer.org/api-reference)
+- [Pricing](https://livepeer.studio/pricing)
+- [Blog](https://livepeer.org/blog)
+- [Changelog](https://docs.livepeer.org/changelog)
+- [Explorer](https://explorer.livepeer.org)
+- [Forum](https://forum.livepeer.org)
+- [Roadmap](https://roadmap.livepeer.org/roadmap)
+- [Status Page](https://status.livepeer.studio)
+- [Sign Up](https://livepeer.studio/register)
+- [Login](https://livepeer.studio/login)
+- [Terms of Service](https://www.livepeer.org/legal/terms-of-service)
+- [Privacy Policy](https://www.livepeer.org/legal/privacy-policy)
+- [GitHub Organization](https://github.com/livepeer)
+- [GitHub Repository](https://github.com/livepeer/go-livepeer)
+- [GitHub Repository](https://github.com/livepeer/studio)
+- [GitHub Repository](https://github.com/livepeer/docs)
+- [S D Ks](https://docs.livepeer.org/sdks)
+- [Type Script S D K](https://github.com/livepeer/livepeer-js)
+- [Python S D K](https://github.com/livepeer/livepeer-python)
+- [Python S D K](https://github.com/livepeer/livepeer-ai-python)
+- [Python S D K](https://github.com/livepeer/livepeer-python-gateway)
+- [Go S D K](https://github.com/livepeer/livepeer-go)
+- [U I Kit](https://github.com/livepeer/ui-kit)
+- [Reference Implementation](https://github.com/livepeer/go-livepeer)
+- [A I Worker](https://github.com/livepeer/ai-worker)
+- [Plugin](https://github.com/livepeer/naap)
+- [Smart Contracts](https://github.com/livepeer/protocol)
+- [Network Explorer](https://explorer.livepeer.org)
+- [Token Contract Ethereum](https://etherscan.io/token/0x58b6a8a3302369daec383334672404ee733ab239)
+- [Token Contract Arbitrum](https://arbiscan.io/token/0x289ba1701c2f088cf0faf8b3705246331cb8a839)
+- [Discord](https://discord.gg/livepeer)
+- [Twitter](https://twitter.com/Livepeer)
+- [YouTube](https://www.youtube.com/@LivepeerNetwork)
+- [LinkedIn](https://www.linkedin.com/company/livepeer)
+- [L L Ms Txt](https://docs.livepeer.org/llms.txt)
+- [L L Ms Full Txt](https://docs.livepeer.org/llms-full.txt)
+- [Spectral Ruleset](rules/livepeer-studio-rules.yml)
+- [Spectral Ruleset](rules/livepeer-ai-rules.yml)
+- [Vocabulary](vocabulary/livepeer-com-vocabulary.yml)
+- [J S O N- L D](json-ld/livepeer-com-context.jsonld)
+- [JSON Structure](json-structure/livepeer-platform-structure.json)
+- [Plans](plans/livepeer-com-plans-pricing.yml)
+- [Rate Limits](rate-limits/livepeer-com-rate-limits.yml)
+- [Fin Ops](finops/livepeer-com-finops.yml)
+- [Features](undefined)
+- [Use Cases](undefined)
+- [Integrations](undefined)
+
+## Maintainers
+
+**FN:** Kin Lane
+**Email:** kin@apievangelist.com

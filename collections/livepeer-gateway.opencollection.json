@@ -1,0 +1,208 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Livepeer AI Runner",
+    "version": "0.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "generate",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Text To Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dream-gateway.livepeer.cloud/text-to-image",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Generate images from text prompts."
+        },
+        {
+          "info": {
+            "name": "Image To Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dream-gateway.livepeer.cloud/image-to-image",
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Apply image transformations to a provided image."
+        },
+        {
+          "info": {
+            "name": "Image To Video",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dream-gateway.livepeer.cloud/image-to-video",
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Generate a video from a provided image."
+        },
+        {
+          "info": {
+            "name": "Upscale",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dream-gateway.livepeer.cloud/upscale",
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Upscale an image by increasing its resolution."
+        },
+        {
+          "info": {
+            "name": "Audio To Text",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dream-gateway.livepeer.cloud/audio-to-text",
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Transcribe audio files to text."
+        },
+        {
+          "info": {
+            "name": "Segment Anything 2",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dream-gateway.livepeer.cloud/segment-anything-2",
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Segment objects in an image."
+        },
+        {
+          "info": {
+            "name": "LLM",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dream-gateway.livepeer.cloud/llm",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Generate text using a language model."
+        },
+        {
+          "info": {
+            "name": "Image To Text",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dream-gateway.livepeer.cloud/image-to-text",
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Transform image files to text."
+        },
+        {
+          "info": {
+            "name": "Live Video To Video",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dream-gateway.livepeer.cloud/live-video-to-video",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Apply transformations to a live video streamed to the returned endpoints."
+        },
+        {
+          "info": {
+            "name": "Text To Speech",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dream-gateway.livepeer.cloud/text-to-speech",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Generate a text-to-speech audio file based on the provided text input and speaker description."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

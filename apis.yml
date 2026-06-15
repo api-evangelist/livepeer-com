@@ -1,17 +1,13 @@
 aid: livepeer-com
 name: Livepeer
 description: >-
-  Livepeer is the open, permissionless protocol for video transcoding, streaming,
-  and AI video inference, coordinated on Ethereum mainnet and Arbitrum One via the
-  Livepeer Token (LPT). The company commercializes the network through Livepeer
-  Studio (a managed REST API for live streaming, VOD, multistream, recording,
-  rooms, access control, and AI generate) and the Livepeer AI Network, where any
-  GPU operator can serve text-to-image, image-to-video, live video-to-video, LLM,
-  audio-to-text, text-to-speech, upscale, and segmentation pipelines for fees
-  settled in ETH via probabilistic micropayments. The reference Go implementation
-  (go-livepeer), official SDKs in TypeScript, Python, and Go, the React UI Kit,
-  the AI worker, and the Gateway are all open source under the Livepeer GitHub
-  organization.
+  Livepeer is the open, permissionless protocol for video transcoding, streaming, and AI video inference, coordinated on
+  Ethereum mainnet and Arbitrum One via the Livepeer Token (LPT). The company commercializes the network through
+  Livepeer Studio (a managed REST API for live streaming, VOD, multistream, recording, rooms, access control, and AI
+  generate) and the Livepeer AI Network, where any GPU operator can serve text-to-image, image-to-video, live
+  video-to-video, LLM, audio-to-text, text-to-speech, upscale, and segmentation pipelines for fees settled in ETH via
+  probabilistic micropayments. The reference Go implementation (go-livepeer), official SDKs in TypeScript, Python, and
+  Go, the React UI Kit, the AI worker, and the Gateway are all open source under the Livepeer GitHub organization.
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
@@ -32,12 +28,10 @@ apis:
   - aid: livepeer-com:studio
     name: Livepeer Studio API
     description: >-
-      Managed REST API for the Livepeer network. Create and run live streams via
-      RTMP/SRT/WHIP, ingest VOD assets, run transcode tasks, configure multistream
-      destinations, drive WebRTC rooms, manage signing keys for token-gated
-      playback, query usage and viewership metrics, and submit AI generate jobs
-      to the network — all behind a single Bearer-authenticated API on
-      https://livepeer.studio/api.
+      Managed REST API for the Livepeer network. Create and run live streams via RTMP/SRT/WHIP, ingest VOD assets, run
+      transcode tasks, configure multistream destinations, drive WebRTC rooms, manage signing keys for token-gated
+      playback, query usage and viewership metrics, and submit AI generate jobs to the network — all behind a single
+      Bearer-authenticated API on https://livepeer.studio/api.
     humanURL: https://livepeer.studio
     baseURL: https://livepeer.studio/api
     tags:
@@ -81,41 +75,15 @@ apis:
         type: Example
       - url: examples/livepeer-create-webhook-example.json
         type: Example
-      - type: NaftikoCapability
-        url: capabilities/livepeer-studio-stream.yaml
-      - type: NaftikoCapability
-        url: capabilities/livepeer-studio-multistream.yaml
-      - type: NaftikoCapability
-        url: capabilities/livepeer-studio-asset.yaml
-      - type: NaftikoCapability
-        url: capabilities/livepeer-studio-task.yaml
-      - type: NaftikoCapability
-        url: capabilities/livepeer-studio-webhook.yaml
-      - type: NaftikoCapability
-        url: capabilities/livepeer-studio-session.yaml
-      - type: NaftikoCapability
-        url: capabilities/livepeer-studio-room.yaml
-      - type: NaftikoCapability
-        url: capabilities/livepeer-studio-accesscontrol.yaml
-      - type: NaftikoCapability
-        url: capabilities/livepeer-studio-playback.yaml
-      - type: NaftikoCapability
-        url: capabilities/livepeer-studio-transcode.yaml
-      - type: NaftikoCapability
-        url: capabilities/livepeer-studio-metrics.yaml
-      - type: NaftikoCapability
-        url: capabilities/livepeer-studio-generate.yaml
-
   - aid: livepeer-com:ai-network
     name: Livepeer AI Network
     description: >-
-      Open AI inference gateway exposing text-to-image, image-to-image,
-      image-to-video, live video-to-video, upscale, audio-to-text, text-to-speech,
-      LLM (OpenAI-compatible), image-to-text, and Segment Anything 2 pipelines
-      against a permissionless network of GPU Orchestrators. Two interchangeable
-      endpoints: the community gateway at https://dream-gateway.livepeer.cloud
-      and Livepeer Studio's managed gateway at https://livepeer.studio/api/beta/generate.
-      Fees settle in ETH on Arbitrum One via probabilistic micropayment tickets.
+      Open AI inference gateway exposing text-to-image, image-to-image, image-to-video, live video-to-video, upscale,
+      audio-to-text, text-to-speech, LLM (OpenAI-compatible), image-to-text, and Segment Anything 2 pipelines against a
+      permissionless network of GPU Orchestrators. Two interchangeable endpoints: the community gateway at
+      https://dream-gateway.livepeer.cloud and Livepeer Studio's managed gateway at
+      https://livepeer.studio/api/beta/generate. Fees settle in ETH on Arbitrum One via probabilistic micropayment
+      tickets.
     humanURL: https://docs.livepeer.org/ai
     baseURL: https://dream-gateway.livepeer.cloud
     tags:
@@ -151,20 +119,13 @@ apis:
         type: Example
       - url: examples/livepeer-image-to-video-example.json
         type: Example
-      - type: NaftikoCapability
-        url: capabilities/livepeer-ai-generate.yaml
-      - type: NaftikoCapability
-        url: capabilities/livepeer-ai-system.yaml
-
   - aid: livepeer-com:cli-http
     name: Livepeer Node CLI HTTP API
     description: >-
-      Local loopback HTTP API exposed by go-livepeer for Orchestrator and Gateway
-      operators. Endpoints cover node status, protocol parameters, registered
-      orchestrators, bond/unbond/rebond actions, orchestrator activation,
-      broadcaster configuration, max price for capability, reward calls, ETH/LPT
-      transfers, and message signing — used by the official Livepeer CLI and
-      dashboards.
+      Local loopback HTTP API exposed by go-livepeer for Orchestrator and Gateway operators. Endpoints cover node
+      status, protocol parameters, registered orchestrators, bond/unbond/rebond actions, orchestrator activation,
+      broadcaster configuration, max price for capability, reward calls, ETH/LPT transfers, and message signing — used
+      by the official Livepeer CLI and dashboards.
     humanURL: https://docs.livepeer.org/orchestrators
     baseURL: http://127.0.0.1:7935
     tags:
@@ -183,54 +144,45 @@ apis:
         type: OpenAPI
       - url: rules/livepeer-studio-rules.yml
         type: SpectralRuleset
-      - type: NaftikoCapability
-        url: capabilities/livepeer-cli-status.yaml
-      - type: NaftikoCapability
-        url: capabilities/livepeer-cli-staking.yaml
-      - type: NaftikoCapability
-        url: capabilities/livepeer-cli-orchestrator.yaml
-      - type: NaftikoCapability
-        url: capabilities/livepeer-cli-gateway.yaml
-      - type: NaftikoCapability
-        url: capabilities/livepeer-cli-ethereum.yaml
-
 common:
+  - type: PostmanWorkspace
+    url: https://www.postman.com/kinlaneapi/livepeer/overview
   - type: ArazzoWorkflows
     url: arazzo/
     workflows:
-    - url: arazzo/livepeer-com-clip-livestream-workflow.yml
-      name: Livepeer Clip a Livestream
-      summary: Create a clip from a live playback ID, poll the clip task, fetch the asset.
-    - url: arazzo/livepeer-com-enable-stream-recording-workflow.yml
-      name: Livepeer Enable Recording on a Stream
-      summary: Create a stream, enable recording via update, and confirm the change.
-    - url: arazzo/livepeer-com-import-asset-from-url-workflow.yml
-      name: Livepeer Import an Asset from a URL
-      summary: Upload an asset from an external URL, then poll the processing task.
-    - url: arazzo/livepeer-com-inspect-session-recording-workflow.yml
-      name: Livepeer Inspect a Session Recording
-      summary: Read a stream session and resolve its recording playback info.
-    - url: arazzo/livepeer-com-provision-live-stream-workflow.yml
-      name: Livepeer Provision a Live Stream
-      summary: Create a live stream, confirm it exists, and resolve its playback info.
-    - url: arazzo/livepeer-com-provision-multistream-restream-workflow.yml
-      name: Livepeer Provision Multistream Restreaming
-      summary: Create a stream and attach an inline multistream target to restream it.
-    - url: arazzo/livepeer-com-register-stream-webhook-workflow.yml
-      name: Livepeer Register a Stream Webhook
-      summary: Create a stream then register a webhook scoped to its lifecycle events.
-    - url: arazzo/livepeer-com-secure-stream-signing-key-workflow.yml
-      name: Livepeer Secure a Stream with a Signing Key
-      summary: Create a signing key, create a JWT-gated stream, and resolve playback.
-    - url: arazzo/livepeer-com-standalone-multistream-target-workflow.yml
-      name: Livepeer Reuse a Standalone Multistream Target
-      summary: Create a reusable multistream target, then bind it to a new stream by ID.
-    - url: arazzo/livepeer-com-transcode-video-job-workflow.yml
-      name: Livepeer Run a Transcode Job
-      summary: Submit a transcode job to S3/web3.storage and poll the task until done.
-    - url: arazzo/livepeer-com-upload-and-process-asset-workflow.yml
-      name: Livepeer Upload and Process an Asset
-      summary: Request a direct upload URL, then poll the asset and task until ready.
+      - url: arazzo/livepeer-com-clip-livestream-workflow.yml
+        name: Livepeer Clip a Livestream
+        summary: Create a clip from a live playback ID, poll the clip task, fetch the asset.
+      - url: arazzo/livepeer-com-enable-stream-recording-workflow.yml
+        name: Livepeer Enable Recording on a Stream
+        summary: Create a stream, enable recording via update, and confirm the change.
+      - url: arazzo/livepeer-com-import-asset-from-url-workflow.yml
+        name: Livepeer Import an Asset from a URL
+        summary: Upload an asset from an external URL, then poll the processing task.
+      - url: arazzo/livepeer-com-inspect-session-recording-workflow.yml
+        name: Livepeer Inspect a Session Recording
+        summary: Read a stream session and resolve its recording playback info.
+      - url: arazzo/livepeer-com-provision-live-stream-workflow.yml
+        name: Livepeer Provision a Live Stream
+        summary: Create a live stream, confirm it exists, and resolve its playback info.
+      - url: arazzo/livepeer-com-provision-multistream-restream-workflow.yml
+        name: Livepeer Provision Multistream Restreaming
+        summary: Create a stream and attach an inline multistream target to restream it.
+      - url: arazzo/livepeer-com-register-stream-webhook-workflow.yml
+        name: Livepeer Register a Stream Webhook
+        summary: Create a stream then register a webhook scoped to its lifecycle events.
+      - url: arazzo/livepeer-com-secure-stream-signing-key-workflow.yml
+        name: Livepeer Secure a Stream with a Signing Key
+        summary: Create a signing key, create a JWT-gated stream, and resolve playback.
+      - url: arazzo/livepeer-com-standalone-multistream-target-workflow.yml
+        name: Livepeer Reuse a Standalone Multistream Target
+        summary: Create a reusable multistream target, then bind it to a new stream by ID.
+      - url: arazzo/livepeer-com-transcode-video-job-workflow.yml
+        name: Livepeer Run a Transcode Job
+        summary: Submit a transcode job to S3/web3.storage and poll the task until done.
+      - url: arazzo/livepeer-com-upload-and-process-asset-workflow.yml
+        name: Livepeer Upload and Process an Asset
+        summary: Request a direct upload URL, then poll the asset and task until ready.
   - type: Website
     url: https://livepeer.org
   - type: StudioPortal
@@ -374,7 +326,6 @@ common:
       - OBS, Streamlabs, Larix, Restream (ingest tooling)
       - OpenAI-compatible LLM clients (via /llm endpoint)
       - Daydream, Embody, Frameworks, Stream.place, Storyboard (ecosystem apps)
-
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

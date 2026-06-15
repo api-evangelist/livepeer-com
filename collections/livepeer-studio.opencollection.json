@@ -1,0 +1,1380 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Livepeer API Reference",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "stream",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve streams",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/stream",
+            "params": [
+              {
+                "name": "streamsonly",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve streams"
+        },
+        {
+          "info": {
+            "name": "Create a stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/stream",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "The only parameter you are required to set is the name of your stream,\nbut we also highly recommend that you define transcoding profiles\nparameter that suits your specific broadcasting configuration.\n\\\n\\\nIf you do not define transcoding rendition profiles when creating the\nstream, a default set of profiles will be used. These profiles include\n240p,  360p, 480p and 720p.\n\\\n\\\nThe playback policy is set to public by default for new streams. It can\nalso be added upon the creation of a new stream by "
+        },
+        {
+          "info": {
+            "name": "Retrieve a stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/stream/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the stream"
+              }
+            ]
+          },
+          "docs": "Retrieve a stream"
+        },
+        {
+          "info": {
+            "name": "Update a stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://livepeer.studio/api/stream/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the stream"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a stream"
+        },
+        {
+          "info": {
+            "name": "Delete a stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://livepeer.studio/api/stream/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the stream"
+              }
+            ]
+          },
+          "docs": "This will also suspend any active stream sessions, so make sure to wait\nuntil the stream has finished. To explicitly interrupt an active\nsession, consider instead updating the suspended field in the stream\nusing the PATCH stream API.\n"
+        },
+        {
+          "info": {
+            "name": "Terminates a live stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://livepeer.studio/api/stream/:id/terminate",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the stream"
+              }
+            ]
+          },
+          "docs": "`DELETE /stream/{id}/terminate` can be used to terminate an ongoing\nsession on a live stream. Unlike suspending the stream, it allows the\nstreamer to restart streaming even immediately, but it will force\nterminate the current session and stop the recording.\n\\\n\\\nA 204 No Content status response indicates the stream was successfully\nterminated.\n"
+        },
+        {
+          "info": {
+            "name": "Start ingest for a pull stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/stream/:id/start-pull",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the stream"
+              }
+            ]
+          },
+          "docs": "`POST /stream/{id}/start-pull` can be used to start ingest for a stream\nconfigured with a pull source. If the stream has recording configured,\nit will also start recording.\n\\\n\\\nA 204 No Content status response indicates the stream was successfully\nstarted.\n"
+        },
+        {
+          "info": {
+            "name": "Create a clip",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/clip",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a clip"
+        },
+        {
+          "info": {
+            "name": "Retrieve clips of a livestream",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/stream/:id/clips",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the parent stream or playbackId of parent stream"
+              }
+            ]
+          },
+          "docs": "Retrieve clips of a livestream"
+        },
+        {
+          "info": {
+            "name": "Add a multistream target",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/stream/:id/create-multistream-target",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the parent stream"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a multistream target"
+        },
+        {
+          "info": {
+            "name": "Remove a multistream target",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://livepeer.studio/api/stream/:id/multistream/:targetId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the parent stream"
+              },
+              {
+                "name": "targetId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the multistream target"
+              }
+            ]
+          },
+          "docs": "Remove a multistream target"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "multistream",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve Multistream Targets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/multistream/target"
+          },
+          "docs": "Retrieve Multistream Targets"
+        },
+        {
+          "info": {
+            "name": "Create a multistream target",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/multistream/target",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a multistream target"
+        },
+        {
+          "info": {
+            "name": "Retrieve a multistream target",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/multistream/target/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the multistream target"
+              }
+            ]
+          },
+          "docs": "Retrieve a multistream target"
+        },
+        {
+          "info": {
+            "name": "Update Multistream Target",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://livepeer.studio/api/multistream/target/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the multistream target"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update Multistream Target"
+        },
+        {
+          "info": {
+            "name": "Delete a multistream target",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://livepeer.studio/api/multistream/target/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the multistream target"
+              }
+            ]
+          },
+          "docs": "Make sure to remove any references to the target on existing\nstreams before actually deleting it from the API.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "webhook",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve a Webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/webhook"
+          },
+          "docs": "Retrieve a Webhook"
+        },
+        {
+          "info": {
+            "name": "Create a webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/webhook",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "To create a new webhook, you need to make an API call with the events you want to listen for and the URL that will be called when those events occur.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve a webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/webhook/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve a webhook"
+        },
+        {
+          "info": {
+            "name": "Update a webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://livepeer.studio/api/webhook/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a webhook"
+        },
+        {
+          "info": {
+            "name": "Delete a webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://livepeer.studio/api/webhook/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a webhook"
+        },
+        {
+          "info": {
+            "name": "Retrieve webhook logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/webhook/:id/log",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve webhook logs"
+        },
+        {
+          "info": {
+            "name": "Retrieve a webhook log",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/webhook/:id/log/:logId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "logId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve a webhook log"
+        },
+        {
+          "info": {
+            "name": "Resend a webhook",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/webhook/:id/log/:logId/resend",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "logId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Use this API to resend the same webhook request. This is useful when\ndeveloping and debugging, allowing you to easily repeat the same webhook\nto check or fix the behaviour in your handler.\n"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "asset",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve assets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/asset"
+          },
+          "docs": "Retrieve assets"
+        },
+        {
+          "info": {
+            "name": "Upload an asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/asset/request-upload",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "To upload an asset, your first need to request for a direct upload URL\nand only then actually upload the contents of the asset.\n\\\n\\\nOnce you created a upload link, you have 2 options, resumable or direct\nupload. For a more reliable experience, you should use resumable uploads\nwhich will work better for users with unreliable or slow network\nconnections. If you want a simpler implementation though, you should\njust use a direct upload.\n\n\n## Direct Upload\nFor a direct upload, make a PUT request to t"
+        },
+        {
+          "info": {
+            "name": "Upload asset via URL",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/asset/upload/url",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Upload asset via URL"
+        },
+        {
+          "info": {
+            "name": "Retrieves an asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/asset/:assetId",
+            "params": [
+              {
+                "name": "assetId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset"
+              }
+            ]
+          },
+          "docs": "Retrieves an asset"
+        },
+        {
+          "info": {
+            "name": "Patch an asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://livepeer.studio/api/asset/:assetId",
+            "params": [
+              {
+                "name": "assetId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Patch an asset"
+        },
+        {
+          "info": {
+            "name": "Delete an asset",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://livepeer.studio/api/asset/:assetId",
+            "params": [
+              {
+                "name": "assetId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the asset"
+              }
+            ]
+          },
+          "docs": "Delete an asset"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "session",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve clips of a session",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/session/:id/clips",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the parent session"
+              }
+            ]
+          },
+          "docs": "Retrieve clips of a session"
+        },
+        {
+          "info": {
+            "name": "Retrieve sessions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/session"
+          },
+          "docs": "Retrieve sessions"
+        },
+        {
+          "info": {
+            "name": "Retrieve a session",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/session/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the session"
+              }
+            ]
+          },
+          "docs": "Retrieve a session"
+        },
+        {
+          "info": {
+            "name": "Retrieve Recorded Sessions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/stream/:parentId/sessions",
+            "params": [
+              {
+                "name": "parentId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the parent stream"
+              },
+              {
+                "name": "record",
+                "value": "",
+                "type": "query",
+                "description": "Flag indicating if the response should only include recorded\nsessions\n"
+              }
+            ]
+          },
+          "docs": "Retrieve Recorded Sessions"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "room",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a room",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/room"
+          },
+          "docs": "Create a multiparticipant livestreaming room.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieve a room",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/room/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve a room"
+        },
+        {
+          "info": {
+            "name": "Delete a room",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://livepeer.studio/api/room/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a room"
+        },
+        {
+          "info": {
+            "name": "Start room RTMP egress",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/room/:id/egress",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a livestream for your room.\nThis allows you to leverage livestreaming features like recording and HLS output.\n"
+        },
+        {
+          "info": {
+            "name": "Stop room RTMP egress",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://livepeer.studio/api/room/:id/egress",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Stop room RTMP egress"
+        },
+        {
+          "info": {
+            "name": "Create a room user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/room/:id/user",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Call this endpoint to add a user to a room, specifying a display name at a minimum.\nThe response will contain a joining URL for Livepeer's default meeting app.\nAlternatively the joining token can be used with a custom app.\n"
+        },
+        {
+          "info": {
+            "name": "Get user details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/room/:id/user/:userId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get user details"
+        },
+        {
+          "info": {
+            "name": "Update a room user",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://livepeer.studio/api/room/:id/user/:userId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update properties for a user."
+        },
+        {
+          "info": {
+            "name": "Remove a user from the room",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://livepeer.studio/api/room/:id/user/:userId",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Remove a user from the room"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "metrics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Query realtime viewership",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/data/views/now",
+            "params": [
+              {
+                "name": "playbackId",
+                "value": "",
+                "type": "query",
+                "description": "The playback ID to filter the query results. This can be a canonical\nplayback ID from Livepeer assets or streams, or dStorage identifiers\nfor assets\n"
+              },
+              {
+                "name": "creatorId",
+                "value": "",
+                "type": "query",
+                "description": "The creator ID to filter the query results"
+              },
+              {
+                "name": "breakdownBy[]",
+                "value": "",
+                "type": "query",
+                "description": "The list of fields to break down the query results. Specify this\nquery-string multiple times to break down by multiple fields.\n"
+              }
+            ]
+          },
+          "docs": "Requires a private (non-CORS) API key to be used.\n"
+        },
+        {
+          "info": {
+            "name": "Query viewership metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/data/views/query",
+            "params": [
+              {
+                "name": "playbackId",
+                "value": "",
+                "type": "query",
+                "description": "The playback ID to filter the query results. This can be a canonical\nplayback ID from Livepeer assets or streams, or dStorage identifiers\nfor assets\n"
+              },
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp for the query range (inclusive)"
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp for the query range (exclusive)"
+              },
+              {
+                "name": "timeStep",
+                "value": "",
+                "type": "query",
+                "description": "The time step to aggregate viewership metrics by"
+              },
+              {
+                "name": "assetId",
+                "value": "",
+                "type": "query",
+                "description": "The asset ID to filter metrics for"
+              },
+              {
+                "name": "streamId",
+                "value": "",
+                "type": "query",
+                "description": "The stream ID to filter metrics for"
+              },
+              {
+                "name": "creatorId",
+                "value": "",
+                "type": "query",
+                "description": "The creator ID to filter the query results"
+              },
+              {
+                "name": "breakdownBy[]",
+                "value": "",
+                "type": "query",
+                "description": "The list of fields to break down the query results. Specify this\nquery-string multiple times to break down by multiple fields.\n"
+              }
+            ]
+          },
+          "docs": "Requires a private (non-CORS) API key to be used.\n"
+        },
+        {
+          "info": {
+            "name": "Query creator viewership metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/data/views/query/creator",
+            "params": [
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Start timestamp for the query range (inclusive)"
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "End timestamp for the query range (exclusive)"
+              },
+              {
+                "name": "timeStep",
+                "value": "",
+                "type": "query",
+                "description": "The time step to aggregate viewership metrics by"
+              },
+              {
+                "name": "assetId",
+                "value": "",
+                "type": "query",
+                "description": "The asset ID to filter metrics for"
+              },
+              {
+                "name": "streamId",
+                "value": "",
+                "type": "query",
+                "description": "The stream ID to filter metrics for"
+              },
+              {
+                "name": "creatorId",
+                "value": "",
+                "type": "query",
+                "description": "The creator ID to filter the query results"
+              },
+              {
+                "name": "breakdownBy[]",
+                "value": "",
+                "type": "query",
+                "description": "The list of fields to break down the query results. Specify this\nquery-string multiple times to break down by multiple fields.\n"
+              }
+            ]
+          },
+          "docs": "Requires a proof of ownership to be sent in the request, which for now is just the assetId or streamId parameters (1 of those must be in the query-string).\n"
+        },
+        {
+          "info": {
+            "name": "Query public total views metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/data/views/query/total/:playbackId",
+            "params": [
+              {
+                "name": "playbackId",
+                "value": "",
+                "type": "path",
+                "description": "The playback ID to filter the query results. This can be a canonical\nplayback ID from Livepeer assets or streams, or dStorage identifiers\nfor assets\n"
+              }
+            ]
+          },
+          "docs": "Allows querying for the public metrics for viewership about a video.\nThis can be called from the frontend with a CORS key, or even\nunauthenticated.\n"
+        },
+        {
+          "info": {
+            "name": "Query usage metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/data/usage/query",
+            "params": [
+              {
+                "name": "from",
+                "value": "",
+                "type": "query",
+                "description": "Start millis timestamp for the query range (inclusive)\n"
+              },
+              {
+                "name": "to",
+                "value": "",
+                "type": "query",
+                "description": "End millis timestamp for the query range (exclusive)\n"
+              },
+              {
+                "name": "timeStep",
+                "value": "",
+                "type": "query",
+                "description": "The time step to aggregate viewership metrics by\n"
+              },
+              {
+                "name": "creatorId",
+                "value": "",
+                "type": "query",
+                "description": "The creator ID to filter the query results\n"
+              },
+              {
+                "name": "breakdownBy[]",
+                "value": "",
+                "type": "query",
+                "description": "The list of fields to break down the query results. Currently the\nonly supported breakdown is by `creatorId`.\n"
+              }
+            ]
+          },
+          "docs": "Query usage metrics"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "accessControl",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieves signing keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/access-control/signing-key"
+          },
+          "docs": "Retrieves signing keys"
+        },
+        {
+          "info": {
+            "name": "Create a signing key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/access-control/signing-key"
+          },
+          "docs": "The publicKey is a representation of the public key, encoded as base 64 and is passed as a string, and  the privateKey is displayed only on creation. This is the only moment where the client can save the private key, otherwise it will be lost. Remember to decode your string when signing JWTs.\nUp to 10 signing keys can be generated, after that you must delete at least one signing key to create a new one.\n"
+        },
+        {
+          "info": {
+            "name": "Retrieves a signing key",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/access-control/signing-key/:keyId",
+            "params": [
+              {
+                "name": "keyId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the signing key"
+              }
+            ]
+          },
+          "docs": "Retrieves a signing key"
+        },
+        {
+          "info": {
+            "name": "Update a signing key",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://livepeer.studio/api/access-control/signing-key/:keyId",
+            "params": [
+              {
+                "name": "keyId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the signing key"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a signing key"
+        },
+        {
+          "info": {
+            "name": "Delete Signing Key",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://livepeer.studio/api/access-control/signing-key/:keyId",
+            "params": [
+              {
+                "name": "keyId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the signing key"
+              }
+            ]
+          },
+          "docs": "Delete Signing Key"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "task",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve Tasks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/task"
+          },
+          "docs": "Retrieve Tasks"
+        },
+        {
+          "info": {
+            "name": "Retrieve a Task",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/task/:taskId",
+            "params": [
+              {
+                "name": "taskId",
+                "value": "",
+                "type": "path",
+                "description": "ID of the task"
+              }
+            ]
+          },
+          "docs": "Retrieve a Task"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "transcode",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Transcode a video",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/transcode",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "`POST /transcode` transcodes a video file and uploads the results to the\nspecified storage service.\n\\\n\\\nTranscoding is asynchronous so you will need to check the status of the\ntask in order to determine when transcoding is complete. The `id` field\nin the response is the unique ID for the transcoding `Task`. The task\nstatus can be queried using the [GET tasks\nendpoint](https://docs.livepeer.org/reference/api/get-tasks):\n\\\n\\\nWhen `status.phase` is `completed`,  transcoding will be complete and\nthe"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "playback",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve Playback Info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://livepeer.studio/api/playback/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The playback ID from the asset or livestream, e.g. `eaw4nk06ts2d0mzb`."
+              }
+            ]
+          },
+          "docs": "Retrieve Playback Info"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "generate",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Text To Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/api/generate/text-to-image",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate images from text prompts."
+        },
+        {
+          "info": {
+            "name": "Image To Image",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/api/generate/image-to-image",
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Apply image transformations to a provided image."
+        },
+        {
+          "info": {
+            "name": "Image To Video",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/api/generate/image-to-video",
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Generate a video from a provided image."
+        },
+        {
+          "info": {
+            "name": "Upscale",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/api/generate/upscale",
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Upscale an image by increasing its resolution."
+        },
+        {
+          "info": {
+            "name": "Audio To Text",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/api/generate/audio-to-text",
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Transcribe audio files to text."
+        },
+        {
+          "info": {
+            "name": "Segment Anything 2",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/api/generate/segment-anything-2",
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Segment objects in an image."
+        },
+        {
+          "info": {
+            "name": "LLM",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://livepeer.studio/api/api/generate/llm",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "Generate text using a language model."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
