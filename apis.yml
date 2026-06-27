@@ -72,9 +72,9 @@ apis:
       - url: json-structure/livepeer-stream-structure.json
         type: JSONStructure
       - url: examples/livepeer-create-stream-example.json
-        type: Example
+        type: Examples
       - url: examples/livepeer-create-webhook-example.json
-        type: Example
+        type: Examples
   - aid: livepeer-com:ai-network
     name: Livepeer AI Network
     description: >-
@@ -116,9 +116,9 @@ apis:
       - url: json-schema/livepeer-ai-image-to-video-schema.json
         type: JSONSchema
       - url: examples/livepeer-ai-text-to-image-example.json
-        type: Example
+        type: Examples
       - url: examples/livepeer-image-to-video-example.json
-        type: Example
+        type: Examples
   - aid: livepeer-com:cli-http
     name: Livepeer Node CLI HTTP API
     description: >-
@@ -147,42 +147,39 @@ apis:
 common:
   - type: PostmanWorkspace
     url: https://www.postman.com/kinlaneapi/livepeer/overview
-  - type: ArazzoWorkflows
-    url: arazzo/
-    workflows:
-      - url: arazzo/livepeer-com-clip-livestream-workflow.yml
-        name: Livepeer Clip a Livestream
-        summary: Create a clip from a live playback ID, poll the clip task, fetch the asset.
-      - url: arazzo/livepeer-com-enable-stream-recording-workflow.yml
-        name: Livepeer Enable Recording on a Stream
-        summary: Create a stream, enable recording via update, and confirm the change.
-      - url: arazzo/livepeer-com-import-asset-from-url-workflow.yml
-        name: Livepeer Import an Asset from a URL
-        summary: Upload an asset from an external URL, then poll the processing task.
-      - url: arazzo/livepeer-com-inspect-session-recording-workflow.yml
-        name: Livepeer Inspect a Session Recording
-        summary: Read a stream session and resolve its recording playback info.
-      - url: arazzo/livepeer-com-provision-live-stream-workflow.yml
-        name: Livepeer Provision a Live Stream
-        summary: Create a live stream, confirm it exists, and resolve its playback info.
-      - url: arazzo/livepeer-com-provision-multistream-restream-workflow.yml
-        name: Livepeer Provision Multistream Restreaming
-        summary: Create a stream and attach an inline multistream target to restream it.
-      - url: arazzo/livepeer-com-register-stream-webhook-workflow.yml
-        name: Livepeer Register a Stream Webhook
-        summary: Create a stream then register a webhook scoped to its lifecycle events.
-      - url: arazzo/livepeer-com-secure-stream-signing-key-workflow.yml
-        name: Livepeer Secure a Stream with a Signing Key
-        summary: Create a signing key, create a JWT-gated stream, and resolve playback.
-      - url: arazzo/livepeer-com-standalone-multistream-target-workflow.yml
-        name: Livepeer Reuse a Standalone Multistream Target
-        summary: Create a reusable multistream target, then bind it to a new stream by ID.
-      - url: arazzo/livepeer-com-transcode-video-job-workflow.yml
-        name: Livepeer Run a Transcode Job
-        summary: Submit a transcode job to S3/web3.storage and poll the task until done.
-      - url: arazzo/livepeer-com-upload-and-process-asset-workflow.yml
-        name: Livepeer Upload and Process an Asset
-        summary: Request a direct upload URL, then poll the asset and task until ready.
+  - type: Arazzo
+    url: arazzo/livepeer-com-clip-livestream-workflow.yml
+    name: Livepeer Clip a Livestream
+  - type: Arazzo
+    url: arazzo/livepeer-com-enable-stream-recording-workflow.yml
+    name: Livepeer Enable Recording on a Stream
+  - type: Arazzo
+    url: arazzo/livepeer-com-import-asset-from-url-workflow.yml
+    name: Livepeer Import an Asset from a URL
+  - type: Arazzo
+    url: arazzo/livepeer-com-inspect-session-recording-workflow.yml
+    name: Livepeer Inspect a Session Recording
+  - type: Arazzo
+    url: arazzo/livepeer-com-provision-live-stream-workflow.yml
+    name: Livepeer Provision a Live Stream
+  - type: Arazzo
+    url: arazzo/livepeer-com-provision-multistream-restream-workflow.yml
+    name: Livepeer Provision Multistream Restreaming
+  - type: Arazzo
+    url: arazzo/livepeer-com-register-stream-webhook-workflow.yml
+    name: Livepeer Register a Stream Webhook
+  - type: Arazzo
+    url: arazzo/livepeer-com-secure-stream-signing-key-workflow.yml
+    name: Livepeer Secure a Stream with a Signing Key
+  - type: Arazzo
+    url: arazzo/livepeer-com-standalone-multistream-target-workflow.yml
+    name: Livepeer Reuse a Standalone Multistream Target
+  - type: Arazzo
+    url: arazzo/livepeer-com-transcode-video-job-workflow.yml
+    name: Livepeer Run a Transcode Job
+  - type: Arazzo
+    url: arazzo/livepeer-com-upload-and-process-asset-workflow.yml
+    name: Livepeer Upload and Process an Asset
   - type: Website
     url: https://livepeer.org
   - type: StudioPortal
@@ -199,13 +196,13 @@ common:
     url: https://docs.livepeer.org/changelog
   - type: Explorer
     url: https://explorer.livepeer.org
-  - type: Forum
+  - type: Forums
     url: https://forum.livepeer.org
-  - type: Roadmap
+  - type: RoadMap
     url: https://roadmap.livepeer.org/roadmap
   - type: StatusPage
     url: https://status.livepeer.studio
-  - type: SignUp
+  - type: Signup
     url: https://livepeer.studio/register
   - type: Login
     url: https://livepeer.studio/login
@@ -259,9 +256,9 @@ common:
     url: https://www.youtube.com/@LivepeerNetwork
   - type: LinkedIn
     url: https://www.linkedin.com/company/livepeer
-  - type: LLMsTxt
+  - type: LlmsText
     url: https://docs.livepeer.org/llms.txt
-  - type: LLMsFullTxt
+  - type: LlmsText
     url: https://docs.livepeer.org/llms-full.txt
   - type: SpectralRuleset
     url: rules/livepeer-studio-rules.yml
@@ -269,7 +266,7 @@ common:
     url: rules/livepeer-ai-rules.yml
   - type: Vocabulary
     url: vocabulary/livepeer-com-vocabulary.yml
-  - type: JSON-LD
+  - type: JSONLD
     url: json-ld/livepeer-com-context.jsonld
   - type: JSONStructure
     url: json-structure/livepeer-platform-structure.json
