@@ -145,6 +145,10 @@ apis:
       - url: rules/livepeer-studio-rules.yml
         type: SpectralRuleset
 common:
+  - type: DomainSecurity
+    url: security/livepeer-com-domain-security.yml
+  - type: Authentication
+    url: authentication/livepeer-com-authentication.yml
   - type: PostmanWorkspace
     url: https://www.postman.com/kinlaneapi/livepeer/overview
   - type: Arazzo
