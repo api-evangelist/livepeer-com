@@ -145,6 +145,8 @@ apis:
       - url: rules/livepeer-studio-rules.yml
         type: SpectralRuleset
 common:
+  - type: AgenticAccess
+    url: agentic-access/livepeer-com-agentic-access.yml
   - type: DomainSecurity
     url: security/livepeer-com-domain-security.yml
   - type: Authentication
