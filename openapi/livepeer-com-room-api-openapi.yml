@@ -1,0 +1,497 @@
+openapi: 3.1.0
+info:
+  title: Livepeer AI Runner accessControl room API
+  description: An application to run AI pipelines
+  version: 0.0.0
+servers:
+- url: https://dream-gateway.livepeer.cloud
+  description: Livepeer Cloud Community Gateway
+- url: https://livepeer.studio/api/beta/generate
+  description: Livepeer Studio Gateway
+tags:
+- name: room
+  description: Operations related to rooms api
+paths:
+  /room:
+    post:
+      deprecated: true
+      operationId: createRoom
+      x-speakeasy-name-override: create
+      summary: Create a room
+      tags:
+      - room
+      description: 'Create a multiparticipant livestreaming room.
+
+        '
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/create-room-response'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: go
+        label: createRoom
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Room.Create(ctx)\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.CreateRoomResponse != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: createRoom
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.room.create()\n\nif res.create_room_response is not None:\n    # handle response\n    pass"
+  /room/{id}:
+    get:
+      deprecated: true
+      operationId: getRoom
+      x-speakeasy-name-override: get
+      tags:
+      - room
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      summary: Retrieve a room
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/room'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: go
+        label: getRoom
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Room.Get(ctx, \"<id>\")\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.Room != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getRoom
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.room.get(id=\"<id>\")\n\nif res.room is not None:\n    # handle response\n    pass"
+    delete:
+      deprecated: true
+      operationId: deleteRoom
+      x-speakeasy-name-override: delete
+      tags:
+      - room
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      summary: Delete a room
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '204':
+          description: Success
+      x-codeSamples:
+      - lang: go
+        label: deleteRoom
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Room.Delete(ctx, \"<id>\")\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: deleteRoom
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.room.delete(id=\"<id>\")\n\nif res is not None:\n    # handle response\n    pass"
+  /room/{id}/egress:
+    post:
+      deprecated: true
+      operationId: startRoomEgress
+      x-speakeasy-name-override: startEgress
+      tags:
+      - room
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/room-egress-payload'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      summary: Start room RTMP egress
+      description: 'Create a livestream for your room.
+
+        This allows you to leverage livestreaming features like recording and HLS output.
+
+        '
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '204':
+          description: Success
+      x-codeSamples:
+      - lang: go
+        label: startRoomEgress
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"github.com/livepeer/livepeer-go/models/components\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Room.StartEgress(ctx, \"<id>\", components.RoomEgressPayload{\n        StreamID: \"aac12556-4d65-4d34-9fb6-d1f0985eb0a9\",\n    })\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: startRoomEgress
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.room.start_egress(id=\"<id>\", room_egress_payload={\n    \"stream_id\": \"aac12556-4d65-4d34-9fb6-d1f0985eb0a9\",\n})\n\nif res is not None:\n    # handle response\n    pass"
+    delete:
+      deprecated: true
+      operationId: stopRoomEgress
+      x-speakeasy-name-override: stopEgress
+      summary: Stop room RTMP egress
+      tags:
+      - room
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '204':
+          description: Success
+      x-codeSamples:
+      - lang: go
+        label: stopRoomEgress
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Room.StopEgress(ctx, \"<id>\")\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: stopRoomEgress
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.room.stop_egress(id=\"<id>\")\n\nif res is not None:\n    # handle response\n    pass"
+  /room/{id}/user:
+    post:
+      deprecated: true
+      operationId: createRoomUser
+      x-speakeasy-name-override: createUser
+      tags:
+      - room
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/room-user-payload'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      summary: Create a room user
+      description: 'Call this endpoint to add a user to a room, specifying a display name at a minimum.
+
+        The response will contain a joining URL for Livepeer''s default meeting app.
+
+        Alternatively the joining token can be used with a custom app.
+
+        '
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/room-user-response'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: go
+        label: createRoomUser
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"github.com/livepeer/livepeer-go/models/components\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Room.CreateUser(ctx, \"<id>\", components.RoomUserPayload{\n        Name: \"name\",\n        CanPublish: livepeergo.Bool(true),\n        CanPublishData: livepeergo.Bool(true),\n    })\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.RoomUserResponse != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: createRoomUser
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.room.create_user(id=\"<id>\", room_user_payload={\n    \"name\": \"name\",\n    \"can_publish\": True,\n    \"can_publish_data\": True,\n})\n\nif res.room_user_response is not None:\n    # handle response\n    pass"
+  /room/{id}/user/{userId}:
+    get:
+      operationId: getRoomUser
+      x-speakeasy-name-override: getUser
+      tags:
+      - room
+      deprecated: true
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      summary: Get user details
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get-room-user-response'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: go
+        label: getRoomUser
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Room.GetUser(ctx, \"<id>\", \"<value>\")\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.GetRoomUserResponse != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getRoomUser
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.room.get_user(id=\"<id>\", user_id=\"<value>\")\n\nif res.get_room_user_response is not None:\n    # handle response\n    pass"
+    put:
+      deprecated: true
+      operationId: updateRoomUser
+      x-speakeasy-name-override: updateUser
+      tags:
+      - room
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/room-user-update-payload'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      summary: Update a room user
+      description: Update properties for a user.
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '204':
+          description: Success
+      x-codeSamples:
+      - lang: go
+        label: updateRoomUser
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"github.com/livepeer/livepeer-go/models/components\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Room.UpdateUser(ctx, \"<id>\", \"<value>\", components.RoomUserUpdatePayload{\n        CanPublish: livepeergo.Bool(true),\n        CanPublishData: livepeergo.Bool(true),\n    })\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: updateRoomUser
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.room.update_user(id=\"<id>\", user_id=\"<value>\", room_user_update_payload={\n    \"can_publish\": True,\n    \"can_publish_data\": True,\n})\n\nif res is not None:\n    # handle response\n    pass"
+    delete:
+      operationId: deleteRoomUser
+      x-speakeasy-name-override: deleteUser
+      tags:
+      - room
+      deprecated: true
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      summary: Remove a user from the room
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '204':
+          description: Success
+      x-codeSamples:
+      - lang: go
+        label: deleteRoomUser
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Room.DeleteUser(ctx, \"<id>\", \"<value>\")\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: deleteRoomUser
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.room.delete_user(id=\"<id>\", user_id=\"<value>\")\n\nif res is not None:\n    # handle response\n    pass"
+components:
+  schemas:
+    room-user-payload:
+      type: object
+      required:
+      - name
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: Display name
+          example: name
+        canPublish:
+          type: boolean
+          description: Whether a user is allowed to publish audio/video tracks
+          example: true
+        canPublishData:
+          type: boolean
+          description: Whether a user is allowed to publish data messages to the room
+          example: true
+        metadata:
+          type: string
+          description: User defined payload to store for the participant
+    room-user-update-payload:
+      type: object
+      required:
+      - canPublish
+      additionalProperties: false
+      properties:
+        canPublish:
+          type: boolean
+          description: Whether a user is allowed to publish audio/video tracks (i.e. their microphone and webcam)
+          example: true
+          default: true
+        canPublishData:
+          type: boolean
+          description: Whether a user is allowed to publish data messages to the room
+          example: true
+          default: true
+        metadata:
+          type: string
+          description: User defined payload to store for the participant
+    room-egress-payload:
+      type: object
+      required:
+      - streamId
+      additionalProperties: false
+      properties:
+        streamId:
+          type: string
+          description: The ID of the Livepeer Stream to stream to
+          example: aac12556-4d65-4d34-9fb6-d1f0985eb0a9
+    room:
+      type: object
+      required:
+      - id
+      - participants
+      - events
+      properties:
+        id:
+          type: string
+          readOnly: true
+          description: room ID
+          example: d32ae9e6-c459-4931-9898-e86e2f5e7e16
+        createdAt:
+          type: number
+          readOnly: true
+          description: Timestamp (in milliseconds) at which the room was created
+          example: 1587667174725
+        updatedAt:
+          type: number
+          readOnly: true
+          description: Timestamp (in milliseconds) at which room was updated
+          example: 1587667174725
+        egressId:
+          type: string
+          description: internal ID for egress output
+        participants:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              identity:
+                type: string
+                description: participant ID
+              name:
+                type: string
+                description: user defined participant name
+              joinedAt:
+                type: integer
+                description: the time the participant joined
+              leftAt:
+                type: integer
+                description: the time the participant left
+    create-room-response:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the room
+          example: d32ae9e6-c459-4931-9898-e86e2f5e7e16
+    room-user-response:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the user
+          example: d32ae9e6-c459-4931-9898-e86e2f5e7e16
+        joinUrl:
+          type: string
+          description: Joining URL - use this for Livepeer's default meeting app (see the multiparticipant streaming guide for more info).
+          example: https://meet.livepeer.chat
+        token:
+          type: string
+          description: Joining JWT - this can be used if you have a custom meeting app (see the multiparticipant streaming guide for more info).
+          example: token
+    error:
+      type: object
+      properties:
+        errors:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            example:
+            - id not provided
+            - Account not found
+    get-room-user-response:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the user
+          example: d32ae9e6-c459-4931-9898-e86e2f5e7e16
+        joinedAt:
+          type: integer
+          description: Timestamp (in milliseconds) at which the user joined
+          example: 1687517025261
+        name:
+          type: string
+          description: The display name of the user
+          example: name
+        isPublisher:
+          type: boolean
+          description: Whether a user is allowed to publish audio/video tracks
+          example: true
+          default: true
+        metadata:
+          type: string
+          description: User defined payload to store for the participant
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

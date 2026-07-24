@@ -1,0 +1,942 @@
+openapi: 3.1.0
+info:
+  title: Livepeer AI Runner accessControl session API
+  description: An application to run AI pipelines
+  version: 0.0.0
+servers:
+- url: https://dream-gateway.livepeer.cloud
+  description: Livepeer Cloud Community Gateway
+- url: https://livepeer.studio/api/beta/generate
+  description: Livepeer Studio Gateway
+tags:
+- name: session
+  description: Operations related to session api
+paths:
+  /session/{id}/clips:
+    get:
+      operationId: getSessionClips
+      x-speakeasy-name-override: getClips
+      summary: Retrieve clips of a session
+      tags:
+      - session
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: ID of the parent session
+        required: true
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/asset'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: getSessionClips
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.session.getClips(\"<id>\");\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: getSessionClips
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Session.GetClips(ctx, \"<id>\")\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.Data != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getSessionClips
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.session.get_clips(id=\"<id>\")\n\nif res.data is not None:\n    # handle response\n    pass"
+  /session:
+    get:
+      operationId: getSessions
+      x-speakeasy-name-override: getAll
+      summary: Retrieve sessions
+      tags:
+      - session
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/session'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: getSessions
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.session.getAll();\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: getSessions
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Session.GetAll(ctx)\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.Data != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getSessions
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.session.get_all()\n\nif res.data is not None:\n    # handle response\n    pass"
+  /session/{id}:
+    get:
+      operationId: getSession
+      x-speakeasy-name-override: get
+      summary: Retrieve a session
+      tags:
+      - session
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: ID of the session
+        required: true
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/session'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: getSession
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.session.get(\"<id>\");\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: getSession
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Session.Get(ctx, \"<id>\")\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.Session != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getSession
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.session.get(id=\"<id>\")\n\nif res.session is not None:\n    # handle response\n    pass"
+  /stream/{parentId}/sessions:
+    get:
+      operationId: getRecordedSessions
+      x-speakeasy-name-override: getRecorded
+      summary: Retrieve Recorded Sessions
+      tags:
+      - session
+      parameters:
+      - in: path
+        name: parentId
+        schema:
+          type: string
+        description: ID of the parent stream
+        required: true
+      - in: query
+        name: record
+        schema:
+          oneOf:
+          - type: boolean
+          - type: integer
+          example: true
+        description: 'Flag indicating if the response should only include recorded
+
+          sessions
+
+          '
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/session'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: getRecordedSessions
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.session.getRecorded(\"<id>\", true);\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: getRecordedSessions
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Session.GetRecorded(ctx, \"<value>\", livepeergo.Pointer(operations.CreateRecordBoolean(\n        true,\n    )))\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.Data != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getRecordedSessions
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.session.get_recorded(parent_id=\"<value>\", record=True)\n\nif res.data is not None:\n    # handle response\n    pass"
+components:
+  schemas:
+    storage-status:
+      readOnly: true
+      additionalProperties: false
+      required:
+      - phase
+      - tasks
+      properties:
+        phase:
+          type: string
+          description: Phase of the asset storage
+          enum:
+          - waiting
+          - processing
+          - ready
+          - failed
+          - reverted
+          example: ready
+        progress:
+          type: number
+          description: Current progress of the task updating the storage.
+          example: 0.5
+        errorMessage:
+          type: string
+          description: Error message if the last storage changed failed.
+          example: Failed to update storage
+        tasks:
+          type: object
+          additionalProperties: false
+          properties:
+            pending:
+              type: string
+              description: 'ID of any currently running task that is exporting this
+
+                asset to IPFS.
+
+                '
+              example: 09F8B46C-61A0-4254-9875-F71F4C605BC7
+            last:
+              type: string
+              description: 'ID of the last task to run successfully, that created
+
+                the currently saved data.
+
+                '
+              example: 09F8B46C-61A0-4254-9875-F71F4C605BC7
+            failed:
+              type: string
+              description: ID of the last task to fail execution.
+              example: 09F8B46C-61A0-4254-9875-F71F4C605BC7
+    session:
+      type: object
+      required:
+      - name
+      - streamId
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: de7818e7-610a-4057-8f6f-b785dc1e6f88
+        kind:
+          type: string
+          example: stream
+          deprecated: true
+        userId:
+          type: string
+          readOnly: true
+          example: 66E2161C-7670-4D05-B71D-DA2D6979556F
+          deprecated: true
+        name:
+          type: string
+          example: test_session
+        lastSeen:
+          type: number
+          example: 1587667174725
+        sourceSegments:
+          type: number
+          example: 1
+        transcodedSegments:
+          type: number
+          example: 2
+        sourceSegmentsDuration:
+          type: number
+          example: 1
+          description: Duration of all the source segments, sec
+        transcodedSegmentsDuration:
+          type: number
+          example: 2
+          description: Duration of all the transcoded segments, sec
+        sourceBytes:
+          type: number
+          example: 1
+        transcodedBytes:
+          type: number
+          example: 2
+        ingestRate:
+          type: number
+          example: 1
+          description: Rate at which sourceBytes increases (bytes/second)
+        outgoingRate:
+          type: number
+          example: 2
+          description: Rate at which transcodedBytes increases (bytes/second)
+        isHealthy:
+          $ref: '#/components/schemas/stream-health-payload/properties/is_healthy'
+        issues:
+          $ref: '#/components/schemas/stream-health-payload/properties/human_issues'
+        createdAt:
+          readOnly: true
+          type: number
+          description: Timestamp (in milliseconds) at which stream object was created
+          example: 1587667174725
+        parentId:
+          type: string
+          example: de7818e7-610a-4057-8f6f-b785dc1e6f88
+          description: Points to parent stream object
+        projectId:
+          type: string
+          description: The ID of the project
+          example: aac12556-4d65-4d34-9fb6-d1f0985eb0a9
+        record:
+          description: 'Whether the stream should be recorded. Uses default settings. For more customization, create and configure an object store.
+
+            '
+          type: boolean
+          example: false
+        recordingStatus:
+          readOnly: true
+          type: string
+          description: The status of the recording process of this stream session.
+          enum:
+          - waiting
+          - ready
+          - failed
+          - deleted
+          - none
+        recordingUrl:
+          type: string
+          readOnly: true
+          description: URL for accessing the recording of this stream session.
+        mp4Url:
+          type: string
+          readOnly: true
+          description: The URL for the stream session recording packaged in an MP4.
+        playbackId:
+          type: string
+          example: eaw4nk06ts2d0mzb
+          description: The playback ID to use with the Playback Info endpoint to retrieve playback URLs.
+        profiles:
+          $ref: '#/components/schemas/stream/properties/profiles'
+        recordingSpec:
+          $ref: '#/components/schemas/stream/properties/recordingSpec'
+    stream-health-payload:
+      properties:
+        is_healthy:
+          oneOf:
+          - type: 'null'
+          - type: boolean
+          description: Indicates whether the stream is healthy or not.
+        human_issues:
+          oneOf:
+          - type: 'null'
+          - type: array
+            items:
+              type: string
+          description: A string array of human-readable errors describing issues affecting the stream, if any.
+    stream:
+      properties:
+        profiles:
+          type: array
+          description: 'Profiles to transcode the stream into. If not specified, a default
+
+            set of profiles will be used with 240p, 360p, 480p and 720p
+
+            resolutions. Keep in mind that the source rendition is always kept.
+
+            '
+          default:
+          - name: 240p0
+            fps: 0
+            bitrate: 250000
+            width: 426
+            height: 240
+          - name: 360p0
+            fps: 0
+            bitrate: 800000
+            width: 640
+            height: 360
+          - name: 480p0
+            fps: 0
+            bitrate: 1600000
+            width: 854
+            height: 480
+          - name: 720p0
+            fps: 0
+            bitrate: 3000000
+            width: 1280
+            height: 720
+          items:
+            $ref: '#/components/schemas/ffmpeg-profile'
+        recordingSpec:
+          type: object
+          description: 'Configuration for recording the stream. This can only be set if
+
+            `record` is true.
+
+            '
+          additionalProperties: false
+          properties:
+            profiles:
+              type: array
+              items:
+                $ref: '#/components/schemas/transcode-profile'
+              description: 'Profiles to process the recording of this stream into. If not
+
+                specified, default profiles will be derived based on the stream
+
+                input. Keep in mind that the source rendition is always kept.
+
+                '
+    creator-id:
+      oneOf:
+      - type: object
+        additionalProperties: false
+        required:
+        - type
+        - value
+        properties:
+          type:
+            type: string
+            enum:
+            - unverified
+            example: unverified
+          value:
+            type: string
+            description: Developer-managed ID of the user who created the resource.
+            example: user123
+    asset:
+      type: object
+      additionalProperties: false
+      required:
+      - id
+      - name
+      - source
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: 09F8B46C-61A0-4254-9875-F71F4C605BC7
+        type:
+          type: string
+          enum:
+          - video
+          - audio
+          description: Type of the asset.
+          example: video
+        playbackId:
+          type: string
+          example: eaw4nk06ts2d0mzb
+          description: The playback ID to use with the Playback Info endpoint to retrieve playback URLs.
+        userId:
+          type: string
+          readOnly: true
+          example: 66E2161C-7670-4D05-B71D-DA2D6979556F
+          deprecated: true
+        staticMp4:
+          type: boolean
+          writeOnly: true
+          description: Whether to generate MP4s for the asset.
+        playbackUrl:
+          readOnly: true
+          type: string
+          example: https://livepeercdn.com/asset/ea03f37e-f861-4cdd-b495-0e60b6d753ad/index.m3u8
+          description: URL for HLS playback. **It is recommended to not use this URL**, and instead use playback IDs with the Playback Info endpoint to retrieve the playback URLs - this URL format is subject to change (e.g. https://livepeercdn.com/asset/ea03f37e-f861-4cdd-b495-0e60b6d753ad/index.m3u8).
+        downloadUrl:
+          readOnly: true
+          type: string
+          example: https://livepeercdn.com/asset/eaw4nk06ts2d0mzb/video/download.mp4
+          description: The URL to directly download the asset, e.g. `https://livepeercdn.com/asset/eawrrk06ts2d0mzb/video`. It is not recommended to use this for playback.
+        playbackPolicy:
+          $ref: '#/components/schemas/playback-policy'
+        source:
+          oneOf:
+          - additionalProperties: false
+            required:
+            - type
+            - url
+            properties:
+              type:
+                type: string
+                enum:
+                - url
+              url:
+                type: string
+                description: URL from which the asset was uploaded.
+              gatewayUrl:
+                type: string
+                description: Gateway URL from asset if parsed from provided URL on upload.
+              encryption:
+                $ref: '#/components/schemas/new-asset-payload/properties/encryption'
+          - additionalProperties: false
+            required:
+            - type
+            - sessionId
+            properties:
+              type:
+                type: string
+                enum:
+                - recording
+              sessionId:
+                type: string
+                description: ID of the session from which this asset was created
+          - additionalProperties: false
+            required:
+            - type
+            properties:
+              type:
+                type: string
+                enum:
+                - directUpload
+                - clip
+              encryption:
+                $ref: '#/components/schemas/new-asset-payload/properties/encryption'
+              sourceId:
+                type: string
+                description: ID of the asset or stream from which this asset was created.
+              sessionId:
+                type: string
+                description: ID of the session from which this asset was created.
+              playbackId:
+                type: string
+                description: Playback ID of the asset or stream from which this asset was created.
+              requesterId:
+                type: string
+                description: ID of the requester from which this asset was created.
+              assetId:
+                type: string
+                description: ID of the asset from which this asset was created.
+        creatorId:
+          $ref: '#/components/schemas/creator-id'
+        profiles:
+          type: array
+          description: 'Requested profiles for the asset to be transcoded into. Configured
+
+            on the upload APIs payload or through the `stream.recordingSpec`
+
+            field for recordings. If not specified, default profiles are derived
+
+            based on the source input. If this is a recording, the source will
+
+            not be present in this list but will be available for playback.
+
+            '
+          items:
+            $ref: '#/components/schemas/transcode-profile'
+        storage:
+          type: object
+          additionalProperties: false
+          properties:
+            ipfs:
+              type: object
+              additionalProperties: false
+              properties:
+                spec:
+                  type: object
+                  additionalProperties: false
+                  default: {}
+                  properties:
+                    nftMetadataTemplate:
+                      type: string
+                      enum:
+                      - file
+                      - player
+                      default: file
+                      description: 'Name of the NFT metadata template to export. ''player''
+
+                        will embed the Livepeer Player on the NFT while ''file''
+
+                        will reference only the immutable MP4 files.
+
+                        '
+                    nftMetadata:
+                      type: object
+                      description: 'Additional data to add to the NFT metadata exported to
+
+                        IPFS. Will be deep merged with the default metadata
+
+                        exported.
+
+                        '
+                $ref: {}
+                nftMetadata:
+                  $ref: '#/components/schemas/ipfs-file-info'
+                updatedAt:
+                  readOnly: true
+                  type: number
+                  description: 'Timestamp (in milliseconds) at which IPFS export task was
+
+                    updated
+
+                    '
+                  example: 1587667174725
+            status:
+              $ref: '#/components/schemas/storage-status'
+        status:
+          readOnly: true
+          type: object
+          additionalProperties: false
+          required:
+          - phase
+          - updatedAt
+          description: Status of the asset
+          properties:
+            phase:
+              type: string
+              description: Phase of the asset
+              enum:
+              - uploading
+              - waiting
+              - processing
+              - ready
+              - failed
+              - deleting
+              - deleted
+            updatedAt:
+              type: number
+              description: Timestamp (in milliseconds) at which the asset was last updated
+              example: 1587667174725
+            progress:
+              type: number
+              description: Current progress of the task creating this asset.
+            errorMessage:
+              type: string
+              description: Error message if the asset creation failed.
+        name:
+          type: string
+          description: 'The name of the asset. This is not necessarily the filename - it can be a custom name or title.
+
+            '
+          example: filename.mp4
+        projectId:
+          type: string
+          description: The ID of the project
+          example: aac12556-4d65-4d34-9fb6-d1f0985eb0a9
+        createdAt:
+          readOnly: true
+          type: number
+          description: Timestamp (in milliseconds) at which asset was created
+          example: 1587667174725
+        createdByTokenName:
+          type: string
+          readOnly: true
+          description: Name of the token used to create this object
+        size:
+          readOnly: true
+          type: number
+          description: Size of the asset in bytes
+          example: 84934509
+        hash:
+          type:
+          - array
+          - 'null'
+          description: Hash of the asset
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              hash:
+                type: string
+                description: Hash of the asset
+                example: 9b560b28b85378a5004117539196ab24e21bbd75b0e9eb1a8bc7c5fd80dc5b57
+              algorithm:
+                type: string
+                description: Hash algorithm used to compute the hash
+                example: sha256
+        videoSpec:
+          readOnly: true
+          type: object
+          additionalProperties: false
+          description: Video metadata
+          properties:
+            format:
+              type: string
+              description: Format of the asset
+              example: mp4
+            duration:
+              type: number
+              description: Duration of the asset in seconds (float)
+              example: 23.8328
+            bitrate:
+              type: number
+              description: Bitrate of the video in bits per second
+              example: 1000000
+            tracks:
+              type: array
+              description: 'List of tracks associated with the asset when the format
+
+                contemplates them (e.g. mp4)
+
+                '
+              items:
+                type: object
+                additionalProperties: false
+                required:
+                - type
+                - codec
+                properties:
+                  type:
+                    type: string
+                    description: type of track
+                    enum:
+                    - video
+                    - audio
+                    example: video
+                  codec:
+                    type: string
+                    description: Codec of the track
+                    example: aac
+                  startTime:
+                    type: number
+                    description: Start time of the track in seconds
+                    example: 23.8238
+                  duration:
+                    type: number
+                    description: Duration of the track in seconds
+                    example: 23.8238
+                  bitrate:
+                    type: number
+                    description: Bitrate of the track in bits per second
+                    example: 1000000
+                  width:
+                    type: number
+                    description: Width of the track - only for video tracks
+                    example: 1920
+                  height:
+                    type: number
+                    description: Height of the track - only for video tracks
+                    example: 1080
+                  pixelFormat:
+                    type: string
+                    description: Pixel format of the track - only for video tracks
+                    example: yuv420p
+                  fps:
+                    type: number
+                    description: Frame rate of the track - only for video tracks
+                    example: 30
+                  channels:
+                    type: number
+                    description: Amount of audio channels in the track
+                    example: 2
+                  sampleRate:
+                    type: number
+                    description: 'Sample rate of the track in samples per second - only for
+
+                      audio tracks
+
+                      '
+                    example: 44100
+                  bitDepth:
+                    type: number
+                    description: Bit depth of the track - only for audio tracks
+                    example: 16
+    transcode-profile:
+      type: object
+      description: Transcode API profile
+      additionalProperties: false
+      required:
+      - bitrate
+      properties:
+        width:
+          type: integer
+          minimum: 128
+          example: 1280
+        name:
+          type: string
+          minLength: 1
+          maxLength: 500
+          example: 720p
+        height:
+          type: integer
+          minimum: 128
+          example: 720
+        bitrate:
+          type: integer
+          minimum: 400
+          example: 3000000
+        quality:
+          type: integer
+          description: 'Restricts the size of the output video using the constant quality feature. Increasing this value will result in a lower quality video. Note that this parameter might not work if the transcoder lacks support for it.
+
+            '
+          minimum: 0
+          maximum: 44
+          example: 23
+        fps:
+          type: integer
+          minimum: 0
+          example: 30
+        fpsDen:
+          type: integer
+          minimum: 1
+          example: 1
+        gop:
+          type: string
+          example: 2
+        profile:
+          type: string
+          enum:
+          - H264Baseline
+          - H264Main
+          - H264High
+          - H264ConstrainedHigh
+          example: H264Baseline
+        encoder:
+          type: string
+          enum:
+          - H.264
+          - HEVC
+          - VP8
+          - VP9
+          example: H.264
+    new-asset-payload:
+      properties:
+        encryption:
+          type: object
+          additionalProperties: false
+          required:
+          - encryptedKey
+          properties:
+            encryptedKey:
+              type: string
+              writeOnly: true
+              description: Encryption key used to encrypt the asset. Only writable in the upload asset endpoints and cannot be retrieved back.
+    error:
+      type: object
+      properties:
+        errors:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            example:
+            - id not provided
+            - Account not found
+    ffmpeg-profile:
+      type: object
+      description: Transcode profile
+      additionalProperties: false
+      required:
+      - width
+      - name
+      - height
+      - bitrate
+      - fps
+      properties:
+        width:
+          type: integer
+          minimum: 128
+          example: 1280
+        name:
+          type: string
+          minLength: 1
+          maxLength: 500
+          example: 720p
+        height:
+          type: integer
+          minimum: 128
+          example: 720
+        bitrate:
+          type: integer
+          minimum: 400
+          example: 3000000
+        fps:
+          type: integer
+          minimum: 0
+          example: 30
+        fpsDen:
+          type: integer
+          minimum: 1
+          example: 1
+        quality:
+          type: integer
+          description: 'Restricts the size of the output video using the constant quality feature. Increasing this value will result in a lower quality video. Note that this parameter might not work if the transcoder lacks support for it.
+
+            '
+          minimum: 0
+          maximum: 44
+          example: 23
+        gop:
+          type: string
+          example: 2
+        profile:
+          type: string
+          enum:
+          - H264Baseline
+          - H264Main
+          - H264High
+          - H264ConstrainedHigh
+          example: H264Baseline
+        encoder:
+          type: string
+          enum:
+          - H.264
+    ipfs-file-info:
+      type: object
+      required:
+      - cid
+      additionalProperties: false
+      properties:
+        cid:
+          type: string
+          description: CID of the file on IPFS
+        url:
+          readOnly: true
+          type: string
+          description: URL with IPFS scheme for the file
+        gatewayUrl:
+          readOnly: true
+          type: string
+          description: URL to access file via HTTP through an IPFS gateway
+    playback-policy:
+      type:
+      - object
+      - 'null'
+      description: Whether the playback policy for an asset or stream is public or signed
+      additionalProperties: false
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - public
+          - jwt
+          - webhook
+          example: webhook
+        webhookId:
+          type: string
+          description: ID of the webhook to use for playback policy
+          example: 1bde4o2i6xycudoy
+        webhookContext:
+          type: object
+          description: User-defined webhook context
+          additionalProperties: true
+          example:
+            streamerId: my-custom-id
+        refreshInterval:
+          type: number
+          description: 'Interval (in seconds) at which the playback policy should be
+
+            refreshed (default 600 seconds)
+
+            '
+          example: 600
+        allowedOrigins:
+          type: array
+          description: List of allowed origins for CORS playback (<scheme>://<hostname>:<port>, <scheme>://<hostname>)
+          items:
+            type: string
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

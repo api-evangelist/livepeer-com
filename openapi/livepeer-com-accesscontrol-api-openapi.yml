@@ -1,0 +1,252 @@
+openapi: 3.1.0
+info:
+  title: Livepeer AI Runner accessControl API
+  description: An application to run AI pipelines
+  version: 0.0.0
+servers:
+- url: https://dream-gateway.livepeer.cloud
+  description: Livepeer Cloud Community Gateway
+- url: https://livepeer.studio/api/beta/generate
+  description: Livepeer Studio Gateway
+tags:
+- name: accessControl
+  description: Operations related to access control/signing keys api
+paths:
+  /access-control/signing-key:
+    post:
+      operationId: createSigningKey
+      x-speakeasy-name-override: create
+      summary: Create a signing key
+      tags:
+      - accessControl
+      description: 'The publicKey is a representation of the public key, encoded as base 64 and is passed as a string, and  the privateKey is displayed only on creation. This is the only moment where the client can save the private key, otherwise it will be lost. Remember to decode your string when signing JWTs.
+
+        Up to 10 signing keys can be generated, after that you must delete at least one signing key to create a new one.
+
+        '
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/signing-key'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: createSigningKey
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.accessControl.create();\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: createSigningKey
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.AccessControl.Create(ctx)\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.SigningKey != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: createSigningKey
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.access_control.create()\n\nif res.signing_key is not None:\n    # handle response\n    pass"
+    get:
+      operationId: getSigningKeys
+      x-speakeasy-name-override: getAll
+      summary: Retrieves signing keys
+      tags:
+      - accessControl
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/signing-key'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: getSigningKeys
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.accessControl.getAll();\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: getSigningKeys
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.AccessControl.GetAll(ctx)\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.Data != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getSigningKeys
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.access_control.get_all()\n\nif res.data is not None:\n    # handle response\n    pass"
+  /access-control/signing-key/{keyId}:
+    delete:
+      operationId: deleteSigningKey
+      x-speakeasy-name-override: delete
+      summary: Delete Signing Key
+      tags:
+      - accessControl
+      parameters:
+      - in: path
+        name: keyId
+        schema:
+          type: string
+        description: ID of the signing key
+        required: true
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '204':
+          description: Success (No content)
+      x-codeSamples:
+      - lang: typescript
+        label: deleteSigningKey
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.accessControl.delete(\"<id>\");\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: deleteSigningKey
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.AccessControl.Delete(ctx, \"<value>\")\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: deleteSigningKey
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.access_control.delete(key_id=\"<value>\")\n\nif res is not None:\n    # handle response\n    pass"
+    get:
+      operationId: getSigningKey
+      x-speakeasy-name-override: get
+      summary: Retrieves a signing key
+      tags:
+      - accessControl
+      parameters:
+      - in: path
+        name: keyId
+        schema:
+          type: string
+        description: ID of the signing key
+        required: true
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/signing-key'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: getSigningKey
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.accessControl.get(\"<id>\");\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: getSigningKey
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.AccessControl.Get(ctx, \"<value>\")\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.SigningKey != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getSigningKey
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.access_control.get(key_id=\"<value>\")\n\nif res.signing_key is not None:\n    # handle response\n    pass"
+    patch:
+      operationId: updateSigningKey
+      x-speakeasy-name-override: update
+      summary: Update a signing key
+      tags:
+      - accessControl
+      parameters:
+      - in: path
+        name: keyId
+        schema:
+          type: string
+        description: ID of the signing key
+        required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                disabled:
+                  type: boolean
+                name:
+                  type: string
+              additionalProperties: false
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '204':
+          description: Success (No content)
+      x-codeSamples:
+      - lang: typescript
+        label: updateSigningKey
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.accessControl.update({}, \"<id>\");\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: updateSigningKey
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"github.com/livepeer/livepeer-go/models/operations\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.AccessControl.Update(ctx, \"<value>\", operations.UpdateSigningKeyRequestBody{})\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: updateSigningKey
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.access_control.update(key_id=\"<value>\", request_body={})\n\nif res is not None:\n    # handle response\n    pass"
+components:
+  schemas:
+    error:
+      type: object
+      properties:
+        errors:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            example:
+            - id not provided
+            - Account not found
+    signing-key:
+      type: object
+      additionalProperties: false
+      required:
+      - publicKey
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: 78df0075-b5f3-4683-a618-1086faca35dc
+        name:
+          type: string
+          description: Name of the signing key
+          example: key1
+        userId:
+          type: string
+          readOnly: true
+          example: 78df0075-b5f3-4683-a618-1086faca35dc
+          deprecated: true
+        createdAt:
+          readOnly: true
+          type: number
+          description: Timestamp (in milliseconds) at which the signing-key was created
+          example: 1587667174725
+        lastSeen:
+          readOnly: true
+          type: number
+          description: Timestamp (in milliseconds) at which the signing-key was last used
+          example: 1587667174725
+        publicKey:
+          type: string
+        disabled:
+          type: boolean
+          description: Disable the signing key to allow rotation safely
+          example: false
+        projectId:
+          type: string
+          description: The ID of the project
+          example: aac12556-4d65-4d34-9fb
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

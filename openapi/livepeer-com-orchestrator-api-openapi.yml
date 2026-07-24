@@ -1,0 +1,87 @@
+openapi: 3.1.0
+info:
+  title: Livepeer AI Runner accessControl Orchestrator API
+  description: An application to run AI pipelines
+  version: 0.0.0
+servers:
+- url: https://dream-gateway.livepeer.cloud
+  description: Livepeer Cloud Community Gateway
+- url: https://livepeer.studio/api/beta/generate
+  description: Livepeer Studio Gateway
+tags:
+- name: Orchestrator
+  description: Orchestrator configuration and management
+paths:
+  /activateOrchestrator:
+    post:
+      tags:
+      - Orchestrator
+      summary: Activate orchestrator
+      description: Multi-step process to become an orchestrator
+      operationId: activateOrchestrator
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - blockRewardCut
+              - feeShare
+              - pricePerUnit
+              - serviceURI
+              properties:
+                blockRewardCut:
+                  type: string
+                  description: Percentage of block rewards to keep (0-100)
+                  example: '10'
+                feeShare:
+                  type: string
+                  description: Percentage of fees to share with delegators (0-100)
+                  example: '5'
+                pricePerUnit:
+                  type: string
+                  description: Price per pixel in wei
+                  example: '1000'
+                serviceURI:
+                  type: string
+                  description: Service URI for the orchestrator
+                  example: https://orchestrator.example.com:8935
+      responses:
+        '200':
+          description: Orchestrator activated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+  /reward:
+    post:
+      tags:
+      - Orchestrator
+      summary: Claim orchestrator rewards
+      description: Claim orchestrator rewards for current round
+      operationId: claimReward
+      responses:
+        '200':
+          description: Reward claimed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+components:
+  schemas:
+    TransactionResponse:
+      type: object
+      properties:
+        txHash:
+          type: string
+          description: Transaction hash
+          example: 0x...
+        status:
+          type: string
+          description: Transaction status
+          example: success
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

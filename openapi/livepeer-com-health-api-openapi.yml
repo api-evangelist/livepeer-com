@@ -1,0 +1,46 @@
+openapi: 3.1.0
+info:
+  title: Livepeer AI Runner accessControl Health API
+  description: An application to run AI pipelines
+  version: 0.0.0
+servers:
+- url: https://dream-gateway.livepeer.cloud
+  description: Livepeer Cloud Community Gateway
+- url: https://livepeer.studio/api/beta/generate
+  description: Livepeer Studio Gateway
+tags:
+- name: Health
+paths:
+  /health:
+    get:
+      summary: Health
+      operationId: health
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthCheck'
+      tags:
+      - Health
+components:
+  schemas:
+    HealthCheck:
+      properties:
+        status:
+          type: string
+          enum:
+          - OK
+          - ERROR
+          - IDLE
+          title: Status
+          description: The health status of the pipeline
+      type: object
+      required:
+      - status
+      title: HealthCheck
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

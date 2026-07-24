@@ -1,0 +1,95 @@
+openapi: 3.1.0
+info:
+  title: Livepeer AI Runner accessControl Ethereum API
+  description: An application to run AI pipelines
+  version: 0.0.0
+servers:
+- url: https://dream-gateway.livepeer.cloud
+  description: Livepeer Cloud Community Gateway
+- url: https://livepeer.studio/api/beta/generate
+  description: Livepeer Studio Gateway
+tags:
+- name: Ethereum
+  description: Ethereum operations and token transfers
+paths:
+  /transferTokens:
+    post:
+      tags:
+      - Ethereum
+      summary: Transfer LPT tokens
+      description: Transfer LPT to another address
+      operationId: transferTokens
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - to
+              - amount
+              properties:
+                to:
+                  type: string
+                  description: Recipient address
+                  example: '0x1234567890abcdef1234567890abcdef12345678'
+                amount:
+                  type: string
+                  description: Amount of LPT to transfer (in wei)
+                  example: '1000000000000000000'
+      responses:
+        '200':
+          description: Transfer successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+  /signMessage:
+    post:
+      tags:
+      - Ethereum
+      summary: Sign message
+      description: Sign message with node's private key
+      operationId: signMessage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - message
+              properties:
+                message:
+                  type: string
+                  description: Message to sign
+                  example: Hello Livepeer
+      responses:
+        '200':
+          description: Message signed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  signature:
+                    type: string
+                    description: Hex-encoded signature
+                    example: 0x...
+components:
+  schemas:
+    TransactionResponse:
+      type: object
+      properties:
+        txHash:
+          type: string
+          description: Transaction hash
+          example: 0x...
+        status:
+          type: string
+          description: Transaction status
+          example: success
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

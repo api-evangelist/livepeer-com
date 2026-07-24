@@ -1,0 +1,115 @@
+openapi: 3.1.0
+info:
+  title: Livepeer AI Runner accessControl Staking API
+  description: An application to run AI pipelines
+  version: 0.0.0
+servers:
+- url: https://dream-gateway.livepeer.cloud
+  description: Livepeer Cloud Community Gateway
+- url: https://livepeer.studio/api/beta/generate
+  description: Livepeer Studio Gateway
+tags:
+- name: Staking
+  description: Token bonding and delegation operations
+paths:
+  /bond:
+    post:
+      tags:
+      - Staking
+      summary: Bond tokens to an orchestrator
+      description: Delegate LPT tokens to an orchestrator
+      operationId: bondTokens
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - amount
+              - to
+              properties:
+                amount:
+                  type: string
+                  description: Amount of LPT to bond (in wei)
+                  example: '1000000000000000000'
+                to:
+                  type: string
+                  description: Orchestrator address to bond to
+                  example: '0x1234567890abcdef1234567890abcdef12345678'
+      responses:
+        '200':
+          description: Bond successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+  /unbond:
+    post:
+      tags:
+      - Staking
+      summary: Unbond tokens
+      description: Remove delegated tokens (starts unbonding period)
+      operationId: unbondTokens
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - amount
+              properties:
+                amount:
+                  type: string
+                  description: Amount of LPT to unbond (in wei)
+                  example: '1000000000000000000'
+      responses:
+        '200':
+          description: Unbond initiated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+  /rebond:
+    post:
+      tags:
+      - Staking
+      summary: Rebond tokens
+      description: Rebond tokens in unbonding state
+      operationId: rebondTokens
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                unbondingLockId:
+                  type: integer
+                  description: ID of the unbonding lock to rebond
+                  example: 0
+      responses:
+        '200':
+          description: Rebond successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+components:
+  schemas:
+    TransactionResponse:
+      type: object
+      properties:
+        txHash:
+          type: string
+          description: Transaction hash
+          example: 0x...
+        status:
+          type: string
+          description: Transaction status
+          example: success
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

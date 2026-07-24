@@ -1,0 +1,242 @@
+openapi: 3.1.0
+info:
+  title: Livepeer AI Runner accessControl multistream API
+  description: An application to run AI pipelines
+  version: 0.0.0
+servers:
+- url: https://dream-gateway.livepeer.cloud
+  description: Livepeer Cloud Community Gateway
+- url: https://livepeer.studio/api/beta/generate
+  description: Livepeer Studio Gateway
+tags:
+- name: multistream
+  description: Operations related to multistream api
+paths:
+  /multistream/target:
+    get:
+      operationId: getMultistreamTargets
+      x-speakeasy-name-override: getAll
+      summary: Retrieve Multistream Targets
+      tags:
+      - multistream
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/multistream-target'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: getMultistreamTargets
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.multistream.getAll();\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: getMultistreamTargets
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Multistream.GetAll(ctx)\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.Data != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getMultistreamTargets
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.multistream.get_all()\n\nif res.data is not None:\n    # handle response\n    pass"
+    post:
+      operationId: createMultistreamTarget
+      x-speakeasy-name-override: create
+      summary: Create a multistream target
+      tags:
+      - multistream
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/multistream-target'
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/multistream-target'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: createMultistreamTarget
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.multistream.create({\n    url: \"rtmps://live.my-service.tv/channel/secretKey\",\n  });\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: createMultistreamTarget
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"github.com/livepeer/livepeer-go/models/components\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Multistream.Create(ctx, components.MultistreamTargetInput{\n        URL: \"rtmps://live.my-service.tv/channel/secretKey\",\n    })\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.MultistreamTarget != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: createMultistreamTarget
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.multistream.create(request={\n    \"url\": \"rtmps://live.my-service.tv/channel/secretKey\",\n})\n\nif res.multistream_target is not None:\n    # handle response\n    pass"
+  /multistream/target/{id}:
+    parameters:
+    - name: id
+      description: ID of the multistream target
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: getMultistreamTarget
+      x-speakeasy-name-override: get
+      summary: Retrieve a multistream target
+      tags:
+      - multistream
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/multistream-target'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: getMultistreamTarget
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.multistream.get(\"<id>\");\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: getMultistreamTarget
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Multistream.Get(ctx, \"<id>\")\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.MultistreamTarget != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getMultistreamTarget
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.multistream.get(id=\"<id>\")\n\nif res.multistream_target is not None:\n    # handle response\n    pass"
+    patch:
+      operationId: updateMultistreamTarget
+      x-speakeasy-name-override: update
+      summary: Update Multistream Target
+      tags:
+      - multistream
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/multistream-target-patch-payload'
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '204':
+          description: Success
+      x-codeSamples:
+      - lang: typescript
+        label: updateMultistreamTarget
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.multistream.update({\n    url: \"rtmps://live.my-service.tv/channel/secretKey\",\n  }, \"<id>\");\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: updateMultistreamTarget
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"github.com/livepeer/livepeer-go/models/components\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Multistream.Update(ctx, \"<id>\", components.MultistreamTargetPatchPayload{\n        URL: \"rtmps://live.my-service.tv/channel/secretKey\",\n    })\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: updateMultistreamTarget
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.multistream.update(id=\"<id>\", multistream_target_patch_payload={\n    \"url\": \"rtmps://live.my-service.tv/channel/secretKey\",\n})\n\nif res is not None:\n    # handle response\n    pass"
+    delete:
+      operationId: deleteMultistreamTarget
+      x-speakeasy-name-override: delete
+      summary: Delete a multistream target
+      tags:
+      - multistream
+      description: 'Make sure to remove any references to the target on existing
+
+        streams before actually deleting it from the API.
+
+        '
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '204':
+          description: Success
+      x-codeSamples:
+      - lang: typescript
+        label: deleteMultistreamTarget
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.multistream.delete(\"<id>\");\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: deleteMultistreamTarget
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Multistream.Delete(ctx, \"<id>\")\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: deleteMultistreamTarget
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.multistream.delete(id=\"<id>\")\n\nif res is not None:\n    # handle response\n    pass"
+components:
+  schemas:
+    multistream-target-patch-payload:
+      $ref: '#/components/schemas/multistream-target'
+      required: []
+    multistream-target:
+      type: object
+      required:
+      - url
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: 09F8B46C-61A0-4254-9875-F71F4C605BC7
+        name:
+          type: string
+        userId:
+          type: string
+          readOnly: true
+          example: 66E2161C-7670-4D05-B71D-DA2D6979556F
+          deprecated: true
+        url:
+          type: string
+          writeOnly: true
+          description: Livepeer-compatible multistream target URL (RTMP(S) or SRT)
+          example: rtmps://live.my-service.tv/channel/secretKey
+          format: uri
+          pattern: ^(srt|rtmps?)://
+        disabled:
+          type: boolean
+          description: 'If true then this multistream target will not be used for pushing
+
+            even if it is configured in a stream object.
+
+            '
+        createdAt:
+          type: number
+          readOnly: true
+          description: 'Timestamp (in milliseconds) at which multistream target object was
+
+            created
+
+            '
+          example: 1587667174725
+    error:
+      type: object
+      properties:
+        errors:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            example:
+            - id not provided
+            - Account not found
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

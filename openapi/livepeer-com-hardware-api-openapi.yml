@@ -1,0 +1,145 @@
+openapi: 3.1.0
+info:
+  title: Livepeer AI Runner accessControl Hardware API
+  description: An application to run AI pipelines
+  version: 0.0.0
+servers:
+- url: https://dream-gateway.livepeer.cloud
+  description: Livepeer Cloud Community Gateway
+- url: https://livepeer.studio/api/beta/generate
+  description: Livepeer Studio Gateway
+tags:
+- name: Hardware
+paths:
+  /hardware/info:
+    get:
+      summary: Hardware Info
+      operationId: hardware_info
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HardwareInformation'
+      tags:
+      - Hardware
+  /hardware/stats:
+    get:
+      summary: Hardware Stats
+      operationId: hardware_stats
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HardwareStats'
+      tags:
+      - Hardware
+components:
+  schemas:
+    GPUComputeInfo:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        memory_total:
+          type: integer
+          title: Memory Total
+        memory_free:
+          type: integer
+          title: Memory Free
+        major:
+          type: integer
+          title: Major
+        minor:
+          type: integer
+          title: Minor
+      type: object
+      required:
+      - id
+      - name
+      - memory_total
+      - memory_free
+      - major
+      - minor
+      title: GPUComputeInfo
+      description: Model for detailed GPU compute information.
+    HardwareInformation:
+      properties:
+        pipeline:
+          type: string
+          title: Pipeline
+        model_id:
+          type: string
+          title: Model Id
+        gpu_info:
+          additionalProperties:
+            $ref: '#/components/schemas/GPUComputeInfo'
+          type: object
+          title: Gpu Info
+      type: object
+      required:
+      - pipeline
+      - model_id
+      - gpu_info
+      title: HardwareInformation
+      description: Response model for GPU information.
+    GPUUtilizationInfo:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        memory_total:
+          type: integer
+          title: Memory Total
+        memory_free:
+          type: integer
+          title: Memory Free
+        utilization_compute:
+          type: integer
+          title: Utilization Compute
+        utilization_memory:
+          type: integer
+          title: Utilization Memory
+      type: object
+      required:
+      - id
+      - name
+      - memory_total
+      - memory_free
+      - utilization_compute
+      - utilization_memory
+      title: GPUUtilizationInfo
+      description: Model for GPU utilization statistics.
+    HardwareStats:
+      properties:
+        pipeline:
+          type: string
+          title: Pipeline
+        model_id:
+          type: string
+          title: Model Id
+        gpu_stats:
+          additionalProperties:
+            $ref: '#/components/schemas/GPUUtilizationInfo'
+          type: object
+          title: Gpu Stats
+      type: object
+      required:
+      - pipeline
+      - model_id
+      - gpu_stats
+      title: HardwareStats
+      description: Response model for real-time GPU statistics.
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

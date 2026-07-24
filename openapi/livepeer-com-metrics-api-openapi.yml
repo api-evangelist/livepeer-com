@@ -1,0 +1,631 @@
+openapi: 3.1.0
+info:
+  title: Livepeer AI Runner accessControl metrics API
+  description: An application to run AI pipelines
+  version: 0.0.0
+servers:
+- url: https://dream-gateway.livepeer.cloud
+  description: Livepeer Cloud Community Gateway
+- url: https://livepeer.studio/api/beta/generate
+  description: Livepeer Studio Gateway
+tags:
+- name: metrics
+  description: Operations related to metrics api
+paths:
+  /data/views/now:
+    get:
+      operationId: getRealtimeViewershipNow
+      x-speakeasy-name-override: getRealtimeViewership
+      summary: Query realtime viewership
+      tags:
+      - metrics
+      description: 'Requires a private (non-CORS) API key to be used.
+
+        '
+      parameters:
+      - name: playbackId
+        in: query
+        description: 'The playback ID to filter the query results. This can be a canonical
+
+          playback ID from Livepeer assets or streams, or dStorage identifiers
+
+          for assets
+
+          '
+        schema:
+          type: string
+      - name: creatorId
+        in: query
+        description: The creator ID to filter the query results
+        schema:
+          type: string
+      - name: breakdownBy[]
+        in: query
+        description: 'The list of fields to break down the query results. Specify this
+
+          query-string multiple times to break down by multiple fields.
+
+          '
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - playbackId
+            - device
+            - browser
+            - country
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: A list of Metric objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/realtime-viewership-metric'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: getRealtimeViewershipNow
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.metrics.getRealtimeViewership();\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: getRealtimeViewershipNow
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Metrics.GetRealtimeViewership(ctx, nil, nil, nil)\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.Data != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getRealtimeViewershipNow
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.metrics.get_realtime_viewership()\n\nif res.data is not None:\n    # handle response\n    pass"
+  /data/views/query:
+    get:
+      operationId: getViewershipMetrics
+      x-speakeasy-name-override: getViewership
+      summary: Query viewership metrics
+      tags:
+      - metrics
+      description: 'Requires a private (non-CORS) API key to be used.
+
+        '
+      parameters:
+      - name: playbackId
+        in: query
+        description: 'The playback ID to filter the query results. This can be a canonical
+
+          playback ID from Livepeer assets or streams, or dStorage identifiers
+
+          for assets
+
+          '
+        schema:
+          type: string
+      - name: from
+        in: query
+        description: Start timestamp for the query range (inclusive)
+        schema:
+          oneOf:
+          - type: string
+            format: date-time
+          - type: integer
+      - name: to
+        in: query
+        description: End timestamp for the query range (exclusive)
+        schema:
+          oneOf:
+          - type: string
+            format: date-time
+          - type: integer
+      - name: timeStep
+        in: query
+        description: The time step to aggregate viewership metrics by
+        schema:
+          type: string
+          enum:
+          - hour
+          - day
+          - week
+          - month
+          - year
+      - name: assetId
+        in: query
+        description: The asset ID to filter metrics for
+        schema:
+          type: string
+      - name: streamId
+        in: query
+        description: The stream ID to filter metrics for
+        schema:
+          type: string
+      - name: creatorId
+        in: query
+        description: The creator ID to filter the query results
+        schema:
+          type: string
+      - name: breakdownBy[]
+        in: query
+        description: 'The list of fields to break down the query results. Specify this
+
+          query-string multiple times to break down by multiple fields.
+
+          '
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - playbackId
+            - deviceType
+            - device
+            - cpu
+            - os
+            - browser
+            - browserEngine
+            - continent
+            - country
+            - subdivision
+            - timezone
+            - geohash
+            - viewerId
+            - creatorId
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: A list of Metric objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/viewership-metric'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: getViewershipMetrics
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.metrics.getViewership({});\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: getViewershipMetrics
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"github.com/livepeer/livepeer-go/models/operations\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Metrics.GetViewership(ctx, operations.GetViewershipMetricsRequest{})\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.Data != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getViewershipMetrics
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.metrics.get_viewership(request={})\n\nif res.data is not None:\n    # handle response\n    pass"
+  /data/views/query/creator:
+    get:
+      operationId: getCreatorViewershipMetrics
+      x-speakeasy-name-override: getCreatorViewership
+      summary: Query creator viewership metrics
+      tags:
+      - metrics
+      description: 'Requires a proof of ownership to be sent in the request, which for now is just the assetId or streamId parameters (1 of those must be in the query-string).
+
+        '
+      parameters:
+      - name: from
+        in: query
+        description: Start timestamp for the query range (inclusive)
+        schema:
+          oneOf:
+          - type: string
+            format: date-time
+          - type: integer
+      - name: to
+        in: query
+        description: End timestamp for the query range (exclusive)
+        schema:
+          oneOf:
+          - type: string
+            format: date-time
+          - type: integer
+      - name: timeStep
+        in: query
+        description: The time step to aggregate viewership metrics by
+        schema:
+          type: string
+          enum:
+          - hour
+          - day
+          - week
+          - month
+          - year
+      - name: assetId
+        in: query
+        description: The asset ID to filter metrics for
+        schema:
+          type: string
+      - name: streamId
+        in: query
+        description: The stream ID to filter metrics for
+        schema:
+          type: string
+      - name: creatorId
+        in: query
+        description: The creator ID to filter the query results
+        schema:
+          type: string
+      - name: breakdownBy[]
+        in: query
+        description: 'The list of fields to break down the query results. Specify this
+
+          query-string multiple times to break down by multiple fields.
+
+          '
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - deviceType
+            - device
+            - cpu
+            - os
+            - browser
+            - browserEngine
+            - continent
+            - country
+            - subdivision
+            - timezone
+            - viewerId
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: A list of Metric objects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/viewership-metric'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: getCreatorViewershipMetrics
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.metrics.getCreatorViewership({});\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: getCreatorViewershipMetrics
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"github.com/livepeer/livepeer-go/models/operations\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Metrics.GetCreatorViewership(ctx, operations.GetCreatorViewershipMetricsRequest{})\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.Data != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getCreatorViewershipMetrics
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.metrics.get_creator_viewership(request={})\n\nif res.data is not None:\n    # handle response\n    pass"
+  /data/views/query/total/{playbackId}:
+    get:
+      operationId: getPublicViewershipMetrics
+      x-speakeasy-name-override: getPublicViewership
+      summary: Query public total views metrics
+      tags:
+      - metrics
+      description: 'Allows querying for the public metrics for viewership about a video.
+
+        This can be called from the frontend with a CORS key, or even
+
+        unauthenticated.
+
+        '
+      parameters:
+      - name: playbackId
+        in: path
+        required: true
+        description: 'The playback ID to filter the query results. This can be a canonical
+
+          playback ID from Livepeer assets or streams, or dStorage identifiers
+
+          for assets
+
+          '
+        schema:
+          type: string
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: A single Metric object with the viewCount and playtimeMins metrics.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 'A simplified metric object about aggregate viewership of an
+
+                  asset. Either playbackId or dStorageUrl will be set.
+
+                  '
+                properties:
+                  playbackId:
+                    $ref: '#/components/schemas/viewership-metric/properties/playbackId'
+                  dStorageUrl:
+                    $ref: '#/components/schemas/viewership-metric/properties/dStorageUrl'
+                  viewCount:
+                    $ref: '#/components/schemas/viewership-metric/properties/viewCount'
+                  playtimeMins:
+                    $ref: '#/components/schemas/viewership-metric/properties/playtimeMins'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: getPublicViewershipMetrics
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.metrics.getPublicViewership(\"<id>\");\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: getPublicViewershipMetrics
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Metrics.GetPublicViewership(ctx, \"<value>\")\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.Data != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getPublicViewershipMetrics
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.metrics.get_public_viewership(playback_id=\"<value>\")\n\nif res.data is not None:\n    # handle response\n    pass"
+  /data/usage/query:
+    get:
+      operationId: getUsageMetrics
+      x-speakeasy-name-override: getUsage
+      tags:
+      - metrics
+      summary: Query usage metrics
+      parameters:
+      - name: from
+        in: query
+        description: 'Start millis timestamp for the query range (inclusive)
+
+          '
+        schema:
+          type: integer
+      - name: to
+        in: query
+        description: 'End millis timestamp for the query range (exclusive)
+
+          '
+        schema:
+          type: integer
+      - name: timeStep
+        in: query
+        description: 'The time step to aggregate viewership metrics by
+
+          '
+        schema:
+          type: string
+          enum:
+          - hour
+          - day
+      - name: creatorId
+        in: query
+        description: 'The creator ID to filter the query results
+
+          '
+        schema:
+          type: string
+      - name: breakdownBy[]
+        in: query
+        description: 'The list of fields to break down the query results. Currently the
+
+          only supported breakdown is by `creatorId`.
+
+          '
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - creatorId
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: A Usage Metric object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/usage-metric'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: getUsageMetrics
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.metrics.getUsage({});\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: getUsageMetrics
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"github.com/livepeer/livepeer-go/models/operations\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Metrics.GetUsage(ctx, operations.GetUsageMetricsRequest{})\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.UsageMetric != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getUsageMetrics
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.metrics.get_usage(request={})\n\nif res.usage_metric is not None:\n    # handle response\n    pass"
+components:
+  schemas:
+    realtime-viewership-metric:
+      type: object
+      description: 'An individual metric about realtime viewership of a stream/asset.
+
+        '
+      required:
+      - viewCount
+      - errorRate
+      properties:
+        playbackId:
+          type: string
+          description: The playback ID associated with the metric.
+          example: 1bde4o2i6xycudoy
+        device:
+          type: string
+          description: The device used by the viewer.
+          example: iPhone
+        browser:
+          type: string
+          description: The browser used by the viewer.
+          example: Safari
+        country:
+          type: string
+          description: The country where the viewer is located.
+          example: United States
+        viewCount:
+          type: integer
+          description: The number of views for the stream/asset.
+          example: 100
+        errorRate:
+          type: number
+          description: The error rate for the stream/asset.
+          example: 0.1
+    viewership-metric:
+      type: object
+      description: 'An individual metric about viewership of a stream/asset. Necessarily, at least
+
+        1 of playbackId and dStorageUrl will be present, depending on the query.
+
+        '
+      required:
+      - viewCount
+      - playtimeMins
+      properties:
+        playbackId:
+          type: string
+          description: The playback ID associated with the metric.
+          example: 1bde4o2i6xycudoy
+        creatorId:
+          type: string
+          description: The ID of the creator associated with the metric.
+          example: john@doe.com
+        viewerId:
+          type: string
+          description: The ID of the viewer associated with the metric.
+          example: 1bde4o2i6xycudoy
+        dStorageUrl:
+          type: string
+          description: The URL of the distributed storage used for the asset
+          example: ipfs://QmZ4
+        timestamp:
+          type: number
+          example: 1587667174725
+          description: 'Timestamp (in milliseconds) when the metric was recorded. If the
+
+            query contains a time step, this timestamp will point to the
+
+            beginning of the time step period.
+
+            '
+        device:
+          type: string
+          description: The device used by the viewer.
+          example: iPhone
+        deviceType:
+          type: string
+          description: The type of the device used by the viewer.
+          example: mobile
+        cpu:
+          type: string
+          description: The CPU used by the viewer's device.
+          example: ARM
+        os:
+          type: string
+          description: The operating system used by the viewer.
+          example: iOS
+        browser:
+          type: string
+          description: The browser used by the viewer.
+          example: Safari
+        browserEngine:
+          type: string
+          description: The browser engine used by the viewer's browser.
+          example: WebKit
+        continent:
+          type: string
+          description: The continent where the viewer is located.
+          example: North America
+        country:
+          type: string
+          description: The country where the viewer is located.
+          example: United States
+        subdivision:
+          type: string
+          description: 'The subdivision (e.g., state or province) where the viewer is
+
+            located.
+
+            '
+          example: California
+        timezone:
+          type: string
+          description: The timezone where the viewer is located.
+          example: America/Los_Angeles
+        geohash:
+          type: string
+          description: Geographic encoding of the viewers location. Accurate to 3 digits.
+          example: 123
+        viewCount:
+          type: integer
+          description: The number of views for the stream/asset.
+          example: 100
+        playtimeMins:
+          type: number
+          description: The total playtime in minutes for the stream/asset.
+          example: 10
+        ttffMs:
+          type: number
+          description: The time-to-first-frame (TTFF) in milliseconds.
+          example: 100
+        rebufferRatio:
+          type: number
+          description: The rebuffering ratio for the asset.
+          example: 0.1
+        errorRate:
+          type: number
+          description: The error rate for the stream/asset.
+          example: 0.1
+        exitsBeforeStart:
+          type: number
+          description: 'The percentage of sessions that existed before the asset started
+
+            playing.
+
+            '
+          example: 0.5
+    usage-metric:
+      type: object
+      description: 'An individual metric about usage of a user.
+
+        '
+      properties:
+        UserID:
+          type: string
+          description: The user ID associated with the metric
+          example: 1bde4o2i6xycudoy
+        CreatorID:
+          type: string
+          description: The creator ID associated with the metric
+          example: john@doe.com
+        DeliveryUsageMins:
+          type: number
+          description: Total minutes of delivery usage.
+          example: 100
+        TotalUsageMins:
+          type: number
+          description: Total transcoded minutes.
+          example: 100
+        StorageUsageMins:
+          type: number
+          description: Total minutes of storage usage.
+          example: 100
+    error:
+      type: object
+      properties:
+        errors:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            example:
+            - id not provided
+            - Account not found
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

@@ -1,0 +1,533 @@
+openapi: 3.1.0
+info:
+  title: Livepeer AI Runner accessControl webhook API
+  description: An application to run AI pipelines
+  version: 0.0.0
+servers:
+- url: https://dream-gateway.livepeer.cloud
+  description: Livepeer Cloud Community Gateway
+- url: https://livepeer.studio/api/beta/generate
+  description: Livepeer Studio Gateway
+tags:
+- name: webhook
+  description: Operations related to webhook api
+paths:
+  /webhook:
+    get:
+      x-speakeasy-name-override: getAll
+      operationId: getWebhooks
+      summary: Retrieve a Webhook
+      tags:
+      - webhook
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/webhook'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: getWebhooks
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.webhook.getAll();\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: getWebhooks
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Webhook.GetAll(ctx)\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.Data != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getWebhooks
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.webhook.get_all()\n\nif res.data is not None:\n    # handle response\n    pass"
+    post:
+      operationId: createWebhook
+      x-speakeasy-name-override: create
+      summary: Create a webhook
+      tags:
+      - webhook
+      description: 'To create a new webhook, you need to make an API call with the events you want to listen for and the URL that will be called when those events occur.
+
+        '
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webhook'
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webhook'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: createWebhook
+        source: "import { Livepeer } from \"livepeer\";\nimport { Events } from \"livepeer/models/components\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.webhook.create({\n    name: \"test_webhook\",\n    projectId: \"aac12556-4d65-4d34-9fb6-d1f0985eb0a9\",\n    events: [\n      Events.StreamStarted,\n      Events.StreamIdle,\n    ],\n    url: \"https://my-service.com/webhook\",\n    sharedSecret: \"my-secret\",\n    streamId: \"de7818e7-610a-4057-8f6f-b785dc1e6f88\",\n  });\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: createWebhook
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"github.com/livepeer/livepeer-go/models/components\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Webhook.Create(ctx, components.WebhookInput{\n        Name: \"test_webhook\",\n        ProjectID: livepeergo.String(\"aac12556-4d65-4d34-9fb6-d1f0985eb0a9\"),\n        Events: []components.Events{\n            components.EventsStreamStarted,\n            components.EventsStreamIdle,\n        },\n        URL: \"https://my-service.com/webhook\",\n        SharedSecret: livepeergo.String(\"my-secret\"),\n        StreamID: livepeergo.String(\"de7818e7-610a-4057-8f6f-b785dc1e6f88\"),\n    })\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.Webhook != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: createWebhook
+        source: "from livepeer import Livepeer\nfrom livepeer.models import components\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.webhook.create(request={\n    \"name\": \"test_webhook\",\n    \"project_id\": \"aac12556-4d65-4d34-9fb6-d1f0985eb0a9\",\n    \"events\": [\n        components.Events.STREAM_STARTED,\n        components.Events.STREAM_IDLE,\n    ],\n    \"url\": \"https://my-service.com/webhook\",\n    \"shared_secret\": \"my-secret\",\n    \"stream_id\": \"de7818e7-610a-4057-8f6f-b785dc1e6f88\",\n})\n\nif res.webhook is not None:\n    # handle response\n    pass"
+  /webhook/{id}:
+    get:
+      operationId: getWebhook
+      x-speakeasy-name-override: get
+      summary: Retrieve a webhook
+      tags:
+      - webhook
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webhook'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: getWebhook
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.webhook.get(\"<id>\");\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: getWebhook
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Webhook.Get(ctx, \"<id>\")\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.Webhook != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getWebhook
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.webhook.get(id=\"<id>\")\n\nif res.webhook is not None:\n    # handle response\n    pass"
+    put:
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      summary: Update a webhook
+      x-speakeasy-name-override: update
+      operationId: updateWebhook
+      tags:
+      - webhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/webhook'
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webhook'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: updateWebhook
+        source: "import { Livepeer } from \"livepeer\";\nimport { Events } from \"livepeer/models/components\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.webhook.update({\n    name: \"test_webhook\",\n    projectId: \"aac12556-4d65-4d34-9fb6-d1f0985eb0a9\",\n    events: [\n      Events.StreamStarted,\n      Events.StreamIdle,\n    ],\n    url: \"https://my-service.com/webhook\",\n    sharedSecret: \"my-secret\",\n    streamId: \"de7818e7-610a-4057-8f6f-b785dc1e6f88\",\n  }, \"<id>\");\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: updateWebhook
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"github.com/livepeer/livepeer-go/models/components\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Webhook.Update(ctx, \"<id>\", components.WebhookInput{\n        Name: \"test_webhook\",\n        ProjectID: livepeergo.String(\"aac12556-4d65-4d34-9fb6-d1f0985eb0a9\"),\n        Events: []components.Events{\n            components.EventsStreamStarted,\n            components.EventsStreamIdle,\n        },\n        URL: \"https://my-service.com/webhook\",\n        SharedSecret: livepeergo.String(\"my-secret\"),\n        StreamID: livepeergo.String(\"de7818e7-610a-4057-8f6f-b785dc1e6f88\"),\n    })\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.Webhook != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: updateWebhook
+        source: "from livepeer import Livepeer\nfrom livepeer.models import components\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.webhook.update(id=\"<id>\", webhook={\n    \"name\": \"test_webhook\",\n    \"project_id\": \"aac12556-4d65-4d34-9fb6-d1f0985eb0a9\",\n    \"events\": [\n        components.Events.STREAM_STARTED,\n        components.Events.STREAM_IDLE,\n    ],\n    \"url\": \"https://my-service.com/webhook\",\n    \"shared_secret\": \"my-secret\",\n    \"stream_id\": \"de7818e7-610a-4057-8f6f-b785dc1e6f88\",\n})\n\nif res.webhook is not None:\n    # handle response\n    pass"
+    delete:
+      tags:
+      - webhook
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      operationId: deleteWebhook
+      x-speakeasy-name-override: delete
+      summary: Delete a webhook
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webhook'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: deleteWebhook
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.webhook.delete(\"<id>\");\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: deleteWebhook
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Webhook.Delete(ctx, \"<id>\")\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.Webhook != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: deleteWebhook
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.webhook.delete(id=\"<id>\")\n\nif res.webhook is not None:\n    # handle response\n    pass"
+  /webhook/{id}/log:
+    get:
+      operationId: getWebhookLogs
+      x-speakeasy-name-override: getLogs
+      tags:
+      - webhook
+      summary: Retrieve webhook logs
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/webhook-log'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: getWebhookLogs
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.webhook.getLogs(\"<id>\");\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: getWebhookLogs
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Webhook.GetLogs(ctx, \"<id>\")\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.Data != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getWebhookLogs
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.webhook.get_logs(id=\"<id>\")\n\nif res.data is not None:\n    # handle response\n    pass"
+  /webhook/{id}/log/{logId}:
+    get:
+      tags:
+      - webhook
+      operationId: getWebhookLog
+      x-speakeasy-name-override: getLog
+      summary: Retrieve a webhook log
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: logId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webhook-log'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: getWebhookLog
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.webhook.getLog(\"<id>\", \"<id>\");\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: getWebhookLog
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Webhook.GetLog(ctx, \"<id>\", \"<value>\")\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.WebhookLog != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getWebhookLog
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.webhook.get_log(id=\"<id>\", log_id=\"<value>\")\n\nif res.webhook_log is not None:\n    # handle response\n    pass"
+  /webhook/{id}/log/{logId}/resend:
+    post:
+      tags:
+      - webhook
+      operationId: resendWebhook
+      x-speakeasy-name-override: resendLog
+      summary: Resend a webhook
+      description: 'Use this API to resend the same webhook request. This is useful when
+
+        developing and debugging, allowing you to easily repeat the same webhook
+
+        to check or fix the behaviour in your handler.
+
+        '
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: logId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/webhook-log'
+                x-speakeasy-name-override: data
+      x-codeSamples:
+      - lang: typescript
+        label: resendWebhook
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.webhook.resendLog(\"<id>\", \"<id>\");\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: resendWebhook
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Webhook.ResendLog(ctx, \"<id>\", \"<value>\")\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.WebhookLog != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: resendWebhook
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.webhook.resend_log(id=\"<id>\", log_id=\"<value>\")\n\nif res.webhook_log is not None:\n    # handle response\n    pass"
+components:
+  schemas:
+    error:
+      type: object
+      properties:
+        errors:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            example:
+            - id not provided
+            - Account not found
+    webhook:
+      type: object
+      required:
+      - name
+      - url
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: de7818e7-610a-4057-8f6f-b785dc1e6f88
+        name:
+          type: string
+          example: test_webhook
+        kind:
+          type: string
+          example: webhook
+          readOnly: true
+          deprecated: true
+        userId:
+          type: string
+          readOnly: true
+          deprecated: true
+        projectId:
+          type: string
+          description: The ID of the project
+          example: aac12556-4d65-4d34-9fb6-d1f0985eb0a9
+        createdAt:
+          type: number
+          readOnly: true
+          description: Timestamp (in milliseconds) at which stream object was created
+          example: 1587667174725
+        events:
+          type: array
+          items:
+            type: string
+            enum:
+            - stream.started
+            - stream.detection
+            - stream.idle
+            - recording.ready
+            - recording.started
+            - recording.waiting
+            - multistream.connected
+            - multistream.error
+            - multistream.disconnected
+            - playback.user.new
+            - playback.accessControl
+            - asset.created
+            - asset.updated
+            - asset.failed
+            - asset.ready
+            - asset.deleted
+            - task.spawned
+            - task.updated
+            - task.completed
+            - task.failed
+          example:
+          - stream.started
+          - stream.idle
+        url:
+          type: string
+          format: uri
+          pattern: ^http(s)?://
+          example: https://my-service.com/webhook
+        sharedSecret:
+          type: string
+          writeOnly: true
+          description: shared secret used to sign the webhook payload
+          example: my-secret
+        streamId:
+          type: string
+          description: streamId of the stream on which the webhook is applied
+          example: de7818e7-610a-4057-8f6f-b785dc1e6f88
+        status:
+          type: object
+          readOnly: true
+          description: status of webhook
+          properties:
+            lastFailure:
+              type: object
+              readOnly: true
+              description: failure timestamp and error message with status code
+              properties:
+                timestamp:
+                  type: number
+                  readOnly: true
+                  example: 1587667174725
+                  description: Timestamp (in milliseconds) at which the webhook last failed
+                error:
+                  readOnly: true
+                  type: string
+                  description: Webhook failure error message
+                  example: Error message
+                response:
+                  readOnly: true
+                  type: string
+                  description: Webhook failure response
+                  example: Response body
+                statusCode:
+                  readOnly: true
+                  type: number
+                  description: Webhook failure status code
+                  example: 500
+            lastTriggeredAt:
+              type: number
+              description: 'Timestamp (in milliseconds) at which the webhook last was
+
+                triggered
+
+                '
+              example: 1587667174725
+    webhook-log:
+      type: object
+      required:
+      - id
+      - webhookId
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: de7818e7-610a-4057-8f6f-b785dc1e6f88
+        webhookId:
+          readOnly: true
+          type: string
+          description: ID of the webhook this request was made for
+          example: de7818e7-610a-4057-8f6f-b785dc1e6f88
+        event:
+          readOnly: true
+          type: string
+          description: The event type that triggered the webhook request
+          example: stream.started
+        createdAt:
+          readOnly: true
+          type: number
+          description: 'Timestamp (in milliseconds) at which webhook request object was
+
+            created
+
+            '
+          example: 1587667174725
+        duration:
+          type: number
+          description: The time taken (in seconds) to make the webhook request
+          example: 0.5
+        success:
+          type: boolean
+          description: Whether the webhook request was successful
+          example: true
+        request:
+          type: object
+          properties:
+            url:
+              type: string
+              description: URL used for the request
+              example: https://my-service.com/webhook
+            method:
+              type: string
+              description: HTTP request method
+              example: POST
+            headers:
+              type: object
+              description: HTTP request headers
+              additionalProperties:
+                type: string
+              example:
+                User-Agent: livepeer.studio
+            body:
+              type: string
+              description: request body
+              example: '{"event": "stream.started"}'
+        response:
+          type: object
+          additionalProperties: false
+          properties:
+            body:
+              type: string
+              description: response body
+            status:
+              type: number
+              description: HTTP status code
+            statusText:
+              type: string
+              description: response status text
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

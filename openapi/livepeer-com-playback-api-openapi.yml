@@ -1,0 +1,365 @@
+openapi: 3.1.0
+info:
+  title: Livepeer AI Runner accessControl playback API
+  description: An application to run AI pipelines
+  version: 0.0.0
+servers:
+- url: https://dream-gateway.livepeer.cloud
+  description: Livepeer Cloud Community Gateway
+- url: https://livepeer.studio/api/beta/generate
+  description: Livepeer Studio Gateway
+tags:
+- name: playback
+  description: Operations related to playback api
+paths:
+  /playback/{id}:
+    get:
+      operationId: getPlaybackInfo
+      summary: Retrieve Playback Info
+      x-speakeasy-name-override: get
+      tags:
+      - playback
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        description: The playback ID from the asset or livestream, e.g. `eaw4nk06ts2d0mzb`.
+      responses:
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/playback-info'
+                x-speakeasy-name-override: data
+        '404':
+          description: Playback not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+      x-codeSamples:
+      - lang: typescript
+        label: getPlaybackInfo
+        source: "import { Livepeer } from \"livepeer\";\n\nconst livepeer = new Livepeer({\n  apiKey: \"<YOUR_BEARER_TOKEN_HERE>\",\n});\n\nasync function run() {\n  const result = await livepeer.playback.get(\"<id>\");\n\n  // Handle the result\n  console.log(result);\n}\n\nrun();"
+      - lang: go
+        label: getPlaybackInfo
+        source: "package main\n\nimport(\n\tlivepeergo \"github.com/livepeer/livepeer-go\"\n\t\"context\"\n\t\"log\"\n)\n\nfunc main() {\n    s := livepeergo.New(\n        livepeergo.WithSecurity(\"<YOUR_BEARER_TOKEN_HERE>\"),\n    )\n\n    ctx := context.Background()\n    res, err := s.Playback.Get(ctx, \"<id>\")\n    if err != nil {\n        log.Fatal(err)\n    }\n    if res.PlaybackInfo != nil {\n        // handle response\n    }\n}"
+      - lang: python
+        label: getPlaybackInfo
+        source: "from livepeer import Livepeer\n\ns = Livepeer(\n    api_key=\"<YOUR_BEARER_TOKEN_HERE>\",\n)\n\nres = s.playback.get(id=\"<id>\")\n\nif res.playback_info is not None:\n    # handle response\n    pass"
+components:
+  schemas:
+    playback-info:
+      type: object
+      additionalProperties: false
+      required:
+      - type
+      - meta
+      properties:
+        type:
+          type: string
+          example: vod
+          enum:
+          - live
+          - vod
+          - recording
+        meta:
+          type: object
+          additionalProperties: false
+          required:
+          - source
+          properties:
+            live:
+              type: integer
+              enum:
+              - 0
+              - 1
+              example: 0
+            playbackPolicy:
+              $ref: '#/components/schemas/playback-policy'
+            source:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                required:
+                - hrn
+                - type
+                - url
+                properties:
+                  hrn:
+                    type: string
+                    description: Human Readable Name
+                    example: MP4
+                    enum:
+                    - HLS (TS)
+                    - MP4
+                    - WebRTC (H264)
+                    - FLV (H264)
+                    - Thumbnail (JPEG)
+                    - Thumbnail (PNG)
+                    - Thumbnails
+                  type:
+                    type: string
+                    example: html5/video/mp4
+                    enum:
+                    - html5/application/vnd.apple.mpegurl
+                    - html5/video/mp4
+                    - html5/video/h264
+                    - video/x-flv
+                    - image/jpeg
+                    - image/png
+                    - text/vtt
+                  url:
+                    type: string
+                    example: https://asset-cdn.lp-playback.monster/hls/1bde4o2i6xycudoy/static360p0.mp4
+                  size:
+                    type: number
+                    example: 494778
+                  width:
+                    type: number
+                    example: 204
+                  height:
+                    type: number
+                    example: 360
+                  bitrate:
+                    type: number
+                    example: 449890
+            dvrPlayback:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                properties:
+                  hrn:
+                    type: string
+                    example: MP4
+                    enum:
+                    - HLS (TS)
+                  type:
+                    type: string
+                    example: html5/video/mp4
+                    enum:
+                    - html5/application/vnd.apple.mpegurl
+                  url:
+                    type: string
+                    example: https://asset-cdn.lp-playback.monster/hls/1bde4o2i6xycudoy/static360p0.mp4
+                  error:
+                    type: string
+            attestation:
+              $ref: '#/components/schemas/attestation'
+    storage-status:
+      readOnly: true
+      additionalProperties: false
+      required:
+      - phase
+      - tasks
+      properties:
+        phase:
+          type: string
+          description: Phase of the asset storage
+          enum:
+          - waiting
+          - processing
+          - ready
+          - failed
+          - reverted
+          example: ready
+        progress:
+          type: number
+          description: Current progress of the task updating the storage.
+          example: 0.5
+        errorMessage:
+          type: string
+          description: Error message if the last storage changed failed.
+          example: Failed to update storage
+        tasks:
+          type: object
+          additionalProperties: false
+          properties:
+            pending:
+              type: string
+              description: 'ID of any currently running task that is exporting this
+
+                asset to IPFS.
+
+                '
+              example: 09F8B46C-61A0-4254-9875-F71F4C605BC7
+            last:
+              type: string
+              description: 'ID of the last task to run successfully, that created
+
+                the currently saved data.
+
+                '
+              example: 09F8B46C-61A0-4254-9875-F71F4C605BC7
+            failed:
+              type: string
+              description: ID of the last task to fail execution.
+              example: 09F8B46C-61A0-4254-9875-F71F4C605BC7
+    attestation:
+      type: object
+      additionalProperties: false
+      required:
+      - primaryType
+      - domain
+      - message
+      - signature
+      properties:
+        id:
+          type: string
+          readOnly: true
+          example: 5b9e63bb-6fd0-4bea-aff2-cc5d4eb9cad0
+        primaryType:
+          type: string
+          description: Video Metadata EIP-712 primaryType
+          enum:
+          - VideoAttestation
+          example: VideoAttestation
+        domain:
+          type: object
+          description: Video Metadata EIP-712 domain
+          additionalProperties: false
+          required:
+          - name
+          - version
+          properties:
+            name:
+              type: string
+              enum:
+              - Verifiable Video
+              example: Verifiable Video
+            version:
+              type: string
+              enum:
+              - '1'
+              example: '1'
+        message:
+          type: object
+          additionalProperties: false
+          description: Video Metadata EIP-712 message content
+          required:
+          - video
+          - attestations
+          - signer
+          - timestamp
+          properties:
+            video:
+              type: string
+              example: 5b9e63bb-6fd0-4bea-aff2-cc5d4eb9cad0
+            attestations:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                required:
+                - role
+                - address
+                properties:
+                  role:
+                    type: string
+                    example: creator
+                  address:
+                    type: string
+                    example: 1311768467294899700
+            signer:
+              type: string
+              example: 1311768467294899700
+            timestamp:
+              type: number
+              example: 1587667174725
+        signature:
+          type: string
+          description: Video Metadata EIP-712 message signature
+          example: 1311768467294899700
+        createdAt:
+          type: number
+          readOnly: true
+          description: Timestamp (in milliseconds) at which the object was created
+          example: 1587667174725
+        signatureType:
+          type: string
+          enum:
+          - eip712
+          - flow
+          example: eip712
+        storage:
+          additionalProperties: false
+          properties:
+            ipfs:
+              type: object
+              additionalProperties: false
+              properties:
+                $ref: {}
+                updatedAt:
+                  readOnly: true
+                  type: number
+                  description: 'Timestamp (in milliseconds) at which IPFS export task was updated
+
+                    '
+                  example: 1587667174725
+            status:
+              $ref: '#/components/schemas/storage-status'
+    error:
+      type: object
+      properties:
+        errors:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            example:
+            - id not provided
+            - Account not found
+    playback-policy:
+      type:
+      - object
+      - 'null'
+      description: Whether the playback policy for an asset or stream is public or signed
+      additionalProperties: false
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - public
+          - jwt
+          - webhook
+          example: webhook
+        webhookId:
+          type: string
+          description: ID of the webhook to use for playback policy
+          example: 1bde4o2i6xycudoy
+        webhookContext:
+          type: object
+          description: User-defined webhook context
+          additionalProperties: true
+          example:
+            streamerId: my-custom-id
+        refreshInterval:
+          type: number
+          description: 'Interval (in seconds) at which the playback policy should be
+
+            refreshed (default 600 seconds)
+
+            '
+          example: 600
+        allowedOrigins:
+          type: array
+          description: List of allowed origins for CORS playback (<scheme>://<hostname>:<port>, <scheme>://<hostname>)
+          items:
+            type: string
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

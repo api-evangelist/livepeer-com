@@ -1,0 +1,113 @@
+openapi: 3.1.0
+info:
+  title: Livepeer AI Runner accessControl Status API
+  description: An application to run AI pipelines
+  version: 0.0.0
+servers:
+- url: https://dream-gateway.livepeer.cloud
+  description: Livepeer Cloud Community Gateway
+- url: https://livepeer.studio/api/beta/generate
+  description: Livepeer Studio Gateway
+tags:
+- name: Status
+  description: Node status and information
+paths:
+  /status:
+    get:
+      tags:
+      - Status
+      summary: Get node status
+      description: Display node information, balances, and configuration
+      operationId: getStatus
+      responses:
+        '200':
+          description: Node status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodeStatus'
+  /protocolParameters:
+    get:
+      tags:
+      - Status
+      summary: View protocol parameters
+      description: Show protocol state and parameters
+      operationId: getProtocolParameters
+      responses:
+        '200':
+          description: Protocol parameters retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProtocolParameters'
+  /registeredOrchestrators:
+    get:
+      tags:
+      - Status
+      summary: List registered orchestrators
+      description: Display available orchestrators on the network
+      operationId: getRegisteredOrchestrators
+      responses:
+        '200':
+          description: Orchestrator list retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Orchestrator'
+components:
+  schemas:
+    Orchestrator:
+      type: object
+      properties:
+        address:
+          type: string
+          example: 0x...
+        serviceURI:
+          type: string
+          example: https://orchestrator.example.com:8935
+        pricePerPixel:
+          type: string
+          example: '1000'
+        activationRound:
+          type: string
+    ProtocolParameters:
+      type: object
+      properties:
+        totalBondedToken:
+          type: string
+        totalSupply:
+          type: string
+        paused:
+          type: boolean
+        currentRound:
+          type: string
+    NodeStatus:
+      type: object
+      properties:
+        node:
+          type: object
+          properties:
+            version:
+              type: string
+              example: 0.7.0
+            chainId:
+              type: integer
+              example: 42161
+        account:
+          type: object
+          properties:
+            address:
+              type: string
+              example: 0x...
+            ethBalance:
+              type: string
+              example: '1000000000000000000'
+            lptBalance:
+              type: string
+              example: '1000000000000000000'
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer

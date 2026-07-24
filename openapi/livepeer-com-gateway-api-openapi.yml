@@ -1,0 +1,87 @@
+openapi: 3.1.0
+info:
+  title: Livepeer AI Runner accessControl Gateway API
+  description: An application to run AI pipelines
+  version: 0.0.0
+servers:
+- url: https://dream-gateway.livepeer.cloud
+  description: Livepeer Cloud Community Gateway
+- url: https://livepeer.studio/api/beta/generate
+  description: Livepeer Studio Gateway
+tags:
+- name: Gateway
+  description: Gateway/broadcaster configuration
+paths:
+  /setBroadcastConfig:
+    post:
+      tags:
+      - Gateway
+      summary: Set broadcast configuration
+      description: Configure transcoding options and max price
+      operationId: setBroadcastConfig
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                maxPricePerUnit:
+                  type: string
+                  description: Maximum price per pixel in wei
+                  example: '1000'
+                pixelsPerUnit:
+                  type: integer
+                  description: Number of pixels per unit
+                  example: 1
+      responses:
+        '200':
+          description: Broadcast config updated successfully
+  /setMaxPriceForCapability:
+    post:
+      tags:
+      - Gateway
+      summary: Set max price per AI capability
+      description: Set pricing for specific AI pipelines and models
+      operationId: setMaxPriceForCapability
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - capabilities_prices
+              properties:
+                capabilities_prices:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - pipeline
+                    - price_per_unit
+                    properties:
+                      pipeline:
+                        type: string
+                        description: AI pipeline name
+                        example: text-to-image
+                      model_id:
+                        type: string
+                        description: Specific model ID or "default"
+                        example: stabilityai/sd-turbo
+                      price_per_unit:
+                        type: integer
+                        description: Maximum price per unit
+                        example: 1000
+                      pixels_per_unit:
+                        type: integer
+                        description: Pixels per unit
+                        example: 1
+      responses:
+        '200':
+          description: AI pricing updated successfully
+components:
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
